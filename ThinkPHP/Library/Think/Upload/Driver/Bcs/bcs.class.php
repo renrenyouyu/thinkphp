@@ -1,4 +1,5 @@
 <?php
+
 namespace Think\Upload\Driver\Bcs;
 
 use Think\Upload\Driver\Bcs\BCS_Exception as BCS_Exception;
@@ -21,12 +22,14 @@ define('BCS_SUPERFILE_SLICE_SIZE', 1024 * 1024);
 
 require_once BCS_API_PATH . '/requestcore.class.php';
 require_once BCS_API_PATH . '/mimetypes.class.php';
+
 /**
  * Default BCS Exception.
  */
 class BcsException extends \Exception
 {
 }
+
 /**
  * BCS API
  */
@@ -67,7 +70,7 @@ class BaiduBCS
     const BCS_SDK_ACL_ACTION_DELETE_OBJECT     = 'delete_object';
     const BCS_SDK_ACL_ACTION_PUT_OBJECT_POLICY = 'put_object_policy';
     const BCS_SDK_ACL_ACTION_GET_OBJECT_POLICY = 'get_object_policy';
-    static $ACL_ACTIONS                        = array(
+    static $ACL_ACTIONS = array(
         self::BCS_SDK_ACL_ACTION_ALL,
         self::BCS_SDK_ACL_ACTION_LIST_OBJECT,
         self::BCS_SDK_ACL_ACTION_PUT_BUCKET_POLICY,
@@ -81,7 +84,7 @@ class BaiduBCS
     //EFFECT:
     const BCS_SDK_ACL_EFFECT_ALLOW = "allow";
     const BCS_SDK_ACL_EFFECT_DENY  = "deny";
-    static $ACL_EFFECTS            = array(
+    static $ACL_EFFECTS = array(
         self::BCS_SDK_ACL_EFFECT_ALLOW,
         self::BCS_SDK_ACL_EFFECT_DENY);
     //ACL_TYPE:
@@ -115,12 +118,12 @@ class BaiduBCS
 
     /**
      * 构造函数
-     * @param string $ak  云存储公钥
-     * @param string $sk  云存储私钥
+     * @param string $ak 云存储公钥
+     * @param string $sk 云存储私钥
      * @param string $hostname 云存储Api访问地址
      * @throws BCS_Exception
      */
-    public function __construct($ak = null, $sk = null, $hostname = null)
+    public function __construct ($ak = null, $sk = null, $hostname = null)
     {
         //valid ak & sk
         if (!$ak && !defined('BCS_AK') && false === getenv('HTTP_BAE_ENV_AK')) {
@@ -156,7 +159,7 @@ class BaiduBCS
      * @param array $opt
      * @return BCS_ResponseCore
      */
-    private function authenticate($opt)
+    private function authenticate ($opt)
     {
         //set common param into opt
         $opt[self::AK] = $this->ak;
@@ -212,7 +215,7 @@ class BaiduBCS
             }
             if (isset($opt['seekTo']) && !isset($opt["length"])) {
                 // Read from seekTo until EOF by default, when set seekTo but not set $opt["length"]
-                $length -= (integer) $opt['seekTo'];
+                $length -= (integer)$opt['seekTo'];
             }
             $request->set_read_stream_size($length);
             // Attempt to guess the correct mime-type
@@ -227,7 +230,7 @@ class BaiduBCS
         // Handle streaming file offsets
         if (isset($opt['seekTo'])) {
             // Pass the seek position to BCS_RequestCore
-            $request->set_seek_position((integer) $opt['seekTo']);
+            $request->set_seek_position((integer)$opt['seekTo']);
         }
         // Add headers to request and compute the string to sign
         foreach ($headers as $header_key => $header_value) {
@@ -253,10 +256,10 @@ class BaiduBCS
      * 获取当前密钥对拥有者的bucket列表
      * @param array $opt (Optional)
      * BaiduBCS::IMPORT_BCS_LOG_METHOD - String - Optional: 支持用户传入日志处理函数，函数定义如 function f($log)
-     * @throws BCS_Exception
      * @return BCS_ResponseCore
+     * @throws BCS_Exception
      */
-    public function listBucket($opt = array())
+    public function listBucket ($opt = array())
     {
         $this->assertParameterArray($opt);
         $opt[self::BUCKET] = '';
@@ -272,10 +275,10 @@ class BaiduBCS
      * @param string $bucket (Required) bucket名称
      * @param string $acl (Optional)    bucket权限设置，若为null，使用server分配的默认权限
      * @param array $opt (Optional)
-     * @throws BCS_Exception
      * @return BCS_ResponseCore
+     * @throws BCS_Exception
      */
-    public function createBucket($bucket, $acl = null, $opt = array())
+    public function createBucket ($bucket, $acl = null, $opt = array())
     {
         $this->assertParameterArray($opt);
         $opt[self::BUCKET] = $bucket;
@@ -298,7 +301,7 @@ class BaiduBCS
      * @param array $opt (Optional)
      * @return boolean|BCS_ResponseCore
      */
-    public function deleteBucket($bucket, $opt = array())
+    public function deleteBucket ($bucket, $opt = array())
     {
         $this->assertParameterArray($opt);
         $opt[self::BUCKET] = $bucket;
@@ -321,7 +324,7 @@ class BaiduBCS
      * @param array $opt (Optional)
      * @return boolean|BCS_ResponseCore
      */
-    public function setBucketAcl($bucket, $acl, $opt = array())
+    public function setBucketAcl ($bucket, $acl, $opt = array())
     {
         $this->assertParameterArray($opt);
         $result                  = $this->analyzeUserAcl($acl);
@@ -331,7 +334,7 @@ class BaiduBCS
         $opt[self::OBJECT]       = '/';
         $opt[self::QUERY_STRING] = array(
             self::ACL => 1);
-        $response = $this->authenticate($opt);
+        $response                = $this->authenticate($opt);
         $this->log($response->isOK() ? "Set bucket acl success!" : "Set bucket acl failed! Response: [" . $response->body . "]", $opt);
         return $response;
     }
@@ -342,7 +345,7 @@ class BaiduBCS
      * @param array $opt (Optional)
      * @return BCS_ResponseCore
      */
-    public function getBucketAcl($bucket, $opt = array())
+    public function getBucketAcl ($bucket, $opt = array())
     {
         $this->assertParameterArray($opt);
         $opt[self::BUCKET]       = $bucket;
@@ -350,7 +353,7 @@ class BaiduBCS
         $opt[self::OBJECT]       = '/';
         $opt[self::QUERY_STRING] = array(
             self::ACL => 1);
-        $response = $this->authenticate($opt);
+        $response                = $this->authenticate($opt);
         $this->log($response->isOK() ? "Get bucket acl success!" : "Get bucket acl failed! Response: [" . $response->body . "]", $opt);
         return $response;
     }
@@ -362,10 +365,10 @@ class BaiduBCS
      * start : 主要用于翻页功能，用法同mysql中start的用法
      * limit : 主要用于翻页功能，用法同mysql中limit的用法
      * prefix: 只返回以prefix为前缀的object，此处prefix必须以'/'开头
-     * @throws BCS_Exception
      * @return BCS_ResponseCore
+     * @throws BCS_Exception
      */
-    public function listObject($bucket, $opt = array())
+    public function listObject ($bucket, $opt = array())
     {
         $this->assertParameterArray($opt);
         $opt[self::BUCKET] = $bucket;
@@ -402,10 +405,10 @@ class BaiduBCS
      * @param array $opt (Optional)
      * start : 主要用于翻页功能，用法同mysql中start的用法
      * limit : 主要用于翻页功能，用法同mysql中limit的用法
-     * @throws BCS_Exception
      * @return BCS_ResponseCore
+     * @throws BCS_Exception
      */
-    public function listObjectByDir($bucket, $dir = '/', $list_model = 2, $opt = array())
+    public function listObjectByDir ($bucket, $dir = '/', $list_model = 2, $opt = array())
     {
         $this->assertParameterArray($opt);
         $opt[self::BUCKET] = $bucket;
@@ -442,7 +445,7 @@ class BaiduBCS
      * length - Optional; 待上传长度
      * @return BCS_ResponseCore
      */
-    public function createObject($bucket, $object, $file, $opt = array())
+    public function createObject ($bucket, $object, $file, $opt = array())
     {
         $this->assertParameterArray($opt);
         $opt[self::BUCKET] = $bucket;
@@ -475,7 +478,7 @@ class BaiduBCS
      * acl - Optional ; 上传文件的acl，只能使用acl_type
      * @return BCS_ResponseCore
      */
-    public function createObjectByContent($bucket, $object, $content, $opt = array())
+    public function createObjectByContent ($bucket, $object, $content, $opt = array())
     {
         $this->assertParameterArray($opt);
         $opt[self::BUCKET] = $bucket;
@@ -512,7 +515,7 @@ class BaiduBCS
      * sub_object_size - Optional; 指定子文件的划分大小，单位B，建议以256KB为单位进行子object划分，默认为1MB进行划分
      * @return BCS_ResponseCore
      */
-    public function createObjectSuperfile($bucket, $object, $file, $opt = array())
+    public function createObjectSuperfile ($bucket, $object, $file, $opt = array())
     {
         if (isset($opt['length']) || isset($opt['seekTo'])) {
             throw new BCS_Exception("Temporary unsupport opt of length and seekTo of superfile.", -1);
@@ -581,7 +584,7 @@ class BaiduBCS
         $opt['content']          = self::arrayToJson($object_list);
         $opt[self::QUERY_STRING] = array(
             "superfile" => 1);
-        $opt[self::OBJECT] = $object;
+        $opt[self::OBJECT]       = $object;
         if (isset($opt['filename'])) {
             self::setHeaderIntoOpt("Content-Disposition", 'attachment; filename=' . $opt['filename'], $opt);
         }
@@ -599,7 +602,7 @@ class BaiduBCS
      * 举例说明 ：prefix . has_sub_directory?"/b":"" . '/c.txt'
      * @param string $bucket (Required)
      * @param string $dir (Required)
-     * @param array $opt(Optional)
+     * @param array $opt (Optional)
      * string prefix 文件object前缀
      * boolean has_sub_directory(default=true)   object命名中是否携带文件的子目录结构，若置为false，请确认待上传的目录和所有子目录中没有重名文件，否则会产生object覆盖问题
      * BaiduBCS::IMPORT_BCS_PRE_FILTER   用户可自定义上传文件前的操作函数
@@ -617,7 +620,7 @@ class BaiduBCS
      * 'failed' => array()   上传失败的文件
      *
      */
-    public function uploadDirectory($bucket, $dir, $opt = array())
+    public function uploadDirectory ($bucket, $dir, $opt = array())
     {
         $this->assertParameterArray($opt);
         if (!is_dir($dir)) {
@@ -763,10 +766,10 @@ class BaiduBCS
      * object(Required)
      * @param array $opt (Optional)
      * source_tag 指定拷贝对象的版本号
-     * @throws BCS_Exception
      * @return BCS_ResponseCore
+     * @throws BCS_Exception
      */
-    public function copyObject($source, $dest, $opt = array())
+    public function copyObject ($source, $dest, $opt = array())
     {
         $this->assertParameterArray($opt);
         //valid source and dest
@@ -802,7 +805,7 @@ class BaiduBCS
      * Expires
      * @return BCS_ResponseCore
      */
-    public function setObjectMeta($bucket, $object, $meta, $opt = array())
+    public function setObjectMeta ($bucket, $object, $meta, $opt = array())
     {
         $this->assertParameterArray($opt);
         $this->assertParameterArray($meta);
@@ -817,7 +820,7 @@ class BaiduBCS
         foreach ($meta as $header => $value) {
             self::setHeaderIntoOpt($header, $value, $opt);
         }
-        $source = array(
+        $source   = array(
             self::BUCKET => $bucket,
             self::OBJECT => $object);
         $response = $this->copyObject($source, $source, $opt);
@@ -830,10 +833,10 @@ class BaiduBCS
      * @param string $bucket (Required)
      * @param string $object (Required)
      * @param array $opt (Optional)
-     * @throws BCS_Exception
      * @return BCS_ResponseCore
+     * @throws BCS_Exception
      */
-    public function getObjectAcl($bucket, $object, $opt = array())
+    public function getObjectAcl ($bucket, $object, $opt = array())
     {
         $this->assertParameterArray($opt);
         $opt[self::BUCKET]       = $bucket;
@@ -841,7 +844,7 @@ class BaiduBCS
         $opt[self::OBJECT]       = $object;
         $opt[self::QUERY_STRING] = array(
             self::ACL => 1);
-        $response = $this->authenticate($opt);
+        $response                = $this->authenticate($opt);
         $this->log($response->isOK() ? "Get object acl success!" : "Get object acl failed! Response: [" . $response->body . "]", $opt);
         return $response;
     }
@@ -859,7 +862,7 @@ class BaiduBCS
      * @param array $opt (Optional)
      * @return BCS_ResponseCore
      */
-    public function setObjectAcl($bucket, $object, $acl, $opt = array())
+    public function setObjectAcl ($bucket, $object, $acl, $opt = array())
     {
         $this->assertParameterArray($opt);
         //analyze acl
@@ -870,7 +873,7 @@ class BaiduBCS
         $opt[self::OBJECT]       = $object;
         $opt[self::QUERY_STRING] = array(
             self::ACL => 1);
-        $response = $this->authenticate($opt);
+        $response                = $this->authenticate($opt);
         $this->log($response->isOK() ? "Set object acl success!" : "Set object acl failed! Response: [" . $response->body . "]", $opt);
         return $response;
     }
@@ -880,10 +883,10 @@ class BaiduBCS
      * @param string $bucket (Required)
      * @param string $object (Required)
      * @param array $opt (Optional)
-     * @throws BCS_Exception
      * @return BCS_ResponseCore
+     * @throws BCS_Exception
      */
-    public function deleteObject($bucket, $object, $opt = array())
+    public function deleteObject ($bucket, $object, $opt = array())
     {
         $this->assertParameterArray($opt);
         $opt[self::BUCKET] = $bucket;
@@ -899,13 +902,13 @@ class BaiduBCS
      * @param string $bucket (Required)
      * @param string $object (Required)
      * @param array $opt (Optional)
-     * @throws BCS_Exception
      * @return boolean true|boolean false|BCS_ResponseCore
      * true：object存在
      * false：不存在
      * BCS_ResponseCore其他错误
+     * @throws BCS_Exception
      */
-    public function isObjectExist($bucket, $object, $opt = array())
+    public function isObjectExist ($bucket, $object, $opt = array())
     {
         $this->assertParameterArray($opt);
         $opt[self::BUCKET] = $bucket;
@@ -925,10 +928,10 @@ class BaiduBCS
      * @param string $bucket (Required)
      * @param string $object (Required)
      * @param array $opt (Optional)
-     * @throws BCS_Exception
      * @return array BCS_ResponseCore
+     * @throws BCS_Exception
      */
-    public function getObjectInfo($bucket, $object, $opt = array())
+    public function getObjectInfo ($bucket, $object, $opt = array())
     {
         $this->assertParameterArray($opt);
         $opt[self::BUCKET] = $bucket;
@@ -945,10 +948,10 @@ class BaiduBCS
      * @param string $object (Required)
      * @param array $opt (Optional)
      * fileWriteTo   (Optional)直接将请求结果写入该文件，如果fileWriteTo文件存在，sdk进行重命名再存储
-     * @throws BCS_Exception
      * @return BCS_ResponseCore
+     * @throws BCS_Exception
      */
-    public function getObject($bucket, $object, $opt = array())
+    public function getObject ($bucket, $object, $opt = array())
     {
         $this->assertParameterArray($opt);
         //若fileWriteTo待写入的文件已经存在，需要进行重命名
@@ -984,7 +987,7 @@ class BaiduBCS
     /**
      * 生成签名链接
      */
-    private function generateUserUrl($method, $bucket, $object, $opt = array())
+    private function generateUserUrl ($method, $bucket, $object, $opt = array())
     {
         $opt[self::AK]           = $this->ak;
         $opt[self::SK]           = $this->sk;
@@ -1007,7 +1010,7 @@ class BaiduBCS
      * @param string $object (Required)
      * return false| string url
      */
-    public function generateGetObjectUrl($bucket, $object, $opt = array())
+    public function generateGetObjectUrl ($bucket, $object, $opt = array())
     {
         $this->assertParameterArray($opt);
         return $this->generateUserUrl("GET", $bucket, $object, $opt);
@@ -1019,7 +1022,7 @@ class BaiduBCS
      * @param string $object (Required)
      * return false| string url
      */
-    public function generatePutObjectUrl($bucket, $object, $opt = array())
+    public function generatePutObjectUrl ($bucket, $object, $opt = array())
     {
         $this->assertParameterArray($opt);
         return $this->generateUserUrl("PUT", $bucket, $object, $opt);
@@ -1031,7 +1034,7 @@ class BaiduBCS
      * @param string $object (Required)
      * return false| string url
      */
-    public function generatePostObjectUrl($bucket, $object, $opt = array())
+    public function generatePostObjectUrl ($bucket, $object, $opt = array())
     {
         $this->assertParameterArray($opt);
         return $this->generateUserUrl("POST", $bucket, $object, $opt);
@@ -1043,7 +1046,7 @@ class BaiduBCS
      * @param string $object (Required)
      * return false| string url
      */
-    public function generateDeleteObjectUrl($bucket, $object, $opt = array())
+    public function generateDeleteObjectUrl ($bucket, $object, $opt = array())
     {
         $this->assertParameterArray($opt);
         return $this->generateUserUrl("DELETE", $bucket, $object, $opt);
@@ -1055,7 +1058,7 @@ class BaiduBCS
      * @param string $object (Required)
      * return false| string url
      */
-    public function generateHeadObjectUrl($bucket, $object, $opt = array())
+    public function generateHeadObjectUrl ($bucket, $object, $opt = array())
     {
         $this->assertParameterArray($opt);
         return $this->generateUserUrl("HEAD", $bucket, $object, $opt);
@@ -1064,7 +1067,7 @@ class BaiduBCS
     /**
      * @return the $use_ssl
      */
-    public function getuseSsl()
+    public function getuseSsl ()
     {
         return $this->use_ssl;
     }
@@ -1072,7 +1075,7 @@ class BaiduBCS
     /**
      * @param boolean $use_ssl
      */
-    public function setuseSsl($use_ssl)
+    public function setuseSsl ($use_ssl)
     {
         $this->use_ssl = $use_ssl;
     }
@@ -1085,7 +1088,7 @@ class BaiduBCS
      * @param string $bucket
      * @return boolean
      */
-    public static function validateBucket($bucket)
+    public static function validateBucket ($bucket)
     {
         //bucket 正则
         $pattern1 = '/^[a-z][-a-z0-9]{4,61}[a-z0-9]$/';
@@ -1101,7 +1104,7 @@ class BaiduBCS
      * @param string $object
      * @return boolean
      */
-    public static function validateObject($object)
+    public static function validateObject ($object)
     {
         $pattern = '/^\//';
         if (empty($object) || !preg_match($pattern, $object)) {
@@ -1115,10 +1118,10 @@ class BaiduBCS
      * @param string $header
      * @param string $value
      * @param array $opt
-     * @throws BCS_Exception
      * @return void
+     * @throws BCS_Exception
      */
-    private static function setHeaderIntoOpt($header, $value, &$opt)
+    private static function setHeaderIntoOpt ($header, $value, &$opt)
     {
         if (isset($opt[self::HEADERS])) {
             if (!is_array($opt[self::HEADERS])) {
@@ -1133,11 +1136,11 @@ class BaiduBCS
 
     /**
      * 使用特定function对数组中所有元素做处理
-     * @param string    &$array        要处理的字符串
-     * @param string    $function    要执行的函数
-     * @param boolean   $apply_to_keys_also     是否也应用到key上
+     * @param string    &$array 要处理的字符串
+     * @param string $function 要执行的函数
+     * @param boolean $apply_to_keys_also 是否也应用到key上
      */
-    private static function arrayRecursive(&$array, $function, $apply_to_keys_also = false)
+    private static function arrayRecursive (&$array, $function, $apply_to_keys_also = false)
     {
         foreach ($array as $key => $value) {
             if (is_array($value)) {
@@ -1160,7 +1163,7 @@ class BaiduBCS
      * 由数组构造json字符串，增加了一些特殊处理以支持特殊字符和不同编码的中文
      * @param array $array
      */
-    private static function arrayToJson($array)
+    private static function arrayToJson ($array)
     {
         if (!is_array($array)) {
             throw new BCS_Exception("Param must be array in function array_to_json()", -1);
@@ -1177,10 +1180,10 @@ class BaiduBCS
      * b. $acl 为json的string
      * (2).通过acl_type字段进行设置
      * @param string|array $acl
-     * @throws BCS_Exception
      * @return array
+     * @throws BCS_Exception
      */
-    private function analyzeUserAcl($acl)
+    private function analyzeUserAcl ($acl)
     {
         $result = array();
         if (is_array($acl)) {
@@ -1206,7 +1209,7 @@ class BaiduBCS
      * @param array $opt
      * @return boolean|string
      */
-    private function formatSignature($opt)
+    private function formatSignature ($opt)
     {
         $flags   = "";
         $content = '';
@@ -1215,7 +1218,7 @@ class BaiduBCS
             return false;
         }
         if (isset($opt[self::BUCKET]) && isset($opt[self::METHOD]) && isset($opt[self::OBJECT])) {
-            $flags .= 'MBO';
+            $flags   .= 'MBO';
             $content .= "Method=" . $opt[self::METHOD] . "\n"; //method
             $content .= "Bucket=" . $opt[self::BUCKET] . "\n"; //bucket
             $content .= "Object=" . self::trimUrl($opt[self::OBJECT]) . "\n"; //object
@@ -1224,15 +1227,15 @@ class BaiduBCS
             return false;
         }
         if (isset($opt['ip'])) {
-            $flags .= 'I';
+            $flags   .= 'I';
             $content .= "Ip=" . $opt['ip'] . "\n";
         }
         if (isset($opt['time'])) {
-            $flags .= 'T';
+            $flags   .= 'T';
             $content .= "Time=" . $opt['time'] . "\n";
         }
         if (isset($opt['size'])) {
-            $flags .= 'S';
+            $flags   .= 'S';
             $content .= "Size=" . $opt['size'] . "\n";
         }
         $content = $flags . "\n" . $content;
@@ -1243,10 +1246,10 @@ class BaiduBCS
     /**
      * 检查用户输入的acl array是否合法，并转为json
      * @param array $acl
-     * @throws BCS_Exception
      * @return string acl-json
+     * @throws BCS_Exception
      */
-    private function checkUserAcl($acl)
+    private function checkUserAcl ($acl)
     {
         if (!is_array($acl)) {
             throw new BCS_Exception("Invalid acl array");
@@ -1280,7 +1283,7 @@ class BaiduBCS
      * @param array $opt
      * @return boolean|string
      */
-    private function formatUrl($opt)
+    private function formatUrl ($opt)
     {
         $sign = $this->formatSignature($opt);
         if (false === $sign) {
@@ -1289,9 +1292,9 @@ class BaiduBCS
         }
         $opt['sign'] = $sign;
         $url         = "";
-        $url .= $this->use_ssl ? 'https://' : 'http://';
-        $url .= $this->hostname;
-        $url .= '/' . $opt[self::BUCKET];
+        $url         .= $this->use_ssl ? 'https://' : 'http://';
+        $url         .= $this->hostname;
+        $url         .= '/' . $opt[self::BUCKET];
         if (isset($opt[self::OBJECT]) && '/' !== $opt[self::OBJECT]) {
             $url .= "/" . rawurlencode($opt[self::OBJECT]);
         }
@@ -1309,7 +1312,7 @@ class BaiduBCS
      * @param $url
      * @return string
      */
-    public static function trimUrl($url)
+    public static function trimUrl ($url)
     {
         $result = str_replace("//", "/", $url);
         while ($result !== $url) {
@@ -1324,7 +1327,7 @@ class BaiduBCS
      * @param string $dir 文件目录
      * @return array 文件树
      */
-    public static function getFiletree($dir, $file_prefix = "/*")
+    public static function getFiletree ($dir, $file_prefix = "/*")
     {
         $tree = array();
         foreach (glob($dir . $file_prefix) as $single) {
@@ -1342,7 +1345,7 @@ class BaiduBCS
      * @param string $log
      * @param array $opt
      */
-    public function log($log, $opt)
+    public function log ($log, $opt)
     {
         if (isset($opt[self::IMPORT_BCS_LOG_METHOD]) && function_exists($opt[self::IMPORT_BCS_LOG_METHOD])) {
             $opt[self::IMPORT_BCS_LOG_METHOD]($log);
@@ -1355,7 +1358,7 @@ class BaiduBCS
      * make sure $opt is an array
      * @param $opt
      */
-    private function assertParameterArray($opt)
+    private function assertParameterArray ($opt)
     {
         if (!is_array($opt)) {
             throw new BCS_Exception('Parameter must be array, please check!', -1);

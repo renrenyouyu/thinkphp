@@ -20,7 +20,7 @@ class ParseTemplateBehavior
 {
 
     // 行为扩展的执行入口必须是run
-    public function run(&$_data)
+    public function run (&$_data)
     {
         $engine          = strtolower(C('TMPL_ENGINE_TYPE'));
         $_content        = empty($_data['content']) ? $_data['file'] : $_data['content'];
@@ -58,10 +58,10 @@ class ParseTemplateBehavior
      * 检查缓存文件是否有效
      * 如果无效则需要重新编译
      * @access public
-     * @param string $tmplTemplateFile  模板文件名
+     * @param string $tmplTemplateFile 模板文件名
      * @return boolean
      */
-    protected function checkCache($tmplTemplateFile, $prefix = '')
+    protected function checkCache ($tmplTemplateFile, $prefix = '')
     {
         if (!C('TMPL_CACHE_ON')) // 优先对配置设定检测
         {
@@ -93,10 +93,10 @@ class ParseTemplateBehavior
      * 检查缓存内容是否有效
      * 如果无效则需要重新编译
      * @access public
-     * @param string $tmplContent  模板内容
+     * @param string $tmplContent 模板内容
      * @return boolean
      */
-    protected function checkContentCache($tmplContent, $prefix = '')
+    protected function checkContentCache ($tmplContent, $prefix = '')
     {
         if (Storage::has(C('CACHE_PATH') . $prefix . md5($tmplContent) . C('TMPL_CACHFILE_SUFFIX'))) {
             return true;

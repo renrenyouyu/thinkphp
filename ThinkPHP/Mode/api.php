@@ -39,6 +39,5 @@ return array(
         CORE_PATH . 'Behavior' . EXT,
     ),
     // 行为扩展定义
-    'tags'   => array(
-    ),
+    'tags'   => array(),
 );

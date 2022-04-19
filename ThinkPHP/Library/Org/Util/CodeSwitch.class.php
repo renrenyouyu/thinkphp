@@ -16,27 +16,30 @@ class CodeSwitch
     private static $error = array();
     // 提示信息
     private static $info = array();
+
     // 记录错误
-    private static function error($msg)
+    private static function error ($msg)
     {
         self::$error[] = $msg;
     }
+
     // 记录信息
-    private static function info($info)
+    private static function info ($info)
     {
         self::$info[] = $info;
     }
+
     /**
      * 编码转换函数,对整个文件进行编码转换
      * 支持以下转换
      * GB2312、UTF-8 WITH BOM转换为UTF-8
      * UTF-8、UTF-8 WITH BOM转换为GB2312
      * @access public
-     * @param string $filename        文件名
-     * @param string $out_charset    转换后的文件编码,与iconv使用的参数一致
+     * @param string $filename 文件名
+     * @param string $out_charset 转换后的文件编码,与iconv使用的参数一致
      * @return void
      */
-    public static function DetectAndSwitch($filename, $out_charset)
+    public static function DetectAndSwitch ($filename, $out_charset)
     {
         $fpr   = fopen($filename, "r");
         $char1 = fread($fpr, 1);
@@ -141,13 +144,13 @@ class CodeSwitch
     /**
      * 目录遍历函数
      * @access public
-     * @param string $path        要遍历的目录名
-     * @param string $mode        遍历模式,一般取FILES,这样只返回带路径的文件名
-     * @param array $file_types        文件后缀过滤数组
-     * @param int $maxdepth        遍历深度,-1表示遍历到最底层
+     * @param string $path 要遍历的目录名
+     * @param string $mode 遍历模式,一般取FILES,这样只返回带路径的文件名
+     * @param array $file_types 文件后缀过滤数组
+     * @param int $maxdepth 遍历深度,-1表示遍历到最底层
      * @return void
      */
-    public static function searchdir($path, $mode = "FULL", $file_types = array(".html", ".php"), $maxdepth = -1, $d = 0)
+    public static function searchdir ($path, $mode = "FULL", $file_types = array(".html", ".php"), $maxdepth = -1, $d = 0)
     {
         if (substr($path, strlen($path) - 1) != '/') {
             $path .= '/';
@@ -194,12 +197,12 @@ class CodeSwitch
     /**
      * 对整个项目目录中的PHP和HTML文件行进编码转换
      * @access public
-     * @param string $app        要遍历的项目路径
-     * @param string $mode        遍历模式,一般取FILES,这样只返回带路径的文件名
-     * @param array $file_types        文件后缀过滤数组
+     * @param string $app 要遍历的项目路径
+     * @param string $mode 遍历模式,一般取FILES,这样只返回带路径的文件名
+     * @param array $file_types 文件后缀过滤数组
      * @return void
      */
-    public static function CodingSwitch($app = "./", $charset = 'UTF-8', $mode = "FILES", $file_types = array(".html", ".php"))
+    public static function CodingSwitch ($app = "./", $charset = 'UTF-8', $mode = "FILES", $file_types = array(".html", ".php"))
     {
         self::info("注意: 程序使用的文件编码检测算法可能对某些特殊字符不适用");
         $filearr = self::searchdir($app, $mode, $file_types);
@@ -209,12 +212,12 @@ class CodeSwitch
 
     }
 
-    public static function getError()
+    public static function getError ()
     {
         return self::$error;
     }
 
-    public static function getInfo()
+    public static function getInfo ()
     {
         return self::$info;
     }

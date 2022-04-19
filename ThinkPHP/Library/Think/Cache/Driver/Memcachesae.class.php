@@ -27,7 +27,7 @@ class Memcachesae extends Cache
      * @param array $options 缓存参数
      * @access public
      */
-    public function __construct($options = array())
+    public function __construct ($options = array())
     {
         $options = array_merge(array(
             'host'       => C('MEMCACHE_HOST') ?: '127.0.0.1',
@@ -50,7 +50,7 @@ class Memcachesae extends Cache
      * @access private
      * @return boolean
      */
-    private function isConnected()
+    private function isConnected ()
     {
         return $this->connected;
     }
@@ -61,7 +61,7 @@ class Memcachesae extends Cache
      * @param string $name 缓存变量名
      * @return mixed
      */
-    public function get($name)
+    public function get ($name)
     {
         N('cache_read', 1);
         return $this->handler->get($_SERVER['HTTP_APPVERSION'] . '/' . $this->options['prefix'] . $name);
@@ -71,11 +71,11 @@ class Memcachesae extends Cache
      * 写入缓存
      * @access public
      * @param string $name 缓存变量名
-     * @param mixed $value  存储数据
-     * @param integer $expire  有效时间（秒）
+     * @param mixed $value 存储数据
+     * @param integer $expire 有效时间（秒）
      * @return boolean
      */
-    public function set($name, $value, $expire = null)
+    public function set ($name, $value, $expire = null)
     {
         N('cache_write', 1);
         if (is_null($expire)) {
@@ -98,12 +98,12 @@ class Memcachesae extends Cache
      * @param string $name 缓存变量名
      * @return boolean
      */
-    public function rm($name, $ttl = false)
+    public function rm ($name, $ttl = false)
     {
         $name = $_SERVER['HTTP_APPVERSION'] . '/' . $this->options['prefix'] . $name;
         return false === $ttl ?
-        $this->handler->delete($name) :
-        $this->handler->delete($name, $ttl);
+            $this->handler->delete($name) :
+            $this->handler->delete($name, $ttl);
     }
 
     /**
@@ -111,7 +111,7 @@ class Memcachesae extends Cache
      * @access public
      * @return boolean
      */
-    public function clear()
+    public function clear ()
     {
         return $this->handler->flush();
     }
@@ -123,7 +123,7 @@ class Memcachesae extends Cache
      * @return mixed
      */
     //[sae] 下重写queque队列缓存方法
-    protected function queue($key)
+    protected function queue ($key)
     {
         $queue_name = isset($this->options['queue_name']) ? $this->options['queue_name'] : 'think_queue';
         $value      = F($queue_name);

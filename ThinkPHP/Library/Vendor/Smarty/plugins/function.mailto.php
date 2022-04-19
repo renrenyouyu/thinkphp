@@ -44,17 +44,17 @@
  * @version 1.2
  * @author Monte Ohrt <monte at ohrt dot com>
  * @author credits to Jason Sweat (added cc, bcc and subject functionality)
- * @param array                    $params   parameters
+ * @param array $params parameters
  * @param Smarty_Internal_Template $template template object
  * @return string
  */
-function smarty_function_mailto($params, $template)
+function smarty_function_mailto ($params, $template)
 {
     static $_allowed_encoding = array('javascript' => true, 'javascript_charcode' => true, 'hex' => true, 'none' => true);
     $extra = '';
 
     if (empty($params['address'])) {
-        trigger_error("mailto: missing 'address' parameter",E_USER_WARNING);
+        trigger_error("mailto: missing 'address' parameter", E_USER_WARNING);
         return;
     } else {
         $address = $params['address'];
@@ -63,8 +63,8 @@ function smarty_function_mailto($params, $template)
     $text = $address;
     // netscape and mozilla do not decode %40 (@) in BCC field (bug?)
     // so, don't encode it.
-    $search = array('%40', '%2C');
-    $replace = array('@', ',');
+    $search     = array('%40', '%2C');
+    $replace    = array('@', ',');
     $mail_parms = array();
     foreach ($params as $var => $value) {
         switch ($var) {
@@ -91,7 +91,7 @@ function smarty_function_mailto($params, $template)
     if ($mail_parms) {
         $address .= '?' . join('&', $mail_parms);
     }
-    
+
     $encode = (empty($params['encode'])) ? 'none' : $params['encode'];
     if (!isset($_allowed_encoding[$encode])) {
         trigger_error("mailto: 'encode' parameter must be none, javascript, javascript_charcode or hex", E_USER_WARNING);
@@ -110,7 +110,7 @@ function smarty_function_mailto($params, $template)
     } elseif ($encode == 'javascript_charcode') {
         $string = '<a href="mailto:' . $address . '" ' . $extra . '>' . $text . '</a>';
 
-        for($x = 0, $y = strlen($string); $x < $y; $x++) {
+        for ($x = 0, $y = strlen($string); $x < $y; $x++) {
             $ord[] = ord($string[$x]);
         }
 
@@ -125,7 +125,7 @@ function smarty_function_mailto($params, $template)
     } elseif ($encode == 'hex') {
         preg_match('!^(.*)(\?.*)$!', $address, $match);
         if (!empty($match[2])) {
-            trigger_error("mailto: hex encoding does not work with extra attributes. Try javascript.",E_USER_WARNING);
+            trigger_error("mailto: hex encoding does not work with extra attributes. Try javascript.", E_USER_WARNING);
             return;
         }
         $address_encode = '';

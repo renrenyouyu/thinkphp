@@ -25,7 +25,7 @@ class Mysql extends Driver
      * @param array $config 连接信息
      * @return string
      */
-    protected function parseDsn($config)
+    protected function parseDsn ($config)
     {
         $dsn = 'mysql:dbname=' . $config['database'] . ';host=' . $config['hostname'];
         if (!empty($config['hostport'])) {
@@ -37,7 +37,7 @@ class Mysql extends Driver
         if (!empty($config['charset'])) {
             //为兼容各版本PHP,用两种方式设置编码
             $this->options[\PDO::MYSQL_ATTR_INIT_COMMAND] = 'SET NAMES ' . $config['charset'];
-            $dsn .= ';charset=' . $config['charset'];
+            $dsn                                          .= ';charset=' . $config['charset'];
         }
         return $dsn;
     }
@@ -46,13 +46,13 @@ class Mysql extends Driver
      * 取得数据表的字段信息
      * @access public
      */
-    public function getFields($tableName)
+    public function getFields ($tableName)
     {
         $this->initConnect(true);
         list($tableName) = explode(' ', $tableName);
         if (strpos($tableName, '.')) {
             list($dbName, $tableName) = explode('.', $tableName);
-            $sql                      = 'SHOW COLUMNS FROM `' . $dbName . '`.`' . $tableName . '`';
+            $sql = 'SHOW COLUMNS FROM `' . $dbName . '`.`' . $tableName . '`';
         } else {
             $sql = 'SHOW COLUMNS FROM `' . $tableName . '`';
         }
@@ -67,7 +67,7 @@ class Mysql extends Driver
                 $info[$val['field']] = array(
                     'name'    => $val['field'],
                     'type'    => $val['type'],
-                    'notnull' => (bool) ('' === $val['null']), // not null is empty, null is yes
+                    'notnull' => (bool)('' === $val['null']), // not null is empty, null is yes
                     'default' => $val['default'],
                     'primary' => (strtolower($val['key']) == 'pri'),
                     'autoinc' => (strtolower($val['extra']) == 'auto_increment'),
@@ -81,7 +81,7 @@ class Mysql extends Driver
      * 取得数据库的表信息
      * @access public
      */
-    public function getTables($dbName = '')
+    public function getTables ($dbName = '')
     {
         $sql    = !empty($dbName) ? 'SHOW TABLES FROM ' . $dbName : 'SHOW TABLES ';
         $result = $this->query($sql);
@@ -98,7 +98,7 @@ class Mysql extends Driver
      * @param string $key
      * @return string
      */
-    protected function parseKey($key)
+    protected function parseKey ($key)
     {
         $key = trim($key);
         if (!is_numeric($key) && !preg_match('/[,\'\"\*\(\)`.\s]/', $key)) {
@@ -112,7 +112,7 @@ class Mysql extends Driver
      * @access protected
      * @return string
      */
-    protected function parseRand()
+    protected function parseRand ()
     {
         return 'rand()';
     }
@@ -125,7 +125,7 @@ class Mysql extends Driver
      * @param boolean $replace 是否replace
      * @return false | integer
      */
-    public function insertAll($dataSet, $options = array(), $replace = false)
+    public function insertAll ($dataSet, $options = array(), $replace = false)
     {
         $values      = array();
         $this->model = $options['model'];
@@ -157,7 +157,7 @@ class Mysql extends Driver
         // 兼容数字传入方式
         $replace = (is_numeric($replace) && $replace > 0) ? true : $replace;
         $sql     = (true === $replace ? 'REPLACE' : 'INSERT') . ' INTO ' . $this->parseTable($options['table']) . ' (' . implode(',', $fields) . ') VALUES ' . implode(',', $values) . $this->parseDuplicate($replace);
-        $sql .= $this->parseComment(!empty($options['comment']) ? $options['comment'] : '');
+        $sql     .= $this->parseComment(!empty($options['comment']) ? $options['comment'] : '');
         return $this->execute($sql, !empty($options['fetch_sql']) ? true : false);
     }
 
@@ -167,7 +167,7 @@ class Mysql extends Driver
      * @param mixed $duplicate
      * @return string
      */
-    protected function parseDuplicate($duplicate)
+    protected function parseDuplicate ($duplicate)
     {
         // 布尔值或空则返回空字符串
         if (is_bool($duplicate) || empty($duplicate)) {
@@ -182,7 +182,7 @@ class Mysql extends Driver
             $duplicate = get_class_vars($duplicate);
         }
         $updates = array();
-        foreach ((array) $duplicate as $key => $val) {
+        foreach ((array)$duplicate as $key => $val) {
             if (is_numeric($key)) {
                 // array('field1', 'field2', 'field3') 解析为 ON DUPLICATE KEY UPDATE field1=VALUES(field1), field2=VALUES(field2), field3=VALUES(field3)
                 $updates[] = $this->parseKey($val) . "=VALUES(" . $this->parseKey($val) . ")";
@@ -219,11 +219,11 @@ class Mysql extends Driver
     /**
      * 执行存储过程查询 返回多个数据集
      * @access public
-     * @param string $str  sql指令
-     * @param boolean $fetchSql  不执行只是获取SQL
+     * @param string $str sql指令
+     * @param boolean $fetchSql 不执行只是获取SQL
      * @return mixed
      */
-    public function procedure($str, $fetchSql = false)
+    public function procedure ($str, $fetchSql = false)
     {
         $this->initConnect(false);
         $this->_linkID->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_WARNING);

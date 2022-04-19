@@ -34,7 +34,7 @@ class Log
     protected static $storage = null;
 
     // 日志初始化
-    public static function init($config = array())
+    public static function init ($config = array())
     {
         $type  = isset($config['type']) ? $config['type'] : 'File';
         $class = strpos($type, '\\') ? $type : 'Think\\Log\\Driver\\' . ucwords(strtolower($type));
@@ -47,11 +47,11 @@ class Log
      * @static
      * @access public
      * @param string $message 日志信息
-     * @param string $level  日志级别
-     * @param boolean $record  是否强制记录
+     * @param string $level 日志级别
+     * @param boolean $record 是否强制记录
      * @return void
      */
-    public static function record($message, $level = self::ERR, $record = false)
+    public static function record ($message, $level = self::ERR, $record = false)
     {
         if ($record || false !== strpos(C('LOG_LEVEL'), $level)) {
             self::$log[] = "{$level}: {$message}\r\n";
@@ -63,10 +63,10 @@ class Log
      * @static
      * @access public
      * @param integer $type 日志记录方式
-     * @param string $destination  写入目标
+     * @param string $destination 写入目标
      * @return void
      */
-    public static function save($type = '', $destination = '')
+    public static function save ($type = '', $destination = '')
     {
         if (empty(self::$log)) {
             return;
@@ -91,12 +91,12 @@ class Log
      * @static
      * @access public
      * @param string $message 日志信息
-     * @param string $level  日志级别
+     * @param string $level 日志级别
      * @param integer $type 日志记录方式
-     * @param string $destination  写入目标
+     * @param string $destination 写入目标
      * @return void
      */
-    public static function write($message, $level = self::ERR, $type = '', $destination = '')
+    public static function write ($message, $level = self::ERR, $type = '', $destination = '')
     {
         if (!self::$storage) {
             $type               = $type ?: C('LOG_TYPE');

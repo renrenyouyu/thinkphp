@@ -15,7 +15,7 @@ namespace Behavior;
  */
 class AgentCheckBehavior
 {
-    public function run(&$params)
+    public function run (&$params)
     {
         // 代理访问检测
         $limitProxyVisit = C('LIMIT_PROXY_VISIT', null, true);

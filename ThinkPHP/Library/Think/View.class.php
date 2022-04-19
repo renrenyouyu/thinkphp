@@ -35,7 +35,7 @@ class View
      * @param mixed $name
      * @param mixed $value
      */
-    public function assign($name, $value = '')
+    public function assign ($name, $value = '')
     {
         if (is_array($name)) {
             $this->tVar = array_merge($this->tVar, $name);
@@ -50,7 +50,7 @@ class View
      * @param string $name
      * @return mixed
      */
-    public function get($name = '')
+    public function get ($name = '')
     {
         if ('' === $name) {
             return $this->tVar;
@@ -68,7 +68,7 @@ class View
      * @param string $prefix 模板缓存前缀
      * @return mixed
      */
-    public function display($templateFile = '', $charset = '', $contentType = '', $content = '', $prefix = '')
+    public function display ($templateFile = '', $charset = '', $contentType = '', $content = '', $prefix = '')
     {
         G('viewStartTime');
         // 视图开始标签
@@ -89,7 +89,7 @@ class View
      * @param string $contentType 输出类型
      * @return mixed
      */
-    private function render($content, $charset = '', $contentType = '')
+    private function render ($content, $charset = '', $contentType = '')
     {
         if (empty($charset)) {
             $charset = C('DEFAULT_CHARSET');
@@ -114,7 +114,7 @@ class View
      * @param string $prefix 模板缓存前缀
      * @return string
      */
-    public function fetch($templateFile = '', $content = '', $prefix = '')
+    public function fetch ($templateFile = '', $content = '', $prefix = '')
     {
         if (empty($content)) {
             $templateFile = $this->parseTemplate($templateFile);
@@ -160,7 +160,7 @@ class View
      * @param string $template 模板文件规则
      * @return string
      */
-    public function parseTemplate($template = '')
+    public function parseTemplate ($template = '')
     {
         if (is_file($template)) {
             return $template;
@@ -195,10 +195,10 @@ class View
     /**
      * 获取当前的模板路径
      * @access protected
-     * @param  string $module 模块名
+     * @param string $module 模块名
      * @return string
      */
-    protected function getThemePath($module = MODULE_NAME)
+    protected function getThemePath ($module = MODULE_NAME)
     {
         // 获取当前主题名称
         $theme = $this->getTemplateTheme();
@@ -214,10 +214,10 @@ class View
     /**
      * 设置当前输出的模板主题
      * @access public
-     * @param  mixed $theme 主题名称
+     * @param mixed $theme 主题名称
      * @return View
      */
-    public function theme($theme)
+    public function theme ($theme)
     {
         $this->theme = $theme;
         return $this;
@@ -228,7 +228,7 @@ class View
      * @access private
      * @return string
      */
-    private function getTemplateTheme()
+    private function getTemplateTheme ()
     {
         if ($this->theme) {
             // 指定模板主题

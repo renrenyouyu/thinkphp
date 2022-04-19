@@ -24,7 +24,7 @@ class Hook
      * @param mixed $name 插件名称
      * @return void
      */
-    public static function add($tag, $name)
+    public static function add ($tag, $name)
     {
         if (!isset(self::$tags[$tag])) {
             self::$tags[$tag] = array();
@@ -42,7 +42,7 @@ class Hook
      * @param boolean $recursive 是否递归合并
      * @return void
      */
-    public static function import($data, $recursive = true)
+    public static function import ($data, $recursive = true)
     {
         if (!$recursive) {
             // 覆盖导入
@@ -71,7 +71,7 @@ class Hook
      * @param string $tag 插件位置 留空获取全部
      * @return array
      */
-    public static function get($tag = '')
+    public static function get ($tag = '')
     {
         if (empty($tag)) {
             // 获取全部的插件信息
@@ -87,7 +87,7 @@ class Hook
      * @param mixed $params 传入参数
      * @return void
      */
-    public static function listen($tag, &$params = null)
+    public static function listen ($tag, &$params = null)
     {
         if (isset(self::$tags[$tag])) {
             if (APP_DEBUG) {
@@ -121,7 +121,7 @@ class Hook
      * @param Mixed $params 传入的参数
      * @return void
      */
-    public static function exec($name, $tag, &$params = null)
+    public static function exec ($name, $tag, &$params = null)
     {
         if ('Behavior' == substr($name, -8)) {
             // 行为扩展必须用run入口方法

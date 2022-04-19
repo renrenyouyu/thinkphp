@@ -17,7 +17,7 @@ class CheckActionRouteBehavior
 {
 
     // 行为扩展的执行入口必须是run
-    public function run(&$config)
+    public function run (&$config)
     {
         // 优先检测是否存在PATH_INFO
         $regx = trim($_SERVER['PATH_INFO'], '/');
@@ -62,7 +62,7 @@ class CheckActionRouteBehavior
     }
 
     // 检测URL和规则路由是否匹配
-    private function checkUrlMatch($regx, $rule)
+    private function checkUrlMatch ($regx, $rule)
     {
         $m1    = explode('/', $regx);
         $m2    = explode('/', $rule);
@@ -93,7 +93,7 @@ class CheckActionRouteBehavior
 
     // 解析规范的路由地址
     // 地址格式 操作?参数1=值1&参数2=值2...
-    private function parseUrl($url)
+    private function parseUrl ($url)
     {
         $var = array();
         if (false !== strpos($url, '?')) {
@@ -118,7 +118,7 @@ class CheckActionRouteBehavior
     // 外部地址中可以用动态变量 采用 :1 :2 的方式
     // 'news/:month/:day/:id'=>array('News/read?cate=1','status=1'),
     // 'new/:id'=>array('/new.php?id=:1',301), 重定向
-    private function parseRule($rule, $route, $regx)
+    private function parseRule ($rule, $route, $regx)
     {
         // 获取路由地址规则
         $url = is_array($route) ? $route[0] : $route;
@@ -186,7 +186,7 @@ class CheckActionRouteBehavior
     // 参数值和外部地址中可以用动态变量 采用 :1 :2 的方式
     // '/new\/(\d+)\/(\d+)/'=>array('News/read?id=:1&page=:2&cate=1','status=1'),
     // '/new\/(\d+)/'=>array('/new.php?id=:1&page=:2&status=1','301'), 重定向
-    private function parseRegex($matches, $route, $regx)
+    private function parseRegex ($matches, $route, $regx)
     {
         // 获取路由地址规则
         $url = is_array($route) ? $route[0] : $route;

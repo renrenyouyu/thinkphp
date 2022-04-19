@@ -32,16 +32,16 @@ class Gd
      * 构造方法，可用于打开一张图像
      * @param string $imgname 图像路径
      */
-    public function __construct($imgname = null)
+    public function __construct ($imgname = null)
     {
         $imgname && $this->open($imgname);
     }
 
     /**
      * 打开一张图像
-     * @param  string $imgname 图像路径
+     * @param string $imgname 图像路径
      */
-    public function open($imgname)
+    public function open ($imgname)
     {
         //检测图像文件
         //当本地文件时才判断如下if语句，否则如果是http外网图片时不判断
@@ -81,12 +81,12 @@ class Gd
 
     /**
      * 保存图像
-     * @param  string  $imgname   图像保存名称
-     * @param  string  $type      图像类型
-     * @param  integer $quality   图像质量
-     * @param  boolean $interlace 是否对JPEG类型图像设置隔行扫描
+     * @param string $imgname 图像保存名称
+     * @param string $type 图像类型
+     * @param integer $quality 图像质量
+     * @param boolean $interlace 是否对JPEG类型图像设置隔行扫描
      */
-    public function save($imgname, $type = null, $quality = 80, $interlace = true)
+    public function save ($imgname, $type = null, $quality = 80, $interlace = true)
     {
         if (empty($this->img)) {
             E('没有可以被保存的图像资源');
@@ -120,7 +120,7 @@ class Gd
      * 返回图像宽度
      * @return integer 图像宽度
      */
-    public function width()
+    public function width ()
     {
         if (empty($this->img)) {
             E('没有指定图像资源');
@@ -133,7 +133,7 @@ class Gd
      * 返回图像高度
      * @return integer 图像高度
      */
-    public function height()
+    public function height ()
     {
         if (empty($this->img)) {
             E('没有指定图像资源');
@@ -146,7 +146,7 @@ class Gd
      * 返回图像类型
      * @return string 图像类型
      */
-    public function type()
+    public function type ()
     {
         if (empty($this->img)) {
             E('没有指定图像资源');
@@ -159,7 +159,7 @@ class Gd
      * 返回图像MIME类型
      * @return string 图像MIME类型
      */
-    public function mime()
+    public function mime ()
     {
         if (empty($this->img)) {
             E('没有指定图像资源');
@@ -172,7 +172,7 @@ class Gd
      * 返回图像尺寸数组 0 - 图像宽度，1 - 图像高度
      * @return array 图像尺寸
      */
-    public function size()
+    public function size ()
     {
         if (empty($this->img)) {
             E('没有指定图像资源');
@@ -183,21 +183,21 @@ class Gd
 
     /**
      * 裁剪图像
-     * @param  integer $w      裁剪区域宽度
-     * @param  integer $h      裁剪区域高度
-     * @param  integer $x      裁剪区域x坐标
-     * @param  integer $y      裁剪区域y坐标
-     * @param  integer $width  图像保存宽度
-     * @param  integer $height 图像保存高度
+     * @param integer $w 裁剪区域宽度
+     * @param integer $h 裁剪区域高度
+     * @param integer $x 裁剪区域x坐标
+     * @param integer $y 裁剪区域y坐标
+     * @param integer $width 图像保存宽度
+     * @param integer $height 图像保存高度
      */
-    public function crop($w, $h, $x = 0, $y = 0, $width = null, $height = null)
+    public function crop ($w, $h, $x = 0, $y = 0, $width = null, $height = null)
     {
         if (empty($this->img)) {
             E('没有可以被裁剪的图像资源');
         }
 
         //设置保存尺寸
-        empty($width) && $width   = $w;
+        empty($width) && $width = $w;
         empty($height) && $height = $h;
 
         do {
@@ -224,11 +224,11 @@ class Gd
 
     /**
      * 生成缩略图
-     * @param  integer $width  缩略图最大宽度
-     * @param  integer $height 缩略图最大高度
-     * @param  integer $type   缩略图裁剪类型
+     * @param integer $width 缩略图最大宽度
+     * @param integer $height 缩略图最大高度
+     * @param integer $type 缩略图裁剪类型
      */
-    public function thumb($width, $height, $type = Image::IMAGE_THUMB_SCALE)
+    public function thumb ($width, $height, $type = Image::IMAGE_THUMB_SCALE)
     {
         if (empty($this->img)) {
             E('没有可以被缩略的图像资源');
@@ -251,7 +251,7 @@ class Gd
                 $scale = min($width / $w, $height / $h);
 
                 //设置缩略图的坐标及宽度和高度
-                $x      = $y      = 0;
+                $x      = $y = 0;
                 $width  = $w * $scale;
                 $height = $h * $scale;
                 break;
@@ -338,11 +338,11 @@ class Gd
 
     /**
      * 添加水印
-     * @param  string  $source 水印图片路径
-     * @param  integer $locate 水印位置
-     * @param  integer $alpha  水印透明度
+     * @param string $source 水印图片路径
+     * @param integer $locate 水印位置
+     * @param integer $alpha 水印透明度
      */
-    public function water($source, $locate = Image::IMAGE_WATER_SOUTHEAST, $alpha = 80)
+    public function water ($source, $locate = Image::IMAGE_WATER_SOUTHEAST, $alpha = 80)
     {
         //资源检测
         if (empty($this->img)) {
@@ -422,7 +422,7 @@ class Gd
                 break;
 
             default:
-            /* 自定义水印坐标 */
+                /* 自定义水印坐标 */
                 if (is_array($locate)) {
                     list($x, $y) = $locate;
                 } else {
@@ -451,16 +451,17 @@ class Gd
 
     /**
      * 图像添加文字
-     * @param  string  $text   添加的文字
-     * @param  string  $font   字体路径
-     * @param  integer $size   字号
-     * @param  string  $color  文字颜色
-     * @param  integer $locate 文字写入位置
-     * @param  integer $offset 文字相对当前位置的偏移量
-     * @param  integer $angle  文字倾斜角度
+     * @param string $text 添加的文字
+     * @param string $font 字体路径
+     * @param integer $size 字号
+     * @param string $color 文字颜色
+     * @param integer $locate 文字写入位置
+     * @param integer $offset 文字相对当前位置的偏移量
+     * @param integer $angle 文字倾斜角度
      */
-    public function text($text, $font, $size, $color = '#00000000',
-        $locate = Image::IMAGE_WATER_SOUTHEAST, $offset = 0, $angle = 0) {
+    public function text ($text, $font, $size, $color = '#00000000',
+                          $locate = Image::IMAGE_WATER_SOUTHEAST, $offset = 0, $angle = 0)
+    {
         //资源检测
         if (empty($this->img)) {
             E('没有可以被写入文字的图像资源');
@@ -535,7 +536,7 @@ class Gd
                 break;
 
             default:
-            /* 自定义文字坐标 */
+                /* 自定义文字坐标 */
                 if (is_array($locate)) {
                     list($posx, $posy) = $locate;
                     $x += $posx;
@@ -547,11 +548,11 @@ class Gd
 
         /* 设置偏移量 */
         if (is_array($offset)) {
-            $offset        = array_map('intval', $offset);
+            $offset = array_map('intval', $offset);
             list($ox, $oy) = $offset;
         } else {
             $offset = intval($offset);
-            $ox     = $oy     = $offset;
+            $ox     = $oy = $offset;
         }
 
         /* 设置颜色 */
@@ -573,7 +574,7 @@ class Gd
     }
 
     /* 切换到GIF的下一帧并保存当前帧，内部使用 */
-    private function gifNext()
+    private function gifNext ()
     {
         ob_start();
         ob_implicit_flush(0);
@@ -595,7 +596,7 @@ class Gd
     /**
      * 析构方法，用于销毁图像资源
      */
-    public function __destruct()
+    public function __destruct ()
     {
         empty($this->img) || imagedestroy($this->img);
     }

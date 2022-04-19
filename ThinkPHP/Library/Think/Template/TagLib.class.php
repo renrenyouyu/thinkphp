@@ -64,7 +64,7 @@ class TagLib
      * 架构函数
      * @access public
      */
-    public function __construct()
+    public function __construct ()
     {
         $this->tagLib = strtolower(substr(get_class($this), 6));
         $this->tpl    = \Think\Think::instance('Think\\Template');
@@ -76,7 +76,7 @@ class TagLib
      * @param string $tagStr 标签内容
      * @return array
      */
-    public function parseXmlAttr($attr, $tag)
+    public function parseXmlAttr ($attr, $tag)
     {
         //XML解析安全过滤
         $attr = str_replace('&', '___', $attr);
@@ -85,7 +85,7 @@ class TagLib
         if (!$xml) {
             E(L('_XML_TAG_ERROR_') . ' : ' . $attr);
         }
-        $xml = (array) ($xml->tag->attributes());
+        $xml = (array)($xml->tag->attributes());
         if (isset($xml['@attributes'])) {
             $array = array_change_key_case($xml['@attributes']);
             if ($array) {
@@ -127,7 +127,7 @@ class TagLib
      * @param string $condition 表达式标签内容
      * @return array
      */
-    public function parseCondition($condition)
+    public function parseCondition ($condition)
     {
         $condition = str_ireplace(array_keys($this->comparison), array_values($this->comparison), $condition);
         $condition = preg_replace('/\$(\w+):(\w+)\s/is', '$\\1->\\2 ', $condition);
@@ -154,7 +154,7 @@ class TagLib
      * @param string $name 变量描述
      * @return string
      */
-    public function autoBuildVar($name)
+    public function autoBuildVar ($name)
     {
         if ('Think.' == substr($name, 0, 6)) {
             // 特殊变量
@@ -196,10 +196,10 @@ class TagLib
      * 用于标签属性里面的特殊模板变量解析
      * 格式 以 Think. 打头的变量属于特殊模板变量
      * @access public
-     * @param string $varStr  变量字符串
+     * @param string $varStr 变量字符串
      * @return string
      */
-    public function parseThinkVar($varStr)
+    public function parseThinkVar ($varStr)
     {
         if (is_array($varStr)) {
 //用于正则替换回调函数
@@ -211,11 +211,14 @@ class TagLib
         if (count($vars) >= 3) {
             $vars[2] = trim($vars[2]);
             switch ($vars[1]) {
-                case 'SERVER':$parseStr = '$_SERVER[\'' . $vars[2] . '\']';
+                case 'SERVER':
+                    $parseStr = '$_SERVER[\'' . $vars[2] . '\']';
                     break;
-                case 'GET':$parseStr = '$_GET[\'' . $vars[2] . '\']';
+                case 'GET':
+                    $parseStr = '$_GET[\'' . $vars[2] . '\']';
                     break;
-                case 'POST':$parseStr = '$_POST[\'' . $vars[2] . '\']';
+                case 'POST':
+                    $parseStr = '$_POST[\'' . $vars[2] . '\']';
                     break;
                 case 'COOKIE':
                     if (isset($vars[3])) {
@@ -235,30 +238,41 @@ class TagLib
                         $parseStr = '$_SESSION[\'' . $vars[2] . '\']';
                     }
                     break;
-                case 'ENV':$parseStr = '$_ENV[\'' . $vars[2] . '\']';
+                case 'ENV':
+                    $parseStr = '$_ENV[\'' . $vars[2] . '\']';
                     break;
-                case 'REQUEST':$parseStr = '$_REQUEST[\'' . $vars[2] . '\']';
+                case 'REQUEST':
+                    $parseStr = '$_REQUEST[\'' . $vars[2] . '\']';
                     break;
-                case 'CONST':$parseStr = strtoupper($vars[2]);
+                case 'CONST':
+                    $parseStr = strtoupper($vars[2]);
                     break;
-                case 'LANG':$parseStr = 'L("' . $vars[2] . '")';
+                case 'LANG':
+                    $parseStr = 'L("' . $vars[2] . '")';
                     break;
-                case 'CONFIG':$parseStr = 'C("' . $vars[2] . '")';
+                case 'CONFIG':
+                    $parseStr = 'C("' . $vars[2] . '")';
                     break;
             }
         } else if (count($vars) == 2) {
             switch ($vars[1]) {
-                case 'NOW':$parseStr = "date('Y-m-d g:i a',time())";
+                case 'NOW':
+                    $parseStr = "date('Y-m-d g:i a',time())";
                     break;
-                case 'VERSION':$parseStr = 'THINK_VERSION';
+                case 'VERSION':
+                    $parseStr = 'THINK_VERSION';
                     break;
-                case 'TEMPLATE':$parseStr = 'C("TEMPLATE_NAME")';
+                case 'TEMPLATE':
+                    $parseStr = 'C("TEMPLATE_NAME")';
                     break;
-                case 'LDELIM':$parseStr = 'C("TMPL_L_DELIM")';
+                case 'LDELIM':
+                    $parseStr = 'C("TMPL_L_DELIM")';
                     break;
-                case 'RDELIM':$parseStr = 'C("TMPL_R_DELIM")';
+                case 'RDELIM':
+                    $parseStr = 'C("TMPL_R_DELIM")';
                     break;
-                default:if (defined($vars[1])) {
+                default:
+                    if (defined($vars[1])) {
                         $parseStr = $vars[1];
                     }
 
@@ -268,7 +282,7 @@ class TagLib
     }
 
     // 获取标签定义
-    public function getTags()
+    public function getTags ()
     {
         return $this->tags;
     }

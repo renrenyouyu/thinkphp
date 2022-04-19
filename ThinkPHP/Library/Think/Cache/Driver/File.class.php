@@ -22,7 +22,7 @@ class File extends Cache
      * 架构函数
      * @access public
      */
-    public function __construct($options = array())
+    public function __construct ($options = array())
     {
         if (!empty($options)) {
             $this->options = $options;
@@ -43,7 +43,7 @@ class File extends Cache
      * @access private
      * @return boolean
      */
-    private function init()
+    private function init ()
     {
         // 创建应用缓存目录
         if (!is_dir($this->options['temp'])) {
@@ -57,7 +57,7 @@ class File extends Cache
      * @param string $name 缓存变量名
      * @return string
      */
-    private function filename($name)
+    private function filename ($name)
     {
         $name = md5(C('DATA_CACHE_KEY') . $name);
         if (C('DATA_CACHE_SUBDIR')) {
@@ -82,7 +82,7 @@ class File extends Cache
      * @param string $name 缓存变量名
      * @return mixed
      */
-    public function get($name)
+    public function get ($name)
     {
         $filename = $this->filename($name);
         if (!is_file($filename)) {
@@ -91,7 +91,7 @@ class File extends Cache
         N('cache_read', 1);
         $content = file_get_contents($filename);
         if (false !== $content) {
-            $expire = (int) substr($content, 8, 12);
+            $expire = (int)substr($content, 8, 12);
             if (0 != $expire && time() > filemtime($filename) + $expire) {
                 //缓存过期删除缓存文件
                 unlink($filename);
@@ -123,11 +123,11 @@ class File extends Cache
      * 写入缓存
      * @access public
      * @param string $name 缓存变量名
-     * @param mixed $value  存储数据
-     * @param int $expire  有效时间 0为永久
+     * @param mixed $value 存储数据
+     * @param int $expire 有效时间 0为永久
      * @return boolean
      */
-    public function set($name, $value, $expire = null)
+    public function set ($name, $value, $expire = null)
     {
         N('cache_write', 1);
         if (is_null($expire)) {
@@ -165,7 +165,7 @@ class File extends Cache
      * @param string $name 缓存变量名
      * @return boolean
      */
-    public function rm($name)
+    public function rm ($name)
     {
         return unlink($this->filename($name));
     }
@@ -176,7 +176,7 @@ class File extends Cache
      * @param string $name 缓存变量名
      * @return boolean
      */
-    public function clear()
+    public function clear ()
     {
         $path  = $this->options['temp'];
         $files = scandir($path);

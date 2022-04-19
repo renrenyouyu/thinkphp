@@ -32,7 +32,7 @@ class MergeModel extends Model
      * @param string $tablePrefix 表前缀
      * @param mixed $connection 数据库连接信息
      */
-    public function __construct($name = '', $tablePrefix = '', $connection = '')
+    public function __construct ($name = '', $tablePrefix = '', $connection = '')
     {
         parent::__construct($name, $tablePrefix, $connection);
         // 聚合模型的字段信息
@@ -67,7 +67,7 @@ class MergeModel extends Model
      * @access public
      * @return string
      */
-    public function getTableName()
+    public function getTableName ()
     {
         if (empty($this->trueTableName)) {
             $tableName = array();
@@ -85,8 +85,9 @@ class MergeModel extends Model
      * @access protected
      * @return void
      */
-    protected function _checkTableInfo()
-    {}
+    protected function _checkTableInfo ()
+    {
+    }
 
     /**
      * 新增聚合数据
@@ -96,7 +97,7 @@ class MergeModel extends Model
      * @param boolean $replace 是否replace
      * @return mixed
      */
-    public function add($data = '', $options = array(), $replace = false)
+    public function add ($data = '', $options = array(), $replace = false)
     {
         if (empty($data)) {
             // 没有传递数据，获取当前数据对象的值
@@ -141,7 +142,7 @@ class MergeModel extends Model
      * @param mixed $data 要操作的数据
      * @return boolean
      */
-    protected function _facade($data)
+    protected function _facade ($data)
     {
 
         // 检查数据字段合法性
@@ -182,7 +183,7 @@ class MergeModel extends Model
      * @param array $options 表达式
      * @return boolean
      */
-    public function save($data = '', $options = array())
+    public function save ($data = '', $options = array())
     {
         // 根据主表的主键更新
         if (empty($data)) {
@@ -236,7 +237,7 @@ class MergeModel extends Model
      * @param mixed $options 表达式
      * @return mixed
      */
-    public function delete($options = array())
+    public function delete ($options = array())
     {
         $pk = $this->pk;
         if (empty($options) && empty($this->options['where'])) {
@@ -294,7 +295,7 @@ class MergeModel extends Model
      * @param string $options 表达式
      * @return void
      */
-    protected function _options_filter(&$options)
+    protected function _options_filter (&$options)
     {
         if (!isset($options['join'])) {
             $models = $this->modelList;
@@ -325,7 +326,7 @@ class MergeModel extends Model
      * @param mixed $data 条件表达式
      * @return array
      */
-    protected function checkCondition($where)
+    protected function checkCondition ($where)
     {
         if (is_array($where)) {
             $view = array();
@@ -347,7 +348,7 @@ class MergeModel extends Model
      * @param string $order 字段
      * @return string
      */
-    protected function checkOrder($order = '')
+    protected function checkOrder ($order = '')
     {
         if (is_string($order) && !empty($order)) {
             $orders = explode(',', $order);
@@ -373,7 +374,7 @@ class MergeModel extends Model
      * @param string $group 字段
      * @return string
      */
-    protected function checkGroup($group = '')
+    protected function checkGroup ($group = '')
     {
         if (!empty($group)) {
             $groups = explode(',', $group);
@@ -397,7 +398,7 @@ class MergeModel extends Model
      * @param string $fields 字段
      * @return string
      */
-    protected function checkFields($fields = '')
+    protected function checkFields ($fields = '')
     {
         if (empty($fields) || '*' == $fields) {
             // 获取全部聚合字段
@@ -426,7 +427,7 @@ class MergeModel extends Model
      * @access public
      * @return array
      */
-    public function getDbFields()
+    public function getDbFields ()
     {
         return $this->fields;
     }

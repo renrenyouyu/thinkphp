@@ -41,7 +41,7 @@ class RestController extends Controller
      * 架构函数
      * @access public
      */
-    public function __construct()
+    public function __construct ()
     {
         // 资源类型检测
         if ('' == __EXT__) {
@@ -72,7 +72,7 @@ class RestController extends Controller
      * @param array $args 参数
      * @return mixed
      */
-    public function __call($method, $args)
+    public function __call ($method, $args)
     {
         if (0 === strcasecmp($method, ACTION_NAME . C('ACTION_SUFFIX'))) {
             if (method_exists($this, $method . '_' . $this->_method . '_' . $this->_type)) {
@@ -101,7 +101,7 @@ class RestController extends Controller
      * 获取当前请求的Accept头信息
      * @return string
      */
-    protected function getAcceptType()
+    protected function getAcceptType ()
     {
         $type = array(
             'html' => 'text/html,application/xhtml+xml,*/*',
@@ -132,7 +132,7 @@ class RestController extends Controller
     }
 
     // 发送Http状态信息
-    protected function sendHttpStatus($code)
+    protected function sendHttpStatus ($code)
     {
         static $_status = array(
             // Informational 1xx
@@ -197,7 +197,7 @@ class RestController extends Controller
      * @param String $type 返回类型 JSON XML
      * @return string
      */
-    protected function encodeData($data, $type = '')
+    protected function encodeData ($data, $type = '')
     {
         if (empty($data)) {
             return '';
@@ -224,7 +224,7 @@ class RestController extends Controller
      * @param string $charset 页面输出编码
      * @return void
      */
-    public function setContentType($type, $charset = '')
+    public function setContentType ($type, $charset = '')
     {
         if (headers_sent()) {
             return;
@@ -250,7 +250,7 @@ class RestController extends Controller
      * @param integer $code HTTP状态
      * @return void
      */
-    protected function response($data, $type = '', $code = 200)
+    protected function response ($data, $type = '', $code = 200)
     {
         $this->sendHttpStatus($code);
         exit($this->encodeData($data, strtolower($type)));

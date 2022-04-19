@@ -26,7 +26,7 @@ class AdvModel extends Model
     protected $_filter        = array();
     protected $partition      = array();
 
-    public function __construct($name = '', $tablePrefix = '', $connection = '')
+    public function __construct ($name = '', $tablePrefix = '', $connection = '')
     {
         if ('' !== $name || is_subclass_of($this, 'AdvModel')) {
             // 如果是AdvModel子类或者有传入模型名称则获取字段缓存
@@ -44,7 +44,7 @@ class AdvModel extends Model
      * @param mixed $args 调用参数
      * @return mixed
      */
-    public function __call($method, $args)
+    public function __call ($method, $args)
     {
         if (strtolower(substr($method, 0, 3)) == 'top') {
             // 获取前N条记录
@@ -62,7 +62,7 @@ class AdvModel extends Model
      * @param mixed $data 要操作的数据
      * @return boolean
      */
-    protected function _facade($data)
+    protected function _facade ($data)
     {
         // 检查序列化字段
         $data = $this->serializeField($data);
@@ -70,7 +70,7 @@ class AdvModel extends Model
     }
 
     // 查询成功后的回调方法
-    protected function _after_find(&$result, $options = '')
+    protected function _after_find (&$result, $options = '')
     {
         // 检查序列化字段
         $this->checkSerializeField($result);
@@ -83,7 +83,7 @@ class AdvModel extends Model
     }
 
     // 查询数据集成功后的回调方法
-    protected function _after_select(&$resultSet, $options = '')
+    protected function _after_select (&$resultSet, $options = '')
     {
         // 检查序列化字段
         $resultSet = $this->checkListSerializeField($resultSet);
@@ -94,7 +94,7 @@ class AdvModel extends Model
     }
 
     // 写入前的回调方法
-    protected function _before_insert(&$data, $options = '')
+    protected function _before_insert (&$data, $options = '')
     {
         // 记录乐观锁
         $data = $this->recordLockVersion($data);
@@ -104,14 +104,14 @@ class AdvModel extends Model
         $data = $this->setFilterFields($data);
     }
 
-    protected function _after_insert($data, $options)
+    protected function _after_insert ($data, $options)
     {
         // 保存文本字段
         $this->saveBlobFields($data);
     }
 
     // 更新前的回调方法
-    protected function _before_update(&$data, $options = '')
+    protected function _before_update (&$data, $options = '')
     {
         // 检查乐观锁
         $pk = $this->getPK();
@@ -129,13 +129,13 @@ class AdvModel extends Model
         $data = $this->setFilterFields($data);
     }
 
-    protected function _after_update($data, $options)
+    protected function _after_update ($data, $options)
     {
         // 保存文本字段
         $this->saveBlobFields($data);
     }
 
-    protected function _after_delete($data, $options)
+    protected function _after_delete ($data, $options)
     {
         // 删除Blob数据
         $this->delBlobFields($data);
@@ -147,7 +147,7 @@ class AdvModel extends Model
      * @param array $data 数据对象
      * @return array
      */
-    protected function recordLockVersion($data)
+    protected function recordLockVersion ($data)
     {
         // 记录乐观锁
         if ($this->optimLock && !isset($data[$this->optimLock])) {
@@ -164,7 +164,7 @@ class AdvModel extends Model
      * @param array $data 数据对象
      * @return void
      */
-    protected function cacheLockVersion($data)
+    protected function cacheLockVersion ($data)
     {
         if ($this->optimLock) {
             if (isset($data[$this->optimLock]) && isset($data[$this->getPk()])) {
@@ -177,11 +177,11 @@ class AdvModel extends Model
     /**
      * 检查乐观锁
      * @access protected
-     * @param inteter $id  当前主键
-     * @param array $data  当前数据
+     * @param inteter $id 当前主键
+     * @param array $data 当前数据
      * @return mixed
      */
-    protected function checkLockVersion($id, &$data)
+    protected function checkLockVersion ($id, &$data)
     {
         // 检查乐观锁
         $identify = $this->name . '_' . $id . '_lock_version';
@@ -215,7 +215,7 @@ class AdvModel extends Model
      * @param array $options 查询表达式
      * @return array
      */
-    public function topN($count, $options = array())
+    public function topN ($count, $options = array())
     {
         $options['limit'] = $count;
         return $this->select($options);
@@ -229,7 +229,7 @@ class AdvModel extends Model
      * @param array $options 查询表达式
      * @return mixed
      */
-    public function getN($position = 0, $options = array())
+    public function getN ($position = 0, $options = array())
     {
         if ($position >= 0) {
             // 正向查找
@@ -249,7 +249,7 @@ class AdvModel extends Model
      * @param array $options 查询表达式
      * @return mixed
      */
-    public function first($options = array())
+    public function first ($options = array())
     {
         return $this->getN(0, $options);
     }
@@ -260,7 +260,7 @@ class AdvModel extends Model
      * @param array $options 查询表达式
      * @return mixed
      */
-    public function last($options = array())
+    public function last ($options = array())
     {
         return $this->getN(-1, $options);
     }
@@ -272,15 +272,17 @@ class AdvModel extends Model
      * @param string $type 返回类型 默认为数组
      * @return mixed
      */
-    public function returnResult($data, $type = '')
+    public function returnResult ($data, $type = '')
     {
         if ('' === $type) {
             $type = $this->returnType;
         }
 
         switch ($type) {
-            case 'array':return $data;
-            case 'object':return (object) $data;
+            case 'array':
+                return $data;
+            case 'object':
+                return (object)$data;
             default: // 允许用户自定义返回类型
                 if (class_exists($type)) {
                     return new $type($data);
@@ -297,7 +299,7 @@ class AdvModel extends Model
      * @param mixed $result 查询的数据
      * @return array
      */
-    protected function getFilterFields(&$result)
+    protected function getFilterFields (&$result)
     {
         if (!empty($this->_filter)) {
             foreach ($this->_filter as $field => $filter) {
@@ -318,7 +320,7 @@ class AdvModel extends Model
         return $result;
     }
 
-    protected function getFilterListFields(&$resultSet)
+    protected function getFilterListFields (&$resultSet)
     {
         if (!empty($this->_filter)) {
             foreach ($resultSet as $key => $result) {
@@ -335,7 +337,7 @@ class AdvModel extends Model
      * @param mixed $result 查询的数据
      * @return array
      */
-    protected function setFilterFields($data)
+    protected function setFilterFields ($data)
     {
         if (!empty($this->_filter)) {
             foreach ($this->_filter as $field => $filter) {
@@ -363,7 +365,7 @@ class AdvModel extends Model
      * @param string $type 返回类型 默认为数组
      * @return void
      */
-    protected function returnResultSet(&$resultSet, $type = '')
+    protected function returnResultSet (&$resultSet, $type = '')
     {
         foreach ($resultSet as $key => $data) {
             $resultSet[$key] = $this->returnResult($data, $type);
@@ -372,7 +374,7 @@ class AdvModel extends Model
         return $resultSet;
     }
 
-    protected function checkBlobFields(&$data)
+    protected function checkBlobFields (&$data)
     {
         // 检查Blob文件保存字段
         if (!empty($this->blobFields)) {
@@ -398,7 +400,7 @@ class AdvModel extends Model
      * @param string $field 查询的字段
      * @return void
      */
-    protected function getListBlobFields(&$resultSet, $field = '')
+    protected function getListBlobFields (&$resultSet, $field = '')
     {
         if (!empty($this->blobFields)) {
             foreach ($resultSet as $key => $result) {
@@ -416,7 +418,7 @@ class AdvModel extends Model
      * @param string $field 查询的字段
      * @return void
      */
-    protected function getBlobFields(&$data, $field = '')
+    protected function getBlobFields (&$data, $field = '')
     {
         if (!empty($this->blobFields)) {
             $pk = $this->getPk();
@@ -440,7 +442,7 @@ class AdvModel extends Model
      * @param mixed $data 保存的数据
      * @return void
      */
-    protected function saveBlobFields(&$data)
+    protected function saveBlobFields (&$data)
     {
         if (!empty($this->blobFields)) {
             foreach ($this->blobValues as $key => $val) {
@@ -460,7 +462,7 @@ class AdvModel extends Model
      * @param string $field 查询的字段
      * @return void
      */
-    protected function delBlobFields(&$data, $field = '')
+    protected function delBlobFields (&$data, $field = '')
     {
         if (!empty($this->blobFields)) {
             $pk = $this->getPk();
@@ -483,7 +485,7 @@ class AdvModel extends Model
      * @param array $data 数据
      * @return array
      */
-    protected function serializeField(&$data)
+    protected function serializeField (&$data)
     {
         // 检查序列化字段
         if (!empty($this->serializeField)) {
@@ -507,7 +509,7 @@ class AdvModel extends Model
     }
 
     // 检查返回数据的序列化字段
-    protected function checkSerializeField(&$result)
+    protected function checkSerializeField (&$result)
     {
         // 检查序列化字段
         if (!empty($this->serializeField)) {
@@ -526,7 +528,7 @@ class AdvModel extends Model
     }
 
     // 检查数据集的序列化字段
-    protected function checkListSerializeField(&$resultSet)
+    protected function checkListSerializeField (&$resultSet)
     {
         // 检查序列化字段
         if (!empty($this->serializeField)) {
@@ -553,7 +555,7 @@ class AdvModel extends Model
      * @param array $data 数据
      * @return array
      */
-    protected function checkReadonlyField(&$data)
+    protected function checkReadonlyField (&$data)
     {
         if (!empty($this->readonlyField)) {
             foreach ($this->readonlyField as $key => $field) {
@@ -570,10 +572,10 @@ class AdvModel extends Model
      * 批处理执行SQL语句
      * 批处理的指令都认为是execute操作
      * @access public
-     * @param array $sql  SQL批处理指令
+     * @param array $sql SQL批处理指令
      * @return boolean
      */
-    public function patchQuery($sql = array())
+    public function patchQuery ($sql = array())
     {
         if (!is_array($sql)) {
             return false;
@@ -604,7 +606,7 @@ class AdvModel extends Model
      * @param array $data 操作的数据
      * @return string
      */
-    public function getPartitionTableName($data = array())
+    public function getPartitionTableName ($data = array())
     {
         // 对数据表进行分区
         if (isset($data[$this->partition['field']])) {

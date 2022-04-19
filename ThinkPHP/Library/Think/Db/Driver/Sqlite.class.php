@@ -25,7 +25,7 @@ class Sqlite extends Driver
      * @param array $config 连接信息
      * @return string
      */
-    protected function parseDsn($config)
+    protected function parseDsn ($config)
     {
         $dsn = 'sqlite:' . $config['database'];
         return $dsn;
@@ -36,17 +36,17 @@ class Sqlite extends Driver
      * @access public
      * @return array
      */
-    public function getFields($tableName)
+    public function getFields ($tableName)
     {
         list($tableName) = explode(' ', $tableName);
-        $result          = $this->query('PRAGMA table_info( ' . $tableName . ' )');
-        $info            = array();
+        $result = $this->query('PRAGMA table_info( ' . $tableName . ' )');
+        $info   = array();
         if ($result) {
             foreach ($result as $key => $val) {
                 $info[$val['name']] = array(
                     'name'    => $val['name'],
                     'type'    => $val['type'],
-                    'notnull' => (bool) (1 === $val['notnull']),
+                    'notnull' => (bool)(1 === $val['notnull']),
                     'default' => $val['dflt_value'],
                     'primary' => '1' == $val['pk'],
                     'autoinc' => false,
@@ -61,12 +61,12 @@ class Sqlite extends Driver
      * @access public
      * @return array
      */
-    public function getTables($dbName = '')
+    public function getTables ($dbName = '')
     {
         $result = $this->query("SELECT name FROM sqlite_master WHERE type='table' "
             . "UNION ALL SELECT name FROM sqlite_temp_master "
             . "WHERE type='table' ORDER BY name");
-        $info = array();
+        $info   = array();
         foreach ($result as $key => $val) {
             $info[$key] = current($val);
         }
@@ -76,10 +76,10 @@ class Sqlite extends Driver
     /**
      * SQL指令安全过滤
      * @access public
-     * @param string $str  SQL指令
+     * @param string $str SQL指令
      * @return string
      */
-    public function escapeString($str)
+    public function escapeString ($str)
     {
         return str_ireplace("'", "''", $str);
     }
@@ -89,7 +89,7 @@ class Sqlite extends Driver
      * @access public
      * @return string
      */
-    public function parseLimit($limit)
+    public function parseLimit ($limit)
     {
         $limitStr = '';
         if (!empty($limit)) {
@@ -108,7 +108,7 @@ class Sqlite extends Driver
      * @access protected
      * @return string
      */
-    protected function parseRand()
+    protected function parseRand ()
     {
         return 'RANDOM()';
     }

@@ -32,7 +32,6 @@ namespace Behavior;
  *UPGRADE_NOTICE_DEBUG=>true, //调试默认，如果为true，UPGRADE_NOTICE_CHECK_INTERVAL配置不起作用，每次都会进行版本检查，此时用于调试，调试完毕后请设置次配置为false
  *
  */
-
 class UpgradeNoticeBehavior
 {
 
@@ -41,7 +40,8 @@ class UpgradeNoticeBehavior
     protected $httpDesc_;
     protected $accesskey_;
     protected $secretkey_;
-    public function run(&$params)
+
+    public function run (&$params)
     {
         if (C('UPGRADE_NOTICE_ON') && (!S('think_upgrade_interval') || C('UPGRADE_NOTICE_DEBUG'))) {
             if (IS_SAE && C('UPGRADE_NOTICE_QUEUE') && !isset($_POST['think_upgrade_queque'])) {
@@ -68,7 +68,8 @@ class UpgradeNoticeBehavior
             S('think_upgrade_interval', true, C('UPGRADE_NOTICE_CHECK_INTERVAL', null, 604800));
         }
     }
-    private function sendSms($msg)
+
+    private function sendSms ($msg)
     {
         $timestamp = time();
         $url       = 'http://inno.smsinter.sina.com.cn/sae_sms_service/sendsms.php'; //发送短信的接口地址
@@ -80,7 +81,7 @@ class UpgradeNoticeBehavior
             "TimeStamp: " . $timestamp,
             "Signature: $signature",
         );
-        $data = array(
+        $data      = array(
             'mobile'   => C('UPGRADE_NOTICE_MOBILE', null, ''),
             'msg'      => $msg,
             'encoding' => 'UTF-8',
@@ -96,7 +97,8 @@ class UpgradeNoticeBehavior
 
         return true;
     }
-    private function send($url, $params = array(), $headers = array())
+
+    private function send ($url, $params = array(), $headers = array())
     {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);

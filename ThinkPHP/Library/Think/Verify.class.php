@@ -37,9 +37,9 @@ class Verify
     /**
      * 架构方法 设置参数
      * @access public
-     * @param  array $config 配置参数
+     * @param array $config 配置参数
      */
-    public function __construct($config = array())
+    public function __construct ($config = array())
     {
         $this->config = array_merge($this->config, $config);
     }
@@ -47,10 +47,10 @@ class Verify
     /**
      * 使用 $this->name 获取配置
      * @access public
-     * @param  string $name 配置名称
+     * @param string $name 配置名称
      * @return multitype    配置值
      */
-    public function __get($name)
+    public function __get ($name)
     {
         return $this->config[$name];
     }
@@ -58,11 +58,11 @@ class Verify
     /**
      * 设置验证码配置
      * @access public
-     * @param  string $name 配置名称
-     * @param  string $value 配置值
+     * @param string $name 配置名称
+     * @param string $value 配置值
      * @return void
      */
-    public function __set($name, $value)
+    public function __set ($name, $value)
     {
         if (isset($this->config[$name])) {
             $this->config[$name] = $value;
@@ -72,10 +72,10 @@ class Verify
     /**
      * 检查配置
      * @access public
-     * @param  string $name 配置名称
+     * @param string $name 配置名称
      * @return bool
      */
-    public function __isset($name)
+    public function __isset ($name)
     {
         return isset($this->config[$name]);
     }
@@ -87,7 +87,7 @@ class Verify
      * @param string $id 验证码标识
      * @return bool 用户验证码是否正确
      */
-    public function check($code, $id = '')
+    public function check ($code, $id = '')
     {
         $key = $this->authcode($this->seKey) . $id;
         // 验证码不能为空
@@ -116,7 +116,7 @@ class Verify
      * @param string $id 要生成验证码的标识
      * @return void
      */
-    public function entry($id = '')
+    public function entry ($id = '')
     {
         // 图片宽(px)
         $this->imageW || $this->imageW = $this->length * $this->fontSize * 1.5 + $this->length * $this->fontSize / 2;
@@ -170,7 +170,7 @@ class Verify
         } else {
             for ($i = 0; $i < $this->length; $i++) {
                 $code[$i] = $this->codeSet[mt_rand(0, strlen($this->codeSet) - 1)];
-                $codeNX += mt_rand($this->fontSize * 1.2, $this->fontSize * 1.6);
+                $codeNX   += mt_rand($this->fontSize * 1.2, $this->fontSize * 1.6);
                 imagettftext($this->_image, $this->fontSize, mt_rand(-40, 40), $codeNX, $this->fontSize * 1.6, $this->_color, $this->fontttf, $code[$i]);
             }
         }
@@ -205,7 +205,7 @@ class Verify
      *        ω：决定周期（最小正周期T=2π/∣ω∣）
      *
      */
-    private function _writeCurve()
+    private function _writeCurve ()
     {
         $px = $py = 0;
 
@@ -222,7 +222,7 @@ class Verify
         for ($px = $px1; $px <= $px2; $px = $px + 1) {
             if (0 != $w) {
                 $py = $A * sin($w * $px + $f) + $b + $this->imageH / 2; // y = Asin(ωx+φ) + b
-                $i  = (int) ($this->fontSize / 5);
+                $i  = (int)($this->fontSize / 5);
                 while ($i > 0) {
                     imagesetpixel($this->_image, $px + $i, $py + $i, $this->_color); // 这里(while)循环画像素点比imagettftext和imagestring用字体大小一次画出（不用这while循环）性能要好很多
                     $i--;
@@ -242,7 +242,7 @@ class Verify
         for ($px = $px1; $px <= $px2; $px = $px + 1) {
             if (0 != $w) {
                 $py = $A * sin($w * $px + $f) + $b + $this->imageH / 2; // y = Asin(ωx+φ) + b
-                $i  = (int) ($this->fontSize / 5);
+                $i  = (int)($this->fontSize / 5);
                 while ($i > 0) {
                     imagesetpixel($this->_image, $px + $i, $py + $i, $this->_color);
                     $i--;
@@ -255,7 +255,7 @@ class Verify
      * 画杂点
      * 往图片上写不同颜色的字母或数字
      */
-    private function _writeNoise()
+    private function _writeNoise ()
     {
         $codeSet = '2345678abcdefhijkmnpqrstuvwxyz';
         for ($i = 0; $i < 10; $i++) {
@@ -272,7 +272,7 @@ class Verify
      * 绘制背景图片
      * 注：如果验证码输出图片比较大，将占用比较多的系统资源
      */
-    private function _background()
+    private function _background ()
     {
         $path = dirname(__FILE__) . '/Verify/bgs/';
         $dir  = dir($path);
@@ -295,7 +295,7 @@ class Verify
     }
 
     /* 加密验证码 */
-    private function authcode($str)
+    private function authcode ($str)
     {
         $key = substr(md5($this->seKey), 5, 8);
         $str = substr(md5($str), 8, 10);

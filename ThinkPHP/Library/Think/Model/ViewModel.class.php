@@ -25,15 +25,16 @@ class ViewModel extends Model
      * @access protected
      * @return void
      */
-    protected function _checkTableInfo()
-    {}
+    protected function _checkTableInfo ()
+    {
+    }
 
     /**
      * 得到完整的数据表名
      * @access public
      * @return string
      */
-    public function getTableName()
+    public function getTableName ()
     {
         if (empty($this->trueTableName)) {
             $tableName = '';
@@ -43,10 +44,12 @@ class ViewModel extends Model
                     // 2011/10/17 添加实际表名定义支持 可以实现同一个表的视图
                     $tableName .= $view['_table'];
                     $prefix    = $this->tablePrefix;
-                    $tableName = preg_replace_callback("/__([A-Z_-]+)__/sU", function ($match) use ($prefix) {return $prefix . strtolower($match[1]);}, $tableName);
+                    $tableName = preg_replace_callback("/__([A-Z_-]+)__/sU", function ($match) use ($prefix) {
+                        return $prefix . strtolower($match[1]);
+                    }, $tableName);
                 } else {
-                    $class = parse_res_name($key, C('DEFAULT_M_LAYER'));
-                    $Model = class_exists($class) ? new $class() : M($key);
+                    $class     = parse_res_name($key, C('DEFAULT_M_LAYER'));
+                    $Model     = class_exists($class) ? new $class() : M($key);
                     $tableName .= $Model->getTableName();
                 }
                 // 表别名定义
@@ -54,9 +57,9 @@ class ViewModel extends Model
                 // 支持ON 条件定义
                 $tableName .= !empty($view['_on']) ? ' ON ' . $view['_on'] : '';
                 // 指定JOIN类型 例如 RIGHT INNER LEFT 下一个表有效
-                $type = !empty($view['_type']) ? $view['_type'] : '';
+                $type      = !empty($view['_type']) ? $view['_type'] : '';
                 $tableName .= ' ' . strtoupper($type) . ' JOIN ';
-                $len = strlen($type . '_JOIN ');
+                $len       = strlen($type . '_JOIN ');
             }
             $tableName           = substr($tableName, 0, -$len);
             $this->trueTableName = $tableName;
@@ -70,7 +73,7 @@ class ViewModel extends Model
      * @param string $options 表达式
      * @return void
      */
-    protected function _options_filter(&$options)
+    protected function _options_filter (&$options)
     {
         if (isset($options['field'])) {
             $options['field'] = $this->checkFields($options['field']);
@@ -99,7 +102,7 @@ class ViewModel extends Model
      * @param array $fields 字段数组
      * @return array
      */
-    private function _checkFields($name, $fields)
+    private function _checkFields ($name, $fields)
     {
         if (false !== $pos = array_search('*', $fields)) {
             // 定义所有字段
@@ -114,7 +117,7 @@ class ViewModel extends Model
      * @param $where 条件表达式
      * @return array
      */
-    protected function checkCondition($where)
+    protected function checkCondition ($where)
     {
         if (is_array($where)) {
             $fields = $field_map_table = array();
@@ -144,7 +147,7 @@ class ViewModel extends Model
      * @param $field_map_table
      * @return array
      */
-    private function _parseWhere($where, $fields, $field_map_table)
+    private function _parseWhere ($where, $fields, $field_map_table)
     {
         $view = array();
         foreach ($where as $name => $val) {
@@ -198,7 +201,7 @@ class ViewModel extends Model
      * @param string $order 字段
      * @return string
      */
-    protected function checkOrder($order = '')
+    protected function checkOrder ($order = '')
     {
         if (is_string($order) && !empty($order)) {
             $orders = explode(',', $order);
@@ -230,7 +233,7 @@ class ViewModel extends Model
      * @param string $group 字段
      * @return string
      */
-    protected function checkGroup($group = '')
+    protected function checkGroup ($group = '')
     {
         if (!empty($group)) {
             $groups = explode(',', $group);
@@ -259,7 +262,7 @@ class ViewModel extends Model
      * @param string $fields 字段
      * @return string
      */
-    protected function checkFields($fields = '')
+    protected function checkFields ($fields = '')
     {
         if (empty($fields) || '*' == $fields) {
             // 获取全部视图字段
@@ -305,8 +308,7 @@ class ViewModel extends Model
                         if (is_numeric($_field)) {
                             $array[] = $k . '.' . $field . ' AS ' . $field;
                         } elseif ('_' != substr($_field, 0, 1)) {
-                            if (false !== strpos($_field, '*') || false !== strpos($_field, '(') || false !== strpos($_field, '.'))
-                            //如果包含* 或者 使用了sql方法 则不再添加前面的表名
+                            if (false !== strpos($_field, '*') || false !== strpos($_field, '(') || false !== strpos($_field, '.')) //如果包含* 或者 使用了sql方法 则不再添加前面的表名
                             {
                                 $array[] = $_field . ' AS ' . $field;
                             } else {

@@ -30,7 +30,7 @@ class Db extends Cache
      * @param array $options 缓存参数
      * @access public
      */
-    public function __construct($options = array())
+    public function __construct ($options = array())
     {
         if (empty($options)) {
             $options = array(
@@ -50,7 +50,7 @@ class Db extends Cache
      * @param string $name 缓存变量名
      * @return mixed
      */
-    public function get($name)
+    public function get ($name)
     {
         $name = $this->options['prefix'] . addslashes($name);
         N('cache_read', 1);
@@ -79,11 +79,11 @@ class Db extends Cache
      * 写入缓存
      * @access public
      * @param string $name 缓存变量名
-     * @param mixed $value  存储数据
-     * @param integer $expire  有效时间（秒）
+     * @param mixed $value 存储数据
+     * @param integer $expire 有效时间（秒）
      * @return boolean
      */
-    public function set($name, $value, $expire = null)
+    public function set ($name, $value, $expire = null)
     {
         $data = serialize($value);
         $name = $this->options['prefix'] . addslashes($name);
@@ -127,7 +127,7 @@ class Db extends Cache
      * @param string $name 缓存变量名
      * @return boolean
      */
-    public function rm($name)
+    public function rm ($name)
     {
         $name = $this->options['prefix'] . addslashes($name);
         return $this->handler->execute('DELETE FROM `' . $this->options['table'] . '` WHERE `cachekey`=\'' . $name . '\'');
@@ -138,7 +138,7 @@ class Db extends Cache
      * @access public
      * @return boolean
      */
-    public function clear()
+    public function clear ()
     {
         return $this->handler->execute('TRUNCATE TABLE `' . $this->options['table'] . '`');
     }

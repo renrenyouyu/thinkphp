@@ -14,7 +14,6 @@ namespace Think;
  * ThinkPHP API模式的Dispatcher类
  * 完成URL解析、路由和调度
  */
-
 class Dispatcher
 {
 
@@ -23,7 +22,7 @@ class Dispatcher
      * @access public
      * @return void
      */
-    public static function dispatch()
+    public static function dispatch ()
     {
         $varPath       = C('VAR_PATHINFO');
         $varModule     = C('VAR_MODULE');
@@ -111,7 +110,7 @@ class Dispatcher
             foreach ($types as $type) {
                 if (!empty($_SERVER[$type])) {
                     $_SERVER['PATH_INFO'] = (0 === strpos($_SERVER[$type], $_SERVER['SCRIPT_NAME'])) ?
-                    substr($_SERVER[$type], strlen($_SERVER['SCRIPT_NAME'])) : $_SERVER[$type];
+                        substr($_SERVER[$type], strlen($_SERVER['SCRIPT_NAME'])) : $_SERVER[$type];
                     break;
                 }
             }
@@ -195,7 +194,9 @@ class Dispatcher
                 // URL参数按顺序绑定变量
                 $var = $paths;
             } else {
-                preg_replace_callback('/(\w+)\/([^\/]+)/', function ($match) use (&$var) {$var[$match[1]] = strip_tags($match[2]);}, implode('/', $paths));
+                preg_replace_callback('/(\w+)\/([^\/]+)/', function ($match) use (&$var) {
+                    $var[$match[1]] = strip_tags($match[2]);
+                }, implode('/', $paths));
             }
             $_GET = array_merge($var, $_GET);
         }
@@ -209,7 +210,7 @@ class Dispatcher
     /**
      * 获得实际的控制器名称
      */
-    private static function getController($var, $urlCase)
+    private static function getController ($var, $urlCase)
     {
         $controller = (!empty($_GET[$var]) ? $_GET[$var] : C('DEFAULT_CONTROLLER'));
         unset($_GET[$var]);
@@ -224,11 +225,11 @@ class Dispatcher
     /**
      * 获得实际的操作名称
      */
-    private static function getAction($var, $urlCase)
+    private static function getAction ($var, $urlCase)
     {
         $action = !empty($_POST[$var]) ?
-        $_POST[$var] :
-        (!empty($_GET[$var]) ? $_GET[$var] : C('DEFAULT_ACTION'));
+            $_POST[$var] :
+            (!empty($_GET[$var]) ? $_GET[$var] : C('DEFAULT_ACTION'));
         unset($_POST[$var], $_GET[$var]);
         return strip_tags($urlCase ? strtolower($action) : $action);
     }
@@ -236,7 +237,7 @@ class Dispatcher
     /**
      * 获得实际的模块名称
      */
-    private static function getModule($var)
+    private static function getModule ($var)
     {
         $module = (!empty($_GET[$var]) ? $_GET[$var] : C('DEFAULT_MODULE'));
         unset($_GET[$var]);

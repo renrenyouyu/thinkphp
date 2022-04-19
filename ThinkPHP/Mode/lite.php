@@ -42,6 +42,5 @@ return array(
         CORE_PATH . 'View' . EXT,
     ),
     // 行为扩展定义
-    'tags'   => array(
-    ),
+    'tags'   => array(),
 );

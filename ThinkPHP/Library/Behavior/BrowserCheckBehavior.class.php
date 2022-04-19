@@ -15,7 +15,7 @@ namespace Behavior;
  */
 class BrowserCheckBehavior
 {
-    public function run(&$params)
+    public function run (&$params)
     {
         if ('GET' == $_SERVER['REQUEST_METHOD']) {
             //    启用页面防刷新机制

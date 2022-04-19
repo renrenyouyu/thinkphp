@@ -70,14 +70,14 @@ abstract class Driver
         PDO::ATTR_ORACLE_NULLS      => PDO::NULL_NATURAL,
         PDO::ATTR_STRINGIFY_FETCHES => false,
     );
-    protected $bind = array(); // 参数绑定
+    protected $bind    = array(); // 参数绑定
 
     /**
      * 架构函数 读取数据库配置信息
      * @access public
      * @param array $config 数据库配置数组
      */
-    public function __construct($config = '')
+    public function __construct ($config = '')
     {
         if (!empty($config)) {
             $this->config = array_merge($this->config, $config);
@@ -91,7 +91,7 @@ abstract class Driver
      * 连接数据库方法
      * @access public
      */
-    public function connect($config = '', $linkNum = 0, $autoConnection = false)
+    public function connect ($config = '', $linkNum = 0, $autoConnection = false)
     {
         if (!isset($this->linkID[$linkNum])) {
             if (empty($config)) {
@@ -125,14 +125,15 @@ abstract class Driver
      * @param array $config 连接信息
      * @return string
      */
-    protected function parseDsn($config)
-    {}
+    protected function parseDsn ($config)
+    {
+    }
 
     /**
      * 释放查询结果
      * @access public
      */
-    public function free()
+    public function free ()
     {
         $this->PDOStatement = null;
     }
@@ -140,12 +141,12 @@ abstract class Driver
     /**
      * 执行查询 返回数据集
      * @access public
-     * @param string $str  sql指令
-     * @param boolean $fetchSql  不执行只是获取SQL
-     * @param boolean $master  是否在主服务器读操作
+     * @param string $str sql指令
+     * @param boolean $fetchSql 不执行只是获取SQL
+     * @param boolean $master 是否在主服务器读操作
      * @return mixed
      */
-    public function query($str, $fetchSql = false, $master = false)
+    public function query ($str, $fetchSql = false, $master = false)
     {
         $this->initConnect($master);
         if (!$this->_linkID) {
@@ -155,7 +156,9 @@ abstract class Driver
         $this->queryStr = $str;
         if (!empty($this->bind)) {
             $that           = $this;
-            $this->queryStr = strtr($this->queryStr, array_map(function ($val) use ($that) {return '\'' . $that->escapeString($val) . '\'';}, $this->bind));
+            $this->queryStr = strtr($this->queryStr, array_map(function ($val) use ($that) {
+                return '\'' . $that->escapeString($val) . '\'';
+            }, $this->bind));
         }
         if ($fetchSql) {
             return $this->queryStr;
@@ -201,11 +204,11 @@ abstract class Driver
     /**
      * 执行语句
      * @access public
-     * @param string $str  sql指令
-     * @param boolean $fetchSql  不执行只是获取SQL
+     * @param string $str sql指令
+     * @param boolean $fetchSql 不执行只是获取SQL
      * @return mixed
      */
-    public function execute($str, $fetchSql = false)
+    public function execute ($str, $fetchSql = false)
     {
         $this->initConnect(true);
         if (!$this->_linkID) {
@@ -215,7 +218,9 @@ abstract class Driver
         $this->queryStr = $str;
         if (!empty($this->bind)) {
             $that           = $this;
-            $this->queryStr = strtr($this->queryStr, array_map(function ($val) use ($that) {return '\'' . $that->escapeString($val) . '\'';}, $this->bind));
+            $this->queryStr = strtr($this->queryStr, array_map(function ($val) use ($that) {
+                return '\'' . $that->escapeString($val) . '\'';
+            }, $this->bind));
         }
         if ($fetchSql) {
             return $this->queryStr;
@@ -267,7 +272,7 @@ abstract class Driver
      * @access public
      * @return void
      */
-    public function startTrans()
+    public function startTrans ()
     {
         $this->initConnect(true);
         if (!$this->_linkID) {
@@ -287,7 +292,7 @@ abstract class Driver
      * @access public
      * @return boolean
      */
-    public function commit()
+    public function commit ()
     {
         if ($this->transTimes > 0) {
             $result           = $this->_linkID->commit();
@@ -305,7 +310,7 @@ abstract class Driver
      * @access public
      * @return boolean
      */
-    public function rollback()
+    public function rollback ()
     {
         if ($this->transTimes > 0) {
             $result           = $this->_linkID->rollback();
@@ -323,7 +328,7 @@ abstract class Driver
      * @access private
      * @return array
      */
-    private function getResult()
+    private function getResult ()
     {
         //返回数据集
         $result        = $this->PDOStatement->fetchAll(PDO::FETCH_ASSOC);
@@ -337,7 +342,7 @@ abstract class Driver
      * @param boolean $execute 是否包含所有查询
      * @return integer
      */
-    public function getQueryTimes($execute = false)
+    public function getQueryTimes ($execute = false)
     {
         return $execute ? $this->queryTimes + $this->executeTimes : $this->queryTimes;
     }
@@ -347,7 +352,7 @@ abstract class Driver
      * @access public
      * @return integer
      */
-    public function getExecuteTimes()
+    public function getExecuteTimes ()
     {
         return $this->executeTimes;
     }
@@ -356,7 +361,7 @@ abstract class Driver
      * 关闭数据库
      * @access public
      */
-    public function close()
+    public function close ()
     {
         $this->_linkID = null;
     }
@@ -367,7 +372,7 @@ abstract class Driver
      * @access public
      * @return string
      */
-    public function error()
+    public function error ()
     {
         if ($this->PDOStatement) {
             $error       = $this->PDOStatement->errorInfo();
@@ -393,7 +398,7 @@ abstract class Driver
      * @access protected
      * @return string
      */
-    protected function parseLock($lock = false)
+    protected function parseLock ($lock = false)
     {
         return $lock ? ' FOR UPDATE ' : '';
     }
@@ -404,7 +409,7 @@ abstract class Driver
      * @param array $data
      * @return string
      */
-    protected function parseSet($data)
+    protected function parseSet ($data)
     {
         foreach ($data as $key => $val) {
             if (isset($val[0]) && 'exp' == $val[0]) {
@@ -432,7 +437,7 @@ abstract class Driver
      * @param mixed $value 绑定值
      * @return void
      */
-    protected function bindParam($name, $value)
+    protected function bindParam ($name, $value)
     {
         $this->bind[':' . $name] = $value;
     }
@@ -443,7 +448,7 @@ abstract class Driver
      * @param string $key
      * @return string
      */
-    protected function parseKey($key)
+    protected function parseKey ($key)
     {
         return $key;
     }
@@ -454,7 +459,7 @@ abstract class Driver
      * @param mixed $value
      * @return string
      */
-    protected function parseValue($value)
+    protected function parseValue ($value)
     {
         if (is_string($value)) {
             $value = strpos($value, ':') === 0 && in_array($value, array_keys($this->bind)) ? $this->escapeString($value) : '\'' . $this->escapeString($value) . '\'';
@@ -476,7 +481,7 @@ abstract class Driver
      * @param mixed $fields
      * @return string
      */
-    protected function parseField($fields)
+    protected function parseField ($fields)
     {
         if (is_string($fields) && '' !== $fields) {
             $fields = explode(',', $fields);
@@ -507,7 +512,7 @@ abstract class Driver
      * @param mixed $table
      * @return string
      */
-    protected function parseTable($tables)
+    protected function parseTable ($tables)
     {
         if (is_array($tables)) {
             // 支持别名定义
@@ -533,7 +538,7 @@ abstract class Driver
      * @param mixed $where
      * @return string
      */
-    protected function parseWhere($where)
+    protected function parseWhere ($where)
     {
         $whereStr = '';
         if (is_string($where)) {
@@ -594,7 +599,7 @@ abstract class Driver
     }
 
     // where子单元分析
-    protected function parseWhereItem($key, $val)
+    protected function parseWhereItem ($key, $val)
     {
         $whereStr = '';
         if (is_array($val)) {
@@ -631,12 +636,12 @@ abstract class Driver
                         if (is_string($val[1])) {
                             $val[1] = explode(',', $val[1]);
                         }
-                        $zone = implode(',', $this->parseValue($val[1]));
+                        $zone     = implode(',', $this->parseValue($val[1]));
                         $whereStr .= $key . ' ' . $this->exp[$exp] . ' (' . $zone . ')';
                     }
                 } elseif (preg_match('/^(notbetween|not between|between)$/', $exp)) {
                     // BETWEEN运算
-                    $data = is_string($val[1]) ? explode(',', $val[1]) : $val[1];
+                    $data     = is_string($val[1]) ? explode(',', $val[1]) : $val[1];
                     $whereStr .= $key . ' ' . $this->exp[$exp] . ' ' . $this->parseValue($data[0]) . ' AND ' . $this->parseValue($data[1]);
                 } else {
                     E(L('_EXPRESS_ERROR_') . ':' . $val[0]);
@@ -678,7 +683,7 @@ abstract class Driver
      * @param mixed $val
      * @return string
      */
-    protected function parseThinkWhere($key, $val)
+    protected function parseThinkWhere ($key, $val)
     {
         $whereStr = '';
         switch ($key) {
@@ -716,7 +721,7 @@ abstract class Driver
      * @param mixed $lmit
      * @return string
      */
-    protected function parseLimit($limit)
+    protected function parseLimit ($limit)
     {
         return (!empty($limit) && false === strpos($limit, '(')) ? ' LIMIT ' . $limit . ' ' : '';
     }
@@ -727,7 +732,7 @@ abstract class Driver
      * @param mixed $join
      * @return string
      */
-    protected function parseJoin($join)
+    protected function parseJoin ($join)
     {
         $joinStr = '';
         if (!empty($join)) {
@@ -742,7 +747,7 @@ abstract class Driver
      * @param mixed $order
      * @return string
      */
-    protected function parseOrder($order)
+    protected function parseOrder ($order)
     {
         if (empty($order)) {
             return '';
@@ -781,7 +786,7 @@ abstract class Driver
      * @param mixed $group
      * @return string
      */
-    protected function parseGroup($group)
+    protected function parseGroup ($group)
     {
         return !empty($group) ? ' GROUP BY ' . $group : '';
     }
@@ -792,7 +797,7 @@ abstract class Driver
      * @param string $having
      * @return string
      */
-    protected function parseHaving($having)
+    protected function parseHaving ($having)
     {
         return !empty($having) ? ' HAVING ' . $having : '';
     }
@@ -803,7 +808,7 @@ abstract class Driver
      * @param string $comment
      * @return string
      */
-    protected function parseComment($comment)
+    protected function parseComment ($comment)
     {
         return !empty($comment) ? ' /* ' . $comment . ' */' : '';
     }
@@ -814,7 +819,7 @@ abstract class Driver
      * @param mixed $distinct
      * @return string
      */
-    protected function parseDistinct($distinct)
+    protected function parseDistinct ($distinct)
     {
         return !empty($distinct) ? ' DISTINCT ' : '';
     }
@@ -825,7 +830,7 @@ abstract class Driver
      * @param mixed $union
      * @return string
      */
-    protected function parseUnion($union)
+    protected function parseUnion ($union)
     {
         if (empty($union)) {
             return '';
@@ -849,7 +854,7 @@ abstract class Driver
      * @param array $bind
      * @return array
      */
-    protected function parseBind($bind)
+    protected function parseBind ($bind)
     {
         $this->bind = array_merge($this->bind, $bind);
     }
@@ -860,7 +865,7 @@ abstract class Driver
      * @param mixed $index
      * @return string
      */
-    protected function parseForce($index)
+    protected function parseForce ($index)
     {
         if (empty($index)) {
             return '';
@@ -879,7 +884,7 @@ abstract class Driver
      * @param mixed $duplicate
      * @return string
      */
-    protected function parseDuplicate($duplicate)
+    protected function parseDuplicate ($duplicate)
     {
         return '';
     }
@@ -892,9 +897,9 @@ abstract class Driver
      * @param boolean $replace 是否replace
      * @return false | integer
      */
-    public function insert($data, $options = array(), $replace = false)
+    public function insert ($data, $options = array(), $replace = false)
     {
-        $values      = $fields      = array();
+        $values      = $fields = array();
         $this->model = $options['model'];
         $this->parseBind(!empty($options['bind']) ? $options['bind'] : array());
         foreach ($data as $key => $val) {
@@ -919,7 +924,7 @@ abstract class Driver
         // 兼容数字传入方式
         $replace = (is_numeric($replace) && $replace > 0) ? true : $replace;
         $sql     = (true === $replace ? 'REPLACE' : 'INSERT') . ' INTO ' . $this->parseTable($options['table']) . ' (' . implode(',', $fields) . ') VALUES (' . implode(',', $values) . ')' . $this->parseDuplicate($replace);
-        $sql .= $this->parseComment(!empty($options['comment']) ? $options['comment'] : '');
+        $sql     .= $this->parseComment(!empty($options['comment']) ? $options['comment'] : '');
         return $this->execute($sql, !empty($options['fetch_sql']) ? true : false);
     }
 
@@ -931,7 +936,7 @@ abstract class Driver
      * @param boolean $replace 是否replace
      * @return false | integer
      */
-    public function insertAll($dataSet, $options = array(), $replace = false)
+    public function insertAll ($dataSet, $options = array(), $replace = false)
     {
         $values      = array();
         $this->model = $options['model'];
@@ -970,10 +975,10 @@ abstract class Driver
      * @access public
      * @param string $fields 要插入的数据表字段名
      * @param string $table 要插入的数据表名
-     * @param array $option  查询数据参数
+     * @param array $option 查询数据参数
      * @return false | integer
      */
-    public function selectInsert($fields, $table, $options = array())
+    public function selectInsert ($fields, $table, $options = array())
     {
         $this->model = $options['model'];
         $this->parseBind(!empty($options['bind']) ? $options['bind'] : array());
@@ -983,7 +988,7 @@ abstract class Driver
 
         $fields = array_map(array($this, 'parseKey'), $fields);
         $sql    = 'INSERT INTO ' . $this->parseTable($table) . ' (' . implode(',', $fields) . ') ';
-        $sql .= $this->buildSelectSql($options);
+        $sql    .= $this->buildSelectSql($options);
         return $this->execute($sql, !empty($options['fetch_sql']) ? true : false);
     }
 
@@ -994,7 +999,7 @@ abstract class Driver
      * @param array $options 表达式
      * @return false | integer
      */
-    public function update($data, $options)
+    public function update ($data, $options)
     {
         $this->model = $options['model'];
         $this->parseBind(!empty($options['bind']) ? $options['bind'] : array());
@@ -1008,7 +1013,7 @@ abstract class Driver
         if (!strpos($table, ',')) {
             //  单表更新支持order和lmit
             $sql .= $this->parseOrder(!empty($options['order']) ? $options['order'] : '')
-            . $this->parseLimit(!empty($options['limit']) ? $options['limit'] : '');
+                . $this->parseLimit(!empty($options['limit']) ? $options['limit'] : '');
         }
         $sql .= $this->parseComment(!empty($options['comment']) ? $options['comment'] : '');
         return $this->execute($sql, !empty($options['fetch_sql']) ? true : false);
@@ -1020,7 +1025,7 @@ abstract class Driver
      * @param array $options 表达式
      * @return false | integer
      */
-    public function delete($options = array())
+    public function delete ($options = array())
     {
         $this->model = $options['model'];
         $this->parseBind(!empty($options['bind']) ? $options['bind'] : array());
@@ -1037,7 +1042,7 @@ abstract class Driver
         if (!strpos($table, ',')) {
             // 单表删除支持order和limit
             $sql .= $this->parseOrder(!empty($options['order']) ? $options['order'] : '')
-            . $this->parseLimit(!empty($options['limit']) ? $options['limit'] : '');
+                . $this->parseLimit(!empty($options['limit']) ? $options['limit'] : '');
         }
         $sql .= $this->parseComment(!empty($options['comment']) ? $options['comment'] : '');
         return $this->execute($sql, !empty($options['fetch_sql']) ? true : false);
@@ -1049,7 +1054,7 @@ abstract class Driver
      * @param array $options 表达式
      * @return mixed
      */
-    public function select($options = array())
+    public function select ($options = array())
     {
         $this->model = $options['model'];
         $this->parseBind(!empty($options['bind']) ? $options['bind'] : array());
@@ -1064,15 +1069,15 @@ abstract class Driver
      * @param array $options 表达式
      * @return string
      */
-    public function buildSelectSql($options = array())
+    public function buildSelectSql ($options = array())
     {
         if (isset($options['page'])) {
             // 根据页数计算limit
             list($page, $listRows) = $options['page'];
-            $page                  = $page > 0 ? $page : 1;
-            $listRows              = $listRows > 0 ? $listRows : (is_numeric($options['limit']) ? $options['limit'] : 20);
-            $offset                = $listRows * ($page - 1);
-            $options['limit']      = $offset . ',' . $listRows;
+            $page             = $page > 0 ? $page : 1;
+            $listRows         = $listRows > 0 ? $listRows : (is_numeric($options['limit']) ? $options['limit'] : 20);
+            $offset           = $listRows * ($page - 1);
+            $options['limit'] = $offset . ',' . $listRows;
         }
         $sql = $this->parseSql($this->selectSql, $options);
         return $sql;
@@ -1084,7 +1089,7 @@ abstract class Driver
      * @param array $options 表达式
      * @return string
      */
-    public function parseSql($sql, $options = array())
+    public function parseSql ($sql, $options = array())
     {
         $sql = str_replace(
             array('%TABLE%', '%DISTINCT%', '%FIELD%', '%JOIN%', '%WHERE%', '%GROUP%', '%HAVING%', '%ORDER%', '%LIMIT%', '%UNION%', '%LOCK%', '%COMMENT%', '%FORCE%'),
@@ -1108,11 +1113,11 @@ abstract class Driver
 
     /**
      * 获取最近一次查询的sql语句
-     * @param string $model  模型名
+     * @param string $model 模型名
      * @access public
      * @return string
      */
-    public function getLastSql($model = '')
+    public function getLastSql ($model = '')
     {
         return $model ? $this->modelSql[$model] : $this->queryStr;
     }
@@ -1122,7 +1127,7 @@ abstract class Driver
      * @access public
      * @return string
      */
-    public function getLastInsID()
+    public function getLastInsID ()
     {
         return $this->lastInsID;
     }
@@ -1132,7 +1137,7 @@ abstract class Driver
      * @access public
      * @return string
      */
-    public function getError()
+    public function getError ()
     {
         return $this->error;
     }
@@ -1140,10 +1145,10 @@ abstract class Driver
     /**
      * SQL指令安全过滤
      * @access public
-     * @param string $str  SQL字符串
+     * @param string $str SQL字符串
      * @return string
      */
-    public function escapeString($str)
+    public function escapeString ($str)
     {
         return addslashes($str);
     }
@@ -1151,10 +1156,10 @@ abstract class Driver
     /**
      * 设置当前操作模型
      * @access public
-     * @param string $model  模型名
+     * @param string $model 模型名
      * @return void
      */
-    public function setModel($model)
+    public function setModel ($model)
     {
         $this->model = $model;
     }
@@ -1162,9 +1167,9 @@ abstract class Driver
     /**
      * 数据库调试 记录当前SQL
      * @access protected
-     * @param boolean $start  调试开始标记 true 开始 false 结束
+     * @param boolean $start 调试开始标记 true 开始 false 结束
      */
-    protected function debug($start)
+    protected function debug ($start)
     {
         if ($this->config['debug']) {
             // 开启数据库调试模式
@@ -1186,17 +1191,16 @@ abstract class Driver
      * @param boolean $master 主服务器
      * @return void
      */
-    protected function initConnect($master = true)
+    protected function initConnect ($master = true)
     {
-        if (!empty($this->config['deploy']))
-        // 采用分布式数据库
+        if (!empty($this->config['deploy'])) // 采用分布式数据库
         {
             $this->_linkID = $this->multiConnect($master);
         } else
-        // 默认单数据库
-        if (!$this->_linkID) {
-            $this->_linkID = $this->connect();
-        }
+            // 默认单数据库
+            if (!$this->_linkID) {
+                $this->_linkID = $this->connect();
+            }
 
     }
 
@@ -1206,7 +1210,7 @@ abstract class Driver
      * @param boolean $master 主服务器
      * @return void
      */
-    protected function multiConnect($master = false)
+    protected function multiConnect ($master = false)
     {
         // 分布式数据库配置解析
         $_config['username'] = explode(',', $this->config['username']);
@@ -1221,8 +1225,7 @@ abstract class Driver
         // 数据库读写是否分离
         if ($this->config['rw_separate']) {
             // 主从式采用读写分离
-            if ($master)
-            // 主服务器写入
+            if ($master) // 主服务器写入
             {
                 $r = $m;
             } else {
@@ -1266,7 +1269,7 @@ abstract class Driver
      * 析构方法
      * @access public
      */
-    public function __destruct()
+    public function __destruct ()
     {
         // 释放查询
         if ($this->PDOStatement) {

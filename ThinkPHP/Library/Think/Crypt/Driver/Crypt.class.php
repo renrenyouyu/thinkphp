@@ -27,7 +27,7 @@ class Crypt
      * @param integer $expire 有效期（秒）
      * @return string
      */
-    public static function encrypt($str, $key, $expire = 0)
+    public static function encrypt ($str, $key, $expire = 0)
     {
         $expire = sprintf('%010d', $expire ? $expire + time() : 0);
         $r      = md5($key);
@@ -42,7 +42,7 @@ class Crypt
             }
 
             $v .= substr($r, $c, 1) .
-            (substr($str, $i, 1) ^ substr($r, $c, 1));
+                (substr($str, $i, 1) ^ substr($r, $c, 1));
             $c++;
         }
         return self::ed($v, $key);
@@ -54,7 +54,7 @@ class Crypt
      * @param string $key 加密key
      * @return string
      */
-    public static function decrypt($str, $key)
+    public static function decrypt ($str, $key)
     {
         $str = self::ed($str, $key);
         $v   = "";
@@ -73,7 +73,7 @@ class Crypt
         return $data;
     }
 
-    private static function ed($str, $key)
+    private static function ed ($str, $key)
     {
         $r   = md5($key);
         $c   = 0;

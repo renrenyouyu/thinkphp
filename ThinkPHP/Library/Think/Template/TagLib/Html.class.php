@@ -36,7 +36,7 @@ class Html extends TagLib
      * @param array $tag 标签属性
      * @return string|void
      */
-    public function _editor($tag, $content)
+    public function _editor ($tag, $content)
     {
         $id     = !empty($tag['id']) ? $tag['id'] : '_editor';
         $name   = $tag['name'];
@@ -78,7 +78,7 @@ class Html extends TagLib
      * @param array $tag 标签属性
      * @return string|void
      */
-    public function _imageBtn($tag)
+    public function _imageBtn ($tag)
     {
         $name  = $tag['name']; //名称
         $value = $tag['value']; //文字
@@ -103,7 +103,7 @@ class Html extends TagLib
      * @param array $tag 标签属性
      * @return string|void
      */
-    public function _imgLink($tag)
+    public function _imgLink ($tag)
     {
         $name  = $tag['name']; //名称
         $alt   = $tag['alt']; //文字
@@ -126,7 +126,7 @@ class Html extends TagLib
      * @param array $tag 标签属性
      * @return string|void
      */
-    public function _select($tag)
+    public function _select ($tag)
     {
         $name       = $tag['name'];
         $options    = $tag['options'];
@@ -183,7 +183,7 @@ class Html extends TagLib
      * @param array $tag 标签属性
      * @return string|void
      */
-    public function _checkbox($tag)
+    public function _checkbox ($tag)
     {
         $name       = $tag['name'];
         $checkboxes = $tag['checkboxes'];
@@ -209,7 +209,7 @@ class Html extends TagLib
      * @param array $tag 标签属性
      * @return string|void
      */
-    public function _radio($tag)
+    public function _radio ($tag)
     {
         $name      = $tag['name'];
         $radios    = $tag['radios'];
@@ -236,7 +236,7 @@ class Html extends TagLib
      * @param array $tag 标签属性
      * @return string
      */
-    public function _grid($tag)
+    public function _grid ($tag)
     {
         $id         = $tag['id']; //表格ID
         $datasource = $tag['datasource']; //列表显示的数据源VoList名称
@@ -384,7 +384,7 @@ class Html extends TagLib
      * @param array $tag 标签属性
      * @return string
      */
-    public function _list($tag)
+    public function _list ($tag)
     {
         $id         = $tag['id']; //表格ID
         $datasource = $tag['datasource']; //列表显示的数据源VoList名称

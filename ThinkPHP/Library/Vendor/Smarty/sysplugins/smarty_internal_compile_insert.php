@@ -16,7 +16,8 @@
  * @package Smarty
  * @subpackage Compiler
  */
-class Smarty_Internal_Compile_Insert extends Smarty_Internal_CompileBase {
+class Smarty_Internal_Compile_Insert extends Smarty_Internal_CompileBase
+{
 
     /**
      * Attribute definition: Overwrites base class.
@@ -43,20 +44,20 @@ class Smarty_Internal_Compile_Insert extends Smarty_Internal_CompileBase {
     /**
      * Compiles code for the {insert} tag
      *
-     * @param array  $args     array with attributes from parser
+     * @param array $args array with attributes from parser
      * @param object $compiler compiler object
      * @return string compiled code
      */
-    public function compile($args, $compiler)
+    public function compile ($args, $compiler)
     {
         // check and get attributes
         $_attr = $this->getAttributes($compiler, $args);
         // never compile as nocache code
         $compiler->suppressNocacheProcessing = true;
-        $compiler->tag_nocache = true;
-        $_smarty_tpl = $compiler->template;
-        $_name = null;
-        $_script = null;
+        $compiler->tag_nocache               = true;
+        $_smarty_tpl                         = $compiler->template;
+        $_name                               = null;
+        $_script                             = null;
 
         $_output = '<?php ';
         // save posible attributes
@@ -69,9 +70,9 @@ class Smarty_Internal_Compile_Insert extends Smarty_Internal_CompileBase {
         }
         if (isset($_attr['script'])) {
             // script which must be included
-            $_function = "smarty_insert_{$_name}";
+            $_function   = "smarty_insert_{$_name}";
             $_smarty_tpl = $compiler->template;
-            $_filepath = false;
+            $_filepath   = false;
             eval('$_script = ' . $_attr['script'] . ';');
             if (!isset($compiler->smarty->security_policy) && file_exists($_script)) {
                 $_filepath = $_script;
@@ -82,7 +83,7 @@ class Smarty_Internal_Compile_Insert extends Smarty_Internal_CompileBase {
                     $_dir = $compiler->smarty->trusted_dir;
                 }
                 if (!empty($_dir)) {
-                    foreach((array)$_dir as $_script_dir) {
+                    foreach ((array)$_dir as $_script_dir) {
                         $_script_dir = rtrim($_script_dir, '/\\') . DS;
                         if (file_exists($_script_dir . $_script)) {
                             $_filepath = $_script_dir . $_script;

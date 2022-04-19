@@ -23,7 +23,7 @@ class Base64
      * @param integer $expire 有效期（秒）
      * @return string
      */
-    public static function encrypt($data, $key, $expire = 0)
+    public static function encrypt ($data, $key, $expire = 0)
     {
         $expire = sprintf('%010d', $expire ? $expire + time() : 0);
         $key    = md5($key);
@@ -52,7 +52,7 @@ class Base64
      * @param string $key 加密key
      * @return string
      */
-    public static function decrypt($data, $key)
+    public static function decrypt ($data, $key)
     {
         $key = md5($key);
         $x   = 0;

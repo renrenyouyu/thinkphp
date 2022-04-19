@@ -15,7 +15,8 @@
  * @package Smarty
  * @subpackage Debug
  */
-class Smarty_Internal_Debug extends Smarty_Internal_Data {
+class Smarty_Internal_Debug extends Smarty_Internal_Data
+{
 
     /**
      * template data
@@ -29,9 +30,9 @@ class Smarty_Internal_Debug extends Smarty_Internal_Data {
      *
      * @param object $template
      */
-    public static function start_compile($template)
+    public static function start_compile ($template)
     {
-        $key = self::get_key($template);
+        $key                                     = self::get_key($template);
         self::$template_data[$key]['start_time'] = microtime(true);
     }
 
@@ -40,9 +41,9 @@ class Smarty_Internal_Debug extends Smarty_Internal_Data {
      *
      * @param object $template
      */
-    public static function end_compile($template)
+    public static function end_compile ($template)
     {
-        $key = self::get_key($template);
+        $key                                       = self::get_key($template);
         self::$template_data[$key]['compile_time'] += microtime(true) - self::$template_data[$key]['start_time'];
     }
 
@@ -51,9 +52,9 @@ class Smarty_Internal_Debug extends Smarty_Internal_Data {
      *
      * @param object $template
      */
-    public static function start_render($template)
+    public static function start_render ($template)
     {
-        $key = self::get_key($template);
+        $key                                     = self::get_key($template);
         self::$template_data[$key]['start_time'] = microtime(true);
     }
 
@@ -62,9 +63,9 @@ class Smarty_Internal_Debug extends Smarty_Internal_Data {
      *
      * @param object $template
      */
-    public static function end_render($template)
+    public static function end_render ($template)
     {
-        $key = self::get_key($template);
+        $key                                      = self::get_key($template);
         self::$template_data[$key]['render_time'] += microtime(true) - self::$template_data[$key]['start_time'];
     }
 
@@ -73,9 +74,9 @@ class Smarty_Internal_Debug extends Smarty_Internal_Data {
      *
      * @param object $template cached template
      */
-    public static function start_cache($template)
+    public static function start_cache ($template)
     {
-        $key = self::get_key($template);
+        $key                                     = self::get_key($template);
         self::$template_data[$key]['start_time'] = microtime(true);
     }
 
@@ -84,9 +85,9 @@ class Smarty_Internal_Debug extends Smarty_Internal_Data {
      *
      * @param object $template cached template
      */
-    public static function end_cache($template)
+    public static function end_cache ($template)
     {
-        $key = self::get_key($template);
+        $key                                     = self::get_key($template);
         self::$template_data[$key]['cache_time'] += microtime(true) - self::$template_data[$key]['start_time'];
     }
 
@@ -95,7 +96,7 @@ class Smarty_Internal_Debug extends Smarty_Internal_Data {
      *
      * @param Smarty_Internal_Template|Smarty $obj object to debug
      */
-    public static function display_debug($obj)
+    public static function display_debug ($obj)
     {
         // prepare information of assigned variables
         $ptr = self::get_debug_vars($obj);
@@ -109,17 +110,17 @@ class Smarty_Internal_Debug extends Smarty_Internal_Data {
         $_config_vars = $ptr->config_vars;
         ksort($_config_vars);
         $smarty->registered_filters = array();
-        $smarty->autoload_filters = array();
-        $smarty->default_modifiers = array();
-        $smarty->force_compile = false;
-        $smarty->left_delimiter = '{';
-        $smarty->right_delimiter = '}';
-        $smarty->debugging = false;
-        $smarty->force_compile = false;
-        $_template = new Smarty_Internal_Template($smarty->debug_tpl, $smarty);
-        $_template->caching = false;
+        $smarty->autoload_filters   = array();
+        $smarty->default_modifiers  = array();
+        $smarty->force_compile      = false;
+        $smarty->left_delimiter     = '{';
+        $smarty->right_delimiter    = '}';
+        $smarty->debugging          = false;
+        $smarty->force_compile      = false;
+        $_template                  = new Smarty_Internal_Template($smarty->debug_tpl, $smarty);
+        $_template->caching         = false;
         $_template->disableSecurity();
-        $_template->cache_id = null;
+        $_template->cache_id   = null;
         $_template->compile_id = null;
         if ($obj instanceof Smarty_Internal_Template) {
             $_template->assign('template_name', $obj->source->type . ':' . $obj->source->name);
@@ -141,10 +142,10 @@ class Smarty_Internal_Debug extends Smarty_Internal_Data {
      * @param Smarty_Internal_Template|Smarty_Data $obj object to debug
      * @return StdClass
      */
-    public static function get_debug_vars($obj)
+    public static function get_debug_vars ($obj)
     {
         $config_vars = $obj->config_vars;
-        $tpl_vars = array();
+        $tpl_vars    = array();
         foreach ($obj->tpl_vars as $key => $var) {
             $tpl_vars[$key] = clone $var;
             if ($obj instanceof Smarty_Internal_Template) {
@@ -157,28 +158,28 @@ class Smarty_Internal_Debug extends Smarty_Internal_Data {
         }
 
         if (isset($obj->parent)) {
-            $parent = self::get_debug_vars($obj->parent);
-            $tpl_vars = array_merge($parent->tpl_vars, $tpl_vars);
+            $parent      = self::get_debug_vars($obj->parent);
+            $tpl_vars    = array_merge($parent->tpl_vars, $tpl_vars);
             $config_vars = array_merge($parent->config_vars, $config_vars);
         } else {
             foreach (Smarty::$global_tpl_vars as $name => $var) {
                 if (!array_key_exists($name, $tpl_vars)) {
-                    $clone = clone $var;
-                    $clone->scope = 'Global';
+                    $clone           = clone $var;
+                    $clone->scope    = 'Global';
                     $tpl_vars[$name] = $clone;
                 }
             }
         }
-        return (object) array('tpl_vars' => $tpl_vars, 'config_vars' => $config_vars);
+        return (object)array('tpl_vars' => $tpl_vars, 'config_vars' => $config_vars);
     }
 
     /**
      * Return key into $template_data for template
      *
-     * @param object $template  template object
+     * @param object $template template object
      * @return string   key into $template_data
      */
-    private static function get_key($template)
+    private static function get_key ($template)
     {
         static $_is_stringy = array('string' => true, 'eval' => true);
         // calculate Uid if not already done
@@ -190,13 +191,13 @@ class Smarty_Internal_Debug extends Smarty_Internal_Data {
             return $key;
         } else {
             if (isset($_is_stringy[$template->source->type])) {
-                self::$template_data[$key]['name'] = '\''.substr($template->source->name,0,25).'...\'';
+                self::$template_data[$key]['name'] = '\'' . substr($template->source->name, 0, 25) . '...\'';
             } else {
                 self::$template_data[$key]['name'] = $template->source->filepath;
             }
             self::$template_data[$key]['compile_time'] = 0;
-            self::$template_data[$key]['render_time'] = 0;
-            self::$template_data[$key]['cache_time'] = 0;
+            self::$template_data[$key]['render_time']  = 0;
+            self::$template_data[$key]['cache_time']   = 0;
             return $key;
         }
     }

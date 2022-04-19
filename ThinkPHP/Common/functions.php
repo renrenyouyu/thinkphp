@@ -20,7 +20,7 @@
  * @param mixed $default 默认值
  * @return mixed
  */
-function C($name = null, $value = null, $default = null)
+function C ($name = null, $value = null, $default = null)
 {
     static $_config = array();
     // 无参数时获取所有
@@ -62,7 +62,7 @@ function C($name = null, $value = null, $default = null)
  * @param string $parse 配置解析方法 有些格式需要用户自己解析
  * @return array
  */
-function load_config($file, $parse = CONF_PARSE)
+function load_config ($file, $parse = CONF_PARSE)
 {
     $ext = pathinfo($file, PATHINFO_EXTENSION);
     switch ($ext) {
@@ -73,7 +73,7 @@ function load_config($file, $parse = CONF_PARSE)
         case 'yaml':
             return yaml_parse_file($file);
         case 'xml':
-            return (array) simplexml_load_file($file);
+            return (array)simplexml_load_file($file);
         case 'json':
             return json_decode(file_get_contents($file), true);
         default:
@@ -91,7 +91,7 @@ function load_config($file, $parse = CONF_PARSE)
  * @return array
  */
 if (!function_exists('yaml_parse_file')) {
-    function yaml_parse_file($file)
+    function yaml_parse_file ($file)
     {
         vendor('spyc.Spyc');
         return Spyc::YAMLLoad($file);
@@ -102,10 +102,10 @@ if (!function_exists('yaml_parse_file')) {
  * 抛出异常处理
  * @param string $msg 异常消息
  * @param integer $code 异常代码 默认为0
- * @throws Think\Exception
  * @return void
+ * @throws Think\Exception
  */
-function E($msg, $code = 0)
+function E ($msg, $code = 0)
 {
     throw new Think\Exception($msg, $code);
 }
@@ -127,10 +127,10 @@ function E($msg, $code = 0)
  * @param integer|string $dec 小数位或者m
  * @return mixed
  */
-function G($start, $end = '', $dec = 4)
+function G ($start, $end = '', $dec = 4)
 {
     static $_info = array();
-    static $_mem  = array();
+    static $_mem = array();
     if (is_float($end)) {
         // 记录时间
         $_info[$start] = $end;
@@ -167,7 +167,7 @@ function G($start, $end = '', $dec = 4)
  * @param mixed $value 语言值或者变量
  * @return mixed
  */
-function L($name = null, $value = null)
+function L ($name = null, $value = null)
 {
     static $_lang = array();
     // 空参数返回所有定义
@@ -208,7 +208,7 @@ function L($name = null, $value = null)
  * @param boolean $record 是否记录日志
  * @return void|array
  */
-function trace($value = '[think]', $label = '', $level = 'DEBUG', $record = false)
+function trace ($value = '[think]', $label = '', $level = 'DEBUG', $record = false)
 {
     return Think\Think::trace($value, $label, $level, $record);
 }
@@ -218,7 +218,7 @@ function trace($value = '[think]', $label = '', $level = 'DEBUG', $record = fals
  * @param string $filename 文件名
  * @return string
  */
-function compile($filename)
+function compile ($filename)
 {
     $content = php_strip_whitespace($filename);
     $content = trim(substr($content, 5));
@@ -242,7 +242,7 @@ function compile($filename)
  * @param string $layer 视图层（目录）名称
  * @return string
  */
-function T($template = '', $layer = '')
+function T ($template = '', $layer = '')
 {
 
     // 解析模版资源地址
@@ -300,7 +300,7 @@ function T($template = '', $layer = '')
  * @param mixed $datas 要获取的额外数据源
  * @return mixed
  */
-function I($name, $default = '', $filter = null, $datas = null)
+function I ($name, $default = '', $filter = null, $datas = null)
 {
     static $_PUT = null;
     if (strpos($name, '/')) {
@@ -392,7 +392,7 @@ function I($name, $default = '', $filter = null, $datas = null)
         if ($filters) {
             if (is_string($filters)) {
                 if (0 === strpos($filters, '/')) {
-                    if (1 !== preg_match($filters, (string) $data)) {
+                    if (1 !== preg_match($filters, (string)$data)) {
                         // 支持正则验证
                         return isset($default) ? $default : null;
                     }
@@ -420,20 +420,20 @@ function I($name, $default = '', $filter = null, $datas = null)
         if (!empty($type)) {
             switch (strtolower($type)) {
                 case 'a': // 数组
-                    $data = (array) $data;
+                    $data = (array)$data;
                     break;
                 case 'd': // 数字
-                    $data = (int) $data;
+                    $data = (int)$data;
                     break;
                 case 'f': // 浮点
-                    $data = (float) $data;
+                    $data = (float)$data;
                     break;
                 case 'b': // 布尔
-                    $data = (boolean) $data;
+                    $data = (boolean)$data;
                     break;
                 case 's': // 字符串
                 default:
-                    $data = (string) $data;
+                    $data = (string)$data;
             }
         }
     } else {
@@ -444,13 +444,13 @@ function I($name, $default = '', $filter = null, $datas = null)
     return $data;
 }
 
-function array_map_recursive($filter, $data)
+function array_map_recursive ($filter, $data)
 {
     $result = array();
     foreach ($data as $key => $val) {
         $result[$key] = is_array($val)
-        ? array_map_recursive($filter, $val)
-        : call_user_func($filter, $val);
+            ? array_map_recursive($filter, $val)
+            : call_user_func($filter, $val);
     }
     return $result;
 }
@@ -469,7 +469,7 @@ function array_map_recursive($filter, $data)
  * @param boolean $save 是否保存结果
  * @return mixed
  */
-function N($key, $step = 0, $save = false)
+function N ($key, $step = 0, $save = false)
 {
     static $_num = array();
     if (!isset($_num[$key])) {
@@ -478,7 +478,7 @@ function N($key, $step = 0, $save = false)
     if (empty($step)) {
         return $_num[$key];
     } else {
-        $_num[$key] = $_num[$key] + (int) $step;
+        $_num[$key] = $_num[$key] + (int)$step;
     }
     if (false !== $save) {
         // 保存结果
@@ -494,10 +494,12 @@ function N($key, $step = 0, $save = false)
  * @param integer $type 转换类型
  * @return string
  */
-function parse_name($name, $type = 0)
+function parse_name ($name, $type = 0)
 {
     if ($type) {
-        return ucfirst(preg_replace_callback('/_([a-zA-Z])/', function ($match) {return strtoupper($match[1]);}, $name));
+        return ucfirst(preg_replace_callback('/_([a-zA-Z])/', function ($match) {
+            return strtoupper($match[1]);
+        }, $name));
     } else {
         return strtolower(trim(preg_replace("/[A-Z]/", "_\\0", $name), "_"));
     }
@@ -508,7 +510,7 @@ function parse_name($name, $type = 0)
  * @param string $filename 文件地址
  * @return boolean
  */
-function require_cache($filename)
+function require_cache ($filename)
 {
     static $_importFiles = array();
     if (!isset($_importFiles[$filename])) {
@@ -527,7 +529,7 @@ function require_cache($filename)
  * @param string $filename 文件地址
  * @return boolean
  */
-function file_exists_case($filename)
+function file_exists_case ($filename)
 {
     if (is_file($filename)) {
         if (IS_WIN && APP_DEBUG) {
@@ -548,10 +550,10 @@ function file_exists_case($filename)
  * @param string $ext 导入的文件扩展名
  * @return boolean
  */
-function import($class, $baseUrl = '', $ext = EXT)
+function import ($class, $baseUrl = '', $ext = EXT)
 {
     static $_file = array();
-    $class        = str_replace(array('.', '#'), array('/', '.'), $class);
+    $class = str_replace(array('.', '#'), array('/', '.'), $class);
     if (isset($_file[$class . $baseUrl])) {
         return true;
     } else {
@@ -596,7 +598,7 @@ function import($class, $baseUrl = '', $ext = EXT)
  * @param string $ext 导入的文件扩展名
  * @return void
  */
-function load($name, $baseUrl = '', $ext = '.php')
+function load ($name, $baseUrl = '', $ext = '.php')
 {
     $name = str_replace(array('.', '#'), array('/', '.'), $name);
     if (empty($baseUrl)) {
@@ -625,7 +627,7 @@ function load($name, $baseUrl = '', $ext = '.php')
  * @param string $ext 类库后缀
  * @return boolean
  */
-function vendor($class, $baseUrl = '', $ext = '.php')
+function vendor ($class, $baseUrl = '', $ext = '.php')
 {
     if (empty($baseUrl)) {
         $baseUrl = VENDOR_PATH;
@@ -640,14 +642,14 @@ function vendor($class, $baseUrl = '', $ext = '.php')
  * @param string $layer 模型层名称
  * @return Think\Model
  */
-function D($name = '', $layer = '')
+function D ($name = '', $layer = '')
 {
     if (empty($name)) {
         return new Think\Model;
     }
 
     static $_model = array();
-    $layer         = $layer ?: C('DEFAULT_M_LAYER');
+    $layer = $layer ?: C('DEFAULT_M_LAYER');
     if (isset($_model[$name . $layer])) {
         return $_model[$name . $layer];
     }
@@ -678,7 +680,7 @@ function D($name = '', $layer = '')
  * @param mixed $connection 数据库连接信息
  * @return Think\Model
  */
-function M($name = '', $tablePrefix = '', $connection = '')
+function M ($name = '', $tablePrefix = '', $connection = '')
 {
     static $_model = array();
     if (strpos($name, ':')) {
@@ -702,7 +704,7 @@ function M($name = '', $tablePrefix = '', $connection = '')
  * @param integer $level 控制器层次
  * @return string
  */
-function parse_res_name($name, $layer, $level = 1)
+function parse_res_name ($name, $layer, $level = 1)
 {
     if (strpos($name, '://')) {
         // 指定扩展资源
@@ -740,7 +742,7 @@ function parse_res_name($name, $layer, $level = 1)
  * @param string $path 控制器命名空间（路径）
  * @return Think\Controller|false
  */
-function controller($name, $path = '')
+function controller ($name, $path = '')
 {
     $layer = C('DEFAULT_C_LAYER');
     if (!C('APP_USE_NAMESPACE')) {
@@ -768,11 +770,11 @@ function controller($name, $path = '')
  * @param integer $level 控制器层次
  * @return Think\Controller|false
  */
-function A($name, $layer = '', $level = 0)
+function A ($name, $layer = '', $level = 0)
 {
     static $_action = array();
-    $layer          = $layer ?: C('DEFAULT_C_LAYER');
-    $level          = $level ?: (C('DEFAULT_C_LAYER') == $layer ? C('CONTROLLER_LEVEL') : 1);
+    $layer = $layer ?: C('DEFAULT_C_LAYER');
+    $level = $level ?: (C('DEFAULT_C_LAYER') == $layer ? C('CONTROLLER_LEVEL') : 1);
     if (isset($_action[$name . $layer])) {
         return $_action[$name . $layer];
     }
@@ -794,7 +796,7 @@ function A($name, $layer = '', $level = 0)
  * @param string $layer 要调用的控制层名称
  * @return mixed
  */
-function R($url, $vars = array(), $layer = '')
+function R ($url, $vars = array(), $layer = '')
 {
     $info   = pathinfo($url);
     $action = $info['basename'];
@@ -816,7 +818,7 @@ function R($url, $vars = array(), $layer = '')
  * @param mixed $params 传入参数
  * @return void
  */
-function tag($tag, &$params = null)
+function tag ($tag, &$params = null)
 {
     \Think\Hook::listen($tag, $params);
 }
@@ -828,7 +830,7 @@ function tag($tag, &$params = null)
  * @param Mixed $params 传入的参数
  * @return void
  */
-function B($name, $tag = '', &$params = null)
+function B ($name, $tag = '', &$params = null)
 {
     if ('' == $tag) {
         $name .= 'Behavior';
@@ -841,7 +843,7 @@ function B($name, $tag = '', &$params = null)
  * @param string $content 代码内容
  * @return string
  */
-function strip_whitespace($content)
+function strip_whitespace ($content)
 {
     $stripStr = '';
     //分析php源码
@@ -850,7 +852,7 @@ function strip_whitespace($content)
     for ($i = 0, $j = count($tokens); $i < $j; $i++) {
         if (is_string($tokens[$i])) {
             $last_space = false;
-            $stripStr .= $tokens[$i];
+            $stripStr   .= $tokens[$i];
         } else {
             switch ($tokens[$i][0]) {
                 //过滤各种PHP注释
@@ -860,7 +862,7 @@ function strip_whitespace($content)
                 //过滤空格
                 case T_WHITESPACE:
                     if (!$last_space) {
-                        $stripStr .= ' ';
+                        $stripStr   .= ' ';
                         $last_space = true;
                     }
                     break;
@@ -880,7 +882,7 @@ function strip_whitespace($content)
                     break;
                 default:
                     $last_space = false;
-                    $stripStr .= $tokens[$i][1];
+                    $stripStr   .= $tokens[$i][1];
             }
         }
     }
@@ -894,7 +896,7 @@ function strip_whitespace($content)
  * @param integer $code 异常代码 默认为0
  * @return void
  */
-function throw_exception($msg, $type = 'Think\\Exception', $code = 0)
+function throw_exception ($msg, $type = 'Think\\Exception', $code = 0)
 {
     Think\Log::record('建议使用E方法替代throw_exception', Think\Log::NOTICE);
     if (class_exists($type, false)) {
@@ -913,7 +915,7 @@ function throw_exception($msg, $type = 'Think\\Exception', $code = 0)
  * @param boolean $strict 是否严谨 默认为true
  * @return void|string
  */
-function dump($var, $echo = true, $label = null, $strict = true)
+function dump ($var, $echo = true, $label = null, $strict = true)
 {
     $label = (null === $label) ? '' : rtrim($label) . ' ';
     if (!$strict) {
@@ -933,7 +935,7 @@ function dump($var, $echo = true, $label = null, $strict = true)
         }
     }
     if ($echo) {
-        echo ($output);
+        echo($output);
         return null;
     } else {
         return $output;
@@ -946,7 +948,7 @@ function dump($var, $echo = true, $label = null, $strict = true)
  * @param string|false $layout 布局名称 为false的时候表示关闭布局
  * @return void
  */
-function layout($layout)
+function layout ($layout)
 {
     if (false !== $layout) {
         // 开启布局
@@ -969,7 +971,7 @@ function layout($layout)
  * @param boolean $domain 是否显示域名
  * @return string
  */
-function U($url = '', $vars = '', $suffix = true, $domain = false)
+function U ($url = '', $vars = '', $suffix = true, $domain = false)
 {
     // 解析URL
     $info = parse_url($url);
@@ -1105,7 +1107,7 @@ function U($url = '', $vars = '', $suffix = true, $domain = false)
         }
         if (!empty($vars)) {
             $vars = http_build_query($vars);
-            $url .= '&' . $vars;
+            $url  .= '&' . $vars;
         }
     } else {
         // PATHINFO模式或者兼容URL模式
@@ -1159,7 +1161,7 @@ function U($url = '', $vars = '', $suffix = true, $domain = false)
  * @param array $data 传入的参数
  * @return void
  */
-function W($name, $data = array())
+function W ($name, $data = array())
 {
     return R($name, $data, 'Widget');
 }
@@ -1168,7 +1170,7 @@ function W($name, $data = array())
  * 判断是否SSL协议
  * @return boolean
  */
-function is_ssl()
+function is_ssl ()
 {
     if (isset($_SERVER['HTTPS']) && ('1' == $_SERVER['HTTPS'] || 'on' == strtolower($_SERVER['HTTPS']))) {
         return true;
@@ -1185,7 +1187,7 @@ function is_ssl()
  * @param string $msg 重定向前的提示信息
  * @return void
  */
-function redirect($url, $time = 0, $msg = '')
+function redirect ($url, $time = 0, $msg = '')
 {
     //多行URL地址支持
     $url = str_replace(array("\n", "\r"), '', $url);
@@ -1199,7 +1201,7 @@ function redirect($url, $time = 0, $msg = '')
             header('Location: ' . $url);
         } else {
             header("refresh:{$time};url={$url}");
-            echo ($msg);
+            echo($msg);
         }
         exit();
     } else {
@@ -1219,7 +1221,7 @@ function redirect($url, $time = 0, $msg = '')
  * @param mixed $options 缓存参数
  * @return mixed
  */
-function S($name, $value = '', $options = null)
+function S ($name, $value = '', $options = null)
 {
     static $cache = '';
     if (is_array($options)) {
@@ -1259,10 +1261,10 @@ function S($name, $value = '', $options = null)
  * @param string $path 缓存路径
  * @return mixed
  */
-function F($name, $value = '', $path = DATA_PATH)
+function F ($name, $value = '', $path = DATA_PATH)
 {
     static $_cache = array();
-    $filename      = $path . $name . '.php';
+    $filename = $path . $name . '.php';
     if ('' !== $value) {
         if (is_null($value)) {
             // 删除缓存
@@ -1298,7 +1300,7 @@ function F($name, $value = '', $path = DATA_PATH)
  * @param mixed $mix 变量
  * @return string
  */
-function to_guid_string($mix)
+function to_guid_string ($mix)
 {
     if (is_object($mix)) {
         return spl_object_hash($mix);
@@ -1316,11 +1318,11 @@ function to_guid_string($mix)
  * @param string $root 根节点名
  * @param string $item 数字索引的子节点名
  * @param string $attr 根节点属性
- * @param string $id   数字索引子节点key转换的属性名
+ * @param string $id 数字索引子节点key转换的属性名
  * @param string $encoding 数据编码
  * @return string
  */
-function xml_encode($data, $root = 'think', $item = 'item', $attr = '', $id = 'id', $encoding = 'utf-8')
+function xml_encode ($data, $root = 'think', $item = 'item', $attr = '', $id = 'id', $encoding = 'utf-8')
 {
     if (is_array($attr)) {
         $_attr = array();
@@ -1332,26 +1334,26 @@ function xml_encode($data, $root = 'think', $item = 'item', $attr = '', $id = 'i
     $attr = trim($attr);
     $attr = empty($attr) ? '' : " {$attr}";
     $xml  = "<?xml version=\"1.0\" encoding=\"{$encoding}\"?>";
-    $xml .= "<{$root}{$attr}>";
-    $xml .= data_to_xml($data, $item, $id);
-    $xml .= "</{$root}>";
+    $xml  .= "<{$root}{$attr}>";
+    $xml  .= data_to_xml($data, $item, $id);
+    $xml  .= "</{$root}>";
     return $xml;
 }
 
 /**
  * 数据XML编码
- * @param mixed  $data 数据
+ * @param mixed $data 数据
  * @param string $item 数字索引时的节点名称
- * @param string $id   数字索引key转换为的属性名
+ * @param string $id 数字索引key转换为的属性名
  * @return string
  */
-function data_to_xml($data, $item = 'item', $id = 'id')
+function data_to_xml ($data, $item = 'item', $id = 'id')
 {
     $xml = $attr = '';
     foreach ($data as $key => $val) {
         if (is_numeric($key)) {
             $id && $attr = " {$id}=\"{$key}\"";
-            $key         = $item;
+            $key = $item;
         }
         $xml .= "<{$key}{$attr}>";
         $xml .= (is_array($val) || is_object($val)) ? data_to_xml($val, $item, $id) : $val;
@@ -1366,7 +1368,7 @@ function data_to_xml($data, $item = 'item', $id = 'id')
  * @param mixed $value session值
  * @return mixed
  */
-function session($name = '', $value = '')
+function session ($name = '', $value = '')
 {
     $prefix = C('SESSION_PREFIX');
     if (is_array($name)) {
@@ -1535,7 +1537,7 @@ function session($name = '', $value = '')
  * @param mixed $option cookie参数
  * @return mixed
  */
-function cookie($name = '', $value = '', $option = null)
+function cookie ($name = '', $value = '', $option = null)
 {
     // 默认设置
     $config = array(
@@ -1613,10 +1615,10 @@ function cookie($name = '', $value = '', $option = null)
 
 /**
  * 加载动态扩展文件
- * @var string $path 文件路径
  * @return void
+ * @var string $path 文件路径
  */
-function load_ext_file($path)
+function load_ext_file ($path)
 {
     // 加载自定义外部文件
     if ($files = C('LOAD_EXT_FILE')) {
@@ -1639,8 +1641,8 @@ function load_ext_file($path)
             $file = is_file($config) ? $config : $path . 'Conf/' . $config . CONF_EXT;
             if (is_file($file)) {
                 is_numeric($key) ? C(load_Config($file)) : C($key, load_Config($file));
-            }elseif(is_file($file = CONF_PATH.$config.CONF_EXT)) {
-            	is_numeric($key)?C(load_config($file)):C($key,load_config($file));
+            } elseif (is_file($file = CONF_PATH . $config . CONF_EXT)) {
+                is_numeric($key) ? C(load_config($file)) : C($key, load_config($file));
             }
         }
     }
@@ -1652,9 +1654,9 @@ function load_ext_file($path)
  * @param boolean $adv 是否进行高级模式获取（有可能被伪装）
  * @return mixed
  */
-function get_client_ip($type = 0, $adv = false)
+function get_client_ip ($type = 0, $adv = false)
 {
-    $type      = $type ? 1 : 0;
+    $type = $type ? 1 : 0;
     static $ip = null;
     if (null !== $ip) {
         return $ip[$type];
@@ -1688,7 +1690,7 @@ function get_client_ip($type = 0, $adv = false)
  * @param integer $code 状态码
  * @return void
  */
-function send_http_status($code)
+function send_http_status ($code)
 {
     static $_status = array(
         // Informational 1xx
@@ -1746,7 +1748,7 @@ function send_http_status($code)
     }
 }
 
-function think_filter(&$value)
+function think_filter (&$value)
 {
     // TODO 其他安全过滤
 
@@ -1757,7 +1759,7 @@ function think_filter(&$value)
 }
 
 // 不区分大小写的in_array实现
-function in_array_case($value, $array)
+function in_array_case ($value, $array)
 {
     return in_array(strtolower($value), array_map('strtolower', $array));
 }

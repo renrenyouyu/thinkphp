@@ -75,7 +75,7 @@ class Lite
      * @access public
      * @param array $config 数据库配置数组
      */
-    public function __construct($config = '')
+    public function __construct ($config = '')
     {
         if (!empty($config)) {
             $this->config = array_merge($this->config, $config);
@@ -89,7 +89,7 @@ class Lite
      * 连接数据库方法
      * @access public
      */
-    public function connect($config = '', $linkNum = 0)
+    public function connect ($config = '', $linkNum = 0)
     {
         if (!isset($this->linkID[$linkNum])) {
             if (empty($config)) {
@@ -118,14 +118,15 @@ class Lite
      * @param array $config 连接信息
      * @return string
      */
-    protected function parseDsn($config)
-    {}
+    protected function parseDsn ($config)
+    {
+    }
 
     /**
      * 释放查询结果
      * @access public
      */
-    public function free()
+    public function free ()
     {
         $this->PDOStatement = null;
     }
@@ -133,11 +134,11 @@ class Lite
     /**
      * 执行查询 返回数据集
      * @access public
-     * @param string $str  sql指令
-     * @param array $bind  参数绑定
+     * @param string $str sql指令
+     * @param array $bind 参数绑定
      * @return mixed
      */
-    public function query($str, $bind = array())
+    public function query ($str, $bind = array())
     {
         $this->initConnect(false);
         if (!$this->_linkID) {
@@ -147,7 +148,9 @@ class Lite
         $this->queryStr = $str;
         if (!empty($bind)) {
             $that           = $this;
-            $this->queryStr = strtr($this->queryStr, array_map(function ($val) use ($that) {return '\'' . $that->escapeString($val) . '\'';}, $bind));
+            $this->queryStr = strtr($this->queryStr, array_map(function ($val) use ($that) {
+                return '\'' . $that->escapeString($val) . '\'';
+            }, $bind));
         }
         //释放前次的查询结果
         if (!empty($this->PDOStatement)) {
@@ -184,11 +187,11 @@ class Lite
     /**
      * 执行语句
      * @access public
-     * @param string $str  sql指令
-     * @param array $bind  参数绑定
+     * @param string $str sql指令
+     * @param array $bind 参数绑定
      * @return integer
      */
-    public function execute($str, $bind = array())
+    public function execute ($str, $bind = array())
     {
         $this->initConnect(true);
         if (!$this->_linkID) {
@@ -198,7 +201,9 @@ class Lite
         $this->queryStr = $str;
         if (!empty($bind)) {
             $that           = $this;
-            $this->queryStr = strtr($this->queryStr, array_map(function ($val) use ($that) {return '\'' . $that->escapeString($val) . '\'';}, $bind));
+            $this->queryStr = strtr($this->queryStr, array_map(function ($val) use ($that) {
+                return '\'' . $that->escapeString($val) . '\'';
+            }, $bind));
         }
         //释放前次的查询结果
         if (!empty($this->PDOStatement)) {
@@ -239,7 +244,7 @@ class Lite
      * @access public
      * @return void
      */
-    public function startTrans()
+    public function startTrans ()
     {
         $this->initConnect(true);
         if (!$this->_linkID) {
@@ -259,7 +264,7 @@ class Lite
      * @access public
      * @return boolean
      */
-    public function commit()
+    public function commit ()
     {
         if ($this->transTimes > 0) {
             $result           = $this->_linkID->commit();
@@ -277,7 +282,7 @@ class Lite
      * @access public
      * @return boolean
      */
-    public function rollback()
+    public function rollback ()
     {
         if ($this->transTimes > 0) {
             $result           = $this->_linkID->rollback();
@@ -295,7 +300,7 @@ class Lite
      * @access private
      * @return array
      */
-    private function getResult()
+    private function getResult ()
     {
         //返回数据集
         $result        = $this->PDOStatement->fetchAll(PDO::FETCH_ASSOC);
@@ -309,7 +314,7 @@ class Lite
      * @param boolean $execute 是否包含所有查询
      * @return integer
      */
-    public function getQueryTimes($execute = false)
+    public function getQueryTimes ($execute = false)
     {
         return $execute ? $this->queryTimes + $this->executeTimes : $this->queryTimes;
     }
@@ -319,7 +324,7 @@ class Lite
      * @access public
      * @return integer
      */
-    public function getExecuteTimes()
+    public function getExecuteTimes ()
     {
         return $this->executeTimes;
     }
@@ -328,7 +333,7 @@ class Lite
      * 关闭数据库
      * @access public
      */
-    public function close()
+    public function close ()
     {
         $this->_linkID = null;
     }
@@ -339,7 +344,7 @@ class Lite
      * @access public
      * @return string
      */
-    public function error()
+    public function error ()
     {
         if ($this->PDOStatement) {
             $error       = $this->PDOStatement->errorInfo();
@@ -362,11 +367,11 @@ class Lite
 
     /**
      * 获取最近一次查询的sql语句
-     * @param string $model  模型名
+     * @param string $model 模型名
      * @access public
      * @return string
      */
-    public function getLastSql($model = '')
+    public function getLastSql ($model = '')
     {
         return $model ? $this->modelSql[$model] : $this->queryStr;
     }
@@ -376,7 +381,7 @@ class Lite
      * @access public
      * @return string
      */
-    public function getLastInsID()
+    public function getLastInsID ()
     {
         return $this->lastInsID;
     }
@@ -386,7 +391,7 @@ class Lite
      * @access public
      * @return string
      */
-    public function getError()
+    public function getError ()
     {
         return $this->error;
     }
@@ -394,10 +399,10 @@ class Lite
     /**
      * SQL指令安全过滤
      * @access public
-     * @param string $str  SQL字符串
+     * @param string $str SQL字符串
      * @return string
      */
-    public function escapeString($str)
+    public function escapeString ($str)
     {
         return addslashes($str);
     }
@@ -405,10 +410,10 @@ class Lite
     /**
      * 设置当前操作模型
      * @access public
-     * @param string $model  模型名
+     * @param string $model 模型名
      * @return void
      */
-    public function setModel($model)
+    public function setModel ($model)
     {
         $this->model = $model;
     }
@@ -416,9 +421,9 @@ class Lite
     /**
      * 数据库调试 记录当前SQL
      * @access protected
-     * @param boolean $start  调试开始标记 true 开始 false 结束
+     * @param boolean $start 调试开始标记 true 开始 false 结束
      */
-    protected function debug($start)
+    protected function debug ($start)
     {
         if ($this->config['debug']) {
 // 开启数据库调试模式
@@ -440,17 +445,16 @@ class Lite
      * @param boolean $master 主服务器
      * @return void
      */
-    protected function initConnect($master = true)
+    protected function initConnect ($master = true)
     {
-        if (!empty($this->config['deploy']))
-        // 采用分布式数据库
+        if (!empty($this->config['deploy'])) // 采用分布式数据库
         {
             $this->_linkID = $this->multiConnect($master);
         } else
-        // 默认单数据库
-        if (!$this->_linkID) {
-            $this->_linkID = $this->connect();
-        }
+            // 默认单数据库
+            if (!$this->_linkID) {
+                $this->_linkID = $this->connect();
+            }
 
     }
 
@@ -460,7 +464,7 @@ class Lite
      * @param boolean $master 主服务器
      * @return void
      */
-    protected function multiConnect($master = false)
+    protected function multiConnect ($master = false)
     {
         // 分布式数据库配置解析
         $_config['username'] = explode(',', $this->config['username']);
@@ -474,8 +478,7 @@ class Lite
         // 数据库读写是否分离
         if ($this->config['rw_separate']) {
             // 主从式采用读写分离
-            if ($master)
-            // 主服务器写入
+            if ($master) // 主服务器写入
             {
                 $r = floor(mt_rand(0, $this->config['master_num'] - 1));
             } else {
@@ -507,7 +510,7 @@ class Lite
      * 析构方法
      * @access public
      */
-    public function __destruct()
+    public function __destruct ()
     {
         // 释放查询
         if ($this->PDOStatement) {

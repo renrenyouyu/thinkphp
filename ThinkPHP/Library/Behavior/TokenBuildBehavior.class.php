@@ -16,12 +16,12 @@ namespace Behavior;
 class TokenBuildBehavior
 {
 
-    public function run(&$content)
+    public function run (&$content)
     {
         if (C('TOKEN_ON')) {
             list($tokenName, $tokenKey, $tokenValue) = $this->getToken();
-            $input_token                             = '<input type="hidden" name="' . $tokenName . '" value="' . $tokenKey . '_' . $tokenValue . '" />';
-            $meta_token                              = '<meta name="' . $tokenName . '" content="' . $tokenKey . '_' . $tokenValue . '" />';
+            $input_token = '<input type="hidden" name="' . $tokenName . '" value="' . $tokenKey . '_' . $tokenValue . '" />';
+            $meta_token  = '<meta name="' . $tokenName . '" content="' . $tokenKey . '_' . $tokenValue . '" />';
             if (strpos($content, '{__TOKEN__}')) {
                 // 指定表单令牌隐藏域位置
                 $content = str_replace('{__TOKEN__}', $input_token, $content);
@@ -36,7 +36,7 @@ class TokenBuildBehavior
     }
 
     //获得token
-    private function getToken()
+    private function getToken ()
     {
         $tokenName = C('TOKEN_NAME', null, '__hash__');
         $tokenType = C('TOKEN_TYPE', null, 'md5');
