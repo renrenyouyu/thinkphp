@@ -45,7 +45,7 @@ class Mysqli
      * @param string $savePath
      * @param mixed $sessName
      */
-    public function open($savePath, $sessName)
+    public function open ($savePath, $sessName)
     {
         $this->lifeTime     = C('SESSION_EXPIRE') ? C('SESSION_EXPIRE') : ini_get('session.gc_maxlifetime');
         $this->sessionTable = C('SESSION_TABLE') ? C('SESSION_TABLE') : C("DB_PREFIX") . "session";
@@ -71,7 +71,7 @@ class Mysqli
                     isset($user[$w]) ? $user[$w] : $user[0],
                     isset($pwd[$w]) ? $pwd[$w] : $pwd[0]
                 );
-                $dbSel = mysqli_select_db(
+                $dbSel  = mysqli_select_db(
                     $hander,
                     isset($name[$w]) ? $name[$w] : $name[0]
                 );
@@ -86,7 +86,7 @@ class Mysqli
                     isset($user[$r]) ? $user[$r] : $user[0],
                     isset($pwd[$r]) ? $pwd[$r] : $pwd[0]
                 );
-                $dbSel = mysqli_select_db(
+                $dbSel  = mysqli_select_db(
                     $hander,
                     isset($name[$r]) ? $name[$r] : $name[0]
                 );
@@ -105,7 +105,7 @@ class Mysqli
             isset($user[$r]) ? $user[$r] : $user[0],
             isset($pwd[$r]) ? $pwd[$r] : $pwd[0]
         );
-        $dbSel = mysqli_select_db(
+        $dbSel  = mysqli_select_db(
             $hander,
             isset($name[$r]) ? $name[$r] : $name[0]
         );
@@ -121,7 +121,7 @@ class Mysqli
      * 关闭Session
      * @access public
      */
-    public function close()
+    public function close ()
     {
         if (is_array($this->hander)) {
             $this->gc($this->lifeTime);
@@ -136,7 +136,7 @@ class Mysqli
      * @access public
      * @param string $sessID
      */
-    public function read($sessID)
+    public function read ($sessID)
     {
         $hander = is_array($this->hander) ? $this->hander[1] : $this->hander;
         $res    = mysqli_query($hander, "SELECT session_data AS data FROM " . $this->sessionTable . " WHERE session_id = '$sessID'   AND session_expire >" . time());
@@ -153,7 +153,7 @@ class Mysqli
      * @param string $sessID
      * @param String $sessData
      */
-    public function write($sessID, $sessData)
+    public function write ($sessID, $sessData)
     {
         $hander = is_array($this->hander) ? $this->hander[0] : $this->hander;
         $expire = time() + $this->lifeTime;
@@ -170,7 +170,7 @@ class Mysqli
      * @access public
      * @param string $sessID
      */
-    public function destroy($sessID)
+    public function destroy ($sessID)
     {
         $hander = is_array($this->hander) ? $this->hander[0] : $this->hander;
         mysqli_query($hander, "DELETE FROM " . $this->sessionTable . " WHERE session_id = '$sessID'");
@@ -186,7 +186,7 @@ class Mysqli
      * @access public
      * @param string $sessMaxLifeTime
      */
-    public function gc($sessMaxLifeTime)
+    public function gc ($sessMaxLifeTime)
     {
         $hander = is_array($this->hander) ? $this->hander[0] : $this->hander;
         mysqli_query($hander, "DELETE FROM " . $this->sessionTable . " WHERE session_expire < " . time());

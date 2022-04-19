@@ -20,7 +20,7 @@ abstract class Controller
      * 架构函数
      * @access public
      */
-    public function __construct()
+    public function __construct ()
     {
         //控制器初始化
         if (method_exists($this, '_initialize')) {
@@ -36,7 +36,7 @@ abstract class Controller
      * @param array $args 参数
      * @return mixed
      */
-    public function __call($method, $args)
+    public function __call ($method, $args)
     {
         if (0 === strcasecmp($method, ACTION_NAME . C('ACTION_SUFFIX'))) {
             if (method_exists($this, '_empty')) {
@@ -58,7 +58,7 @@ abstract class Controller
      * @param String $type AJAX返回数据格式
      * @return void
      */
-    protected function ajaxReturn($data, $type = '')
+    protected function ajaxReturn ($data, $type = '')
     {
         if (empty($type)) {
             $type = C('DEFAULT_AJAX_RETURN');
@@ -94,7 +94,7 @@ abstract class Controller
      * @param string $msg 跳转提示信息
      * @return void
      */
-    protected function redirect($url, $params = array(), $delay = 0, $msg = '')
+    protected function redirect ($url, $params = array(), $delay = 0, $msg = '')
     {
         $url = U($url, $params);
         redirect($url, $delay, $msg);

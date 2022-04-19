@@ -35,11 +35,11 @@ class Page
 
     /**
      * 架构函数
-     * @param array $totalRows  总的记录数
-     * @param array $listRows  每页显示记录数
-     * @param array $parameter  分页跳转的参数
+     * @param array $totalRows 总的记录数
+     * @param array $listRows 每页显示记录数
+     * @param array $parameter 分页跳转的参数
      */
-    public function __construct($totalRows, $listRows = 20, $parameter = array())
+    public function __construct ($totalRows, $listRows = 20, $parameter = array())
     {
         C('VAR_PAGE') && $this->p = C('VAR_PAGE'); //设置分页参数名称
         /* 基础设置 */
@@ -53,10 +53,10 @@ class Page
 
     /**
      * 定制分页链接设置
-     * @param string $name  设置名称
+     * @param string $name 设置名称
      * @param string $value 设置值
      */
-    public function setConfig($name, $value)
+    public function setConfig ($name, $value)
     {
         if (isset($this->config[$name])) {
             $this->config[$name] = $value;
@@ -65,10 +65,10 @@ class Page
 
     /**
      * 生成链接URL
-     * @param  integer $page 页码
+     * @param integer $page 页码
      * @return string
      */
-    private function url($page)
+    private function url ($page)
     {
         return str_replace(urlencode('[PAGE]'), $page, $this->url);
     }
@@ -77,7 +77,7 @@ class Page
      * 组装分页链接
      * @return string
      */
-    public function show()
+    public function show ()
     {
         if (0 == $this->totalRows) {
             return '';

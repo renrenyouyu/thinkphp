@@ -34,7 +34,7 @@ abstract class Controller
      * 架构函数 取得模板对象实例
      * @access public
      */
-    public function __construct()
+    public function __construct ()
     {
         //实例化视图类
         $this->view = Think::instance('Think\View');
@@ -56,7 +56,7 @@ abstract class Controller
      * @param string $prefix 模板缓存前缀
      * @return void
      */
-    protected function display($templateFile = '', $charset = '', $contentType = '', $content = '', $prefix = '')
+    protected function display ($templateFile = '', $charset = '', $contentType = '', $content = '', $prefix = '')
     {
         $this->view->display($templateFile, $charset, $contentType, $content, $prefix);
     }
@@ -70,7 +70,7 @@ abstract class Controller
      * @param string $prefix 模板缓存前缀
      * @return mixed
      */
-    protected function show($content, $charset = '', $contentType = '', $prefix = '')
+    protected function show ($content, $charset = '', $contentType = '', $prefix = '')
     {
         $this->view->display('', $charset, $contentType, $content, $prefix);
     }
@@ -85,7 +85,7 @@ abstract class Controller
      * @param string $prefix 模板缓存前缀*
      * @return string
      */
-    protected function fetch($templateFile = '', $content = '', $prefix = '')
+    protected function fetch ($templateFile = '', $content = '', $prefix = '')
     {
         return $this->view->fetch($templateFile, $content, $prefix);
     }
@@ -96,7 +96,7 @@ abstract class Controller
      * @param string $theme 模版主题
      * @return Action
      */
-    protected function theme($theme)
+    protected function theme ($theme)
     {
         $this->view->theme($theme);
         return $this;
@@ -109,13 +109,13 @@ abstract class Controller
      * @param mixed $value 变量的值
      * @return Action
      */
-    protected function assign($name, $value = '')
+    protected function assign ($name, $value = '')
     {
         $this->view->assign($name, $value);
         return $this;
     }
 
-    public function __set($name, $value)
+    public function __set ($name, $value)
     {
         $this->assign($name, $value);
     }
@@ -126,12 +126,12 @@ abstract class Controller
      * @param string $name 模板显示变量
      * @return mixed
      */
-    public function get($name = '')
+    public function get ($name = '')
     {
         return $this->view->get($name);
     }
 
-    public function __get($name)
+    public function __get ($name)
     {
         return $this->get($name);
     }
@@ -142,7 +142,7 @@ abstract class Controller
      * @param string $name 名称
      * @return boolean
      */
-    public function __isset($name)
+    public function __isset ($name)
     {
         return $this->get($name);
     }
@@ -154,7 +154,7 @@ abstract class Controller
      * @param array $args 参数
      * @return mixed
      */
-    public function __call($method, $args)
+    public function __call ($method, $args)
     {
         if (0 === strcasecmp($method, ACTION_NAME . C('ACTION_SUFFIX'))) {
             if (method_exists($this, '_empty')) {
@@ -180,7 +180,7 @@ abstract class Controller
      * @param mixed $ajax 是否为Ajax方式 当数字时指定跳转时间
      * @return void
      */
-    protected function error($message = '', $jumpUrl = '', $ajax = false)
+    protected function error ($message = '', $jumpUrl = '', $ajax = false)
     {
         $this->dispatchJump($message, 0, $jumpUrl, $ajax);
     }
@@ -193,7 +193,7 @@ abstract class Controller
      * @param mixed $ajax 是否为Ajax方式 当数字时指定跳转时间
      * @return void
      */
-    protected function success($message = '', $jumpUrl = '', $ajax = false)
+    protected function success ($message = '', $jumpUrl = '', $ajax = false)
     {
         $this->dispatchJump($message, 1, $jumpUrl, $ajax);
     }
@@ -206,7 +206,7 @@ abstract class Controller
      * @param int $json_option 传递给json_encode的option参数
      * @return void
      */
-    protected function ajaxReturn($data, $type = '', $json_option = 0)
+    protected function ajaxReturn ($data, $type = '', $json_option = 0)
     {
         if (empty($type)) {
             $type = C('DEFAULT_AJAX_RETURN');
@@ -241,7 +241,7 @@ abstract class Controller
      * @param string $msg 跳转提示信息
      * @return void
      */
-    protected function redirect($url, $params = array(), $delay = 0, $msg = '')
+    protected function redirect ($url, $params = array(), $delay = 0, $msg = '')
     {
         $url = U($url, $params);
         redirect($url, $delay, $msg);
@@ -258,7 +258,7 @@ abstract class Controller
      * @access private
      * @return void
      */
-    private function dispatchJump($message, $status = 1, $jumpUrl = '', $ajax = false)
+    private function dispatchJump ($message, $status = 1, $jumpUrl = '', $ajax = false)
     {
         if (true === $ajax || IS_AJAX) {
 // AJAX提交

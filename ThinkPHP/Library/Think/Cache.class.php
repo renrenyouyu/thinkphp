@@ -34,10 +34,10 @@ class Cache
      * 连接缓存
      * @access public
      * @param string $type 缓存类型
-     * @param array $options  配置数组
+     * @param array $options 配置数组
      * @return object
      */
-    public function connect($type = '', $options = array())
+    public function connect ($type = '', $options = array())
     {
         if (empty($type)) {
             $type = C('DATA_CACHE_TYPE');
@@ -59,10 +59,10 @@ class Cache
      * @access public
      * @return mixed
      */
-    public static function getInstance($type = '', $options = array())
+    public static function getInstance ($type = '', $options = array())
     {
         static $_instance = array();
-        $guid             = $type . to_guid_string($options);
+        $guid = $type . to_guid_string($options);
         if (!isset($_instance[$guid])) {
             $obj              = new Cache();
             $_instance[$guid] = $obj->connect($type, $options);
@@ -70,26 +70,27 @@ class Cache
         return $_instance[$guid];
     }
 
-    public function __get($name)
+    public function __get ($name)
     {
         return $this->get($name);
     }
 
-    public function __set($name, $value)
+    public function __set ($name, $value)
     {
         return $this->set($name, $value);
     }
 
-    public function __unset($name)
+    public function __unset ($name)
     {
         $this->rm($name);
     }
-    public function setOptions($name, $value)
+
+    public function setOptions ($name, $value)
     {
         $this->options[$name] = $value;
     }
 
-    public function getOptions($name)
+    public function getOptions ($name)
     {
         return $this->options[$name];
     }
@@ -101,7 +102,7 @@ class Cache
      * @return mixed
      */
     //
-    protected function queue($key)
+    protected function queue ($key)
     {
         static $_handler = array(
             'file'   => array('F', 'F'),
@@ -133,7 +134,7 @@ class Cache
         return $fun[1]($queue_name, $value);
     }
 
-    public function __call($method, $args)
+    public function __call ($method, $args)
     {
         //调用缓存类型自己的方法
         if (method_exists($this->handler, $method)) {

@@ -1,4 +1,5 @@
 <?php
+
 namespace Think\Upload\Driver\Qiniu;
 
 class QiniuStorage
@@ -9,7 +10,7 @@ class QiniuStorage
     public $QINIU_UP_HOST  = 'http://up.qiniu.com';
     public $timeout        = '';
 
-    public function __construct($config)
+    public function __construct ($config)
     {
         $this->sk      = $config['secretKey'];
         $this->ak      = $config['accessKey'];
@@ -18,19 +19,19 @@ class QiniuStorage
         $this->timeout = isset($config['timeout']) ? $config['timeout'] : 3600;
     }
 
-    public static function sign($sk, $ak, $data)
+    public static function sign ($sk, $ak, $data)
     {
         $sign = hash_hmac('sha1', $data, $sk, true);
         return $ak . ':' . self::qiniuEncode($sign);
     }
 
-    public static function signWithData($sk, $ak, $data)
+    public static function signWithData ($sk, $ak, $data)
     {
         $data = self::qiniuEncode($data);
         return self::sign($sk, $ak, $data) . ':' . $data;
     }
 
-    public function accessToken($url, $body = '')
+    public function accessToken ($url, $body = '')
     {
         $parsed_url = parse_url($url);
         $path       = $parsed_url['path'];
@@ -46,11 +47,11 @@ class QiniuStorage
         return self::sign($this->sk, $this->ak, $access);
     }
 
-    public function UploadToken($sk, $ak, $param)
+    public function UploadToken ($sk, $ak, $param)
     {
         $param['deadline'] = 0 == $param['Expires'] ? 3600 : $param['Expires'];
         $param['deadline'] += time();
-        $data = array('scope' => $this->bucket, 'deadline' => $param['deadline']);
+        $data              = array('scope' => $this->bucket, 'deadline' => $param['deadline']);
         if (!empty($param['CallbackUrl'])) {
             $data['callbackUrl'] = $param['CallbackUrl'];
         }
@@ -73,7 +74,7 @@ class QiniuStorage
         return self::SignWithData($sk, $ak, $data);
     }
 
-    public function upload($config, $file)
+    public function upload ($config, $file)
     {
         $uploadToken = $this->UploadToken($this->sk, $this->ak, $config);
 
@@ -117,7 +118,7 @@ class QiniuStorage
         return $response;
     }
 
-    public function dealWithType($key, $type)
+    public function dealWithType ($key, $type)
     {
         $param = $this->buildUrlParam();
         $url   = '';
@@ -154,7 +155,7 @@ class QiniuStorage
                 $url = $this->downLink($key);
                 $url .= '?md2html';
                 if (isset($param['mode'])) {
-                    $url .= '/' . (int) $param['mode'];
+                    $url .= '/' . (int)$param['mode'];
                 }
 
                 if ($param['cssurl']) {
@@ -167,13 +168,13 @@ class QiniuStorage
         return $url;
     }
 
-    public function buildUrlParam()
+    public function buildUrlParam ()
     {
         return $_REQUEST;
     }
 
     //获取某个路径下的文件列表
-    public function getList($query = array(), $path = '')
+    public function getList ($query = array(), $path = '')
     {
         $query       = array_merge(array('bucket' => $this->bucket), $query);
         $url         = "{$this->QINIU_RSF_HOST}/list?" . http_build_query($query);
@@ -183,7 +184,7 @@ class QiniuStorage
     }
 
     //获取某个文件的信息
-    public function info($key)
+    public function info ($key)
     {
         $key         = trim($key);
         $url         = "{$this->QINIU_RS_HOST}/stat/" . self::qiniuEncode("{$this->bucket}:{$key}");
@@ -195,7 +196,7 @@ class QiniuStorage
     }
 
     //获取文件下载资源链接
-    public function downLink($key)
+    public function downLink ($key)
     {
         $key = urlencode($key);
         $key = self::qiniuEscapequotes($key);
@@ -204,7 +205,7 @@ class QiniuStorage
     }
 
     //重命名单个文件
-    public function rename($file, $new_file)
+    public function rename ($file, $new_file)
     {
         $key = trim($file);
         $url = "{$this->QINIU_RS_HOST}/move/" . self::qiniuEncode("{$this->bucket}:{$key}") . '/' . self::qiniuEncode("{$this->bucket}:{$new_file}");
@@ -215,7 +216,7 @@ class QiniuStorage
     }
 
     //删除单个文件
-    public function del($file)
+    public function del ($file)
     {
         $key         = trim($file);
         $url         = "{$this->QINIU_RS_HOST}/delete/" . self::qiniuEncode("{$this->bucket}:{$key}");
@@ -225,7 +226,7 @@ class QiniuStorage
     }
 
     //批量删除文件
-    public function delBatch($files)
+    public function delBatch ($files)
     {
         $url = $this->QINIU_RS_HOST . '/batch';
         $ops = array();
@@ -233,14 +234,14 @@ class QiniuStorage
             $ops[] = "/delete/" . self::qiniuEncode("{$this->bucket}:{$file}");
         }
         $params = 'op=' . implode('&op=', $ops);
-        $url .= '?' . $params;
+        $url    .= '?' . $params;
         trace($url);
         $accessToken = $this->accessToken($url);
         $response    = $this->request($url, 'POST', array('Authorization' => "QBox $accessToken"));
         return $response;
     }
 
-    public static function qiniuEncode($str)
+    public static function qiniuEncode ($str)
     {
 // URLSafeBase64Encode
         $find    = array('+', '/');
@@ -248,7 +249,7 @@ class QiniuStorage
         return str_replace($find, $replace, base64_encode($str));
     }
 
-    public static function qiniuEscapequotes($str)
+    public static function qiniuEscapequotes ($str)
     {
         $find    = array("\\", "\"");
         $replace = array("\\\\", "\\\"");
@@ -257,13 +258,13 @@ class QiniuStorage
 
     /**
      * 请求云服务器
-     * @param  string   $path    请求的PATH
-     * @param  string   $method  请求方法
-     * @param  array    $headers 请求header
-     * @param  resource $body    上传文件资源
+     * @param string $path 请求的PATH
+     * @param string $method 请求方法
+     * @param array $headers 请求header
+     * @param resource $body 上传文件资源
      * @return boolean
      */
-    private function request($path, $method, $headers = null, $body = null)
+    private function request ($path, $method, $headers = null, $body = null)
     {
         $ch = curl_init($path);
 
@@ -333,10 +334,10 @@ class QiniuStorage
 
     /**
      * 获取响应数据
-     * @param  string $text 响应头字符串
+     * @param string $text 响应头字符串
      * @return array        响应数据列表
      */
-    private function response($text)
+    private function response ($text)
     {
         $headers = explode(PHP_EOL, $text);
         $items   = array();
@@ -352,15 +353,15 @@ class QiniuStorage
 
     /**
      * 获取请求错误信息
-     * @param  string $header 请求返回头信息
+     * @param string $header 请求返回头信息
      */
-    private function error($header, $body)
+    private function error ($header, $body)
     {
-        list($status, $stash)     = explode("\r\n", $header, 2);
+        list($status, $stash) = explode("\r\n", $header, 2);
         list($v, $code, $message) = explode(" ", $status, 3);
-        $message                  = is_null($message) ? 'File Not Found' : "[{$status}]:{$message}]";
-        $this->error              = $message;
-        $this->errorStr           = json_decode($body, 1);
-        $this->errorStr           = $this->errorStr['error'];
+        $message        = is_null($message) ? 'File Not Found' : "[{$status}]:{$message}]";
+        $this->error    = $message;
+        $this->errorStr = json_decode($body, 1);
+        $this->errorStr = $this->errorStr['error'];
     }
 }

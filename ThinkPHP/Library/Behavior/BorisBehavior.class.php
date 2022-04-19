@@ -17,7 +17,7 @@ use Think\Think;
  */
 class BorisBehavior
 {
-    public function run(&$params)
+    public function run (&$params)
     {
         if (IS_CLI) {
             if (!function_exists('pcntl_signal')) {

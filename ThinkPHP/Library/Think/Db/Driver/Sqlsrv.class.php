@@ -34,7 +34,7 @@ class Sqlsrv extends Driver
      * @param array $config 连接信息
      * @return string
      */
-    protected function parseDsn($config)
+    protected function parseDsn ($config)
     {
         $dsn = 'sqlsrv:Database=' . $config['database'] . ';Server=' . $config['hostname'];
         if (!empty($config['hostport'])) {
@@ -48,23 +48,23 @@ class Sqlsrv extends Driver
      * @access public
      * @return array
      */
-    public function getFields($tableName)
+    public function getFields ($tableName)
     {
         list($tableName) = explode(' ', $tableName);
-        $result          = $this->query("SELECT   column_name,   data_type,   column_default,   is_nullable
+        $result = $this->query("SELECT   column_name,   data_type,   column_default,   is_nullable
         FROM    information_schema.tables AS t
         JOIN    information_schema.columns AS c
         ON  t.table_catalog = c.table_catalog
         AND t.table_schema  = c.table_schema
         AND t.table_name    = c.table_name
         WHERE   t.table_name = '$tableName'");
-        $info = array();
+        $info   = array();
         if ($result) {
             foreach ($result as $key => $val) {
                 $info[$val['column_name']] = array(
                     'name'    => $val['column_name'],
                     'type'    => $val['data_type'],
-                    'notnull' => (bool) ('' === $val['is_nullable']), // not null is empty, null is yes
+                    'notnull' => (bool)('' === $val['is_nullable']), // not null is empty, null is yes
                     'default' => $val['column_default'],
                     'primary' => false,
                     'autoinc' => false,
@@ -79,13 +79,13 @@ class Sqlsrv extends Driver
      * @access public
      * @return array
      */
-    public function getTables($dbName = '')
+    public function getTables ($dbName = '')
     {
         $result = $this->query("SELECT TABLE_NAME
             FROM INFORMATION_SCHEMA.TABLES
             WHERE TABLE_TYPE = 'BASE TABLE'
             ");
-        $info = array();
+        $info   = array();
         foreach ($result as $key => $val) {
             $info[$key] = current($val);
         }
@@ -98,7 +98,7 @@ class Sqlsrv extends Driver
      * @param mixed $order
      * @return string
      */
-    protected function parseOrder($order)
+    protected function parseOrder ($order)
     {
         return !empty($order) ? ' ORDER BY ' . $order : ' ORDER BY rand()';
     }
@@ -109,7 +109,7 @@ class Sqlsrv extends Driver
      * @param string $key
      * @return string
      */
-    protected function parseKey($key)
+    protected function parseKey ($key)
     {
         $key = trim($key);
         if (!is_numeric($key) && !preg_match('/[,\'\"\*\(\)\[.\s]/', $key)) {
@@ -124,7 +124,7 @@ class Sqlsrv extends Driver
      * @param mixed $limit
      * @return string
      */
-    public function parseLimit($limit)
+    public function parseLimit ($limit)
     {
         if (empty($limit)) {
             return '';
@@ -147,16 +147,16 @@ class Sqlsrv extends Driver
      * @param array $options 表达式
      * @return false | integer
      */
-    public function update($data, $options)
+    public function update ($data, $options)
     {
         $this->model = $options['model'];
         $this->parseBind(!empty($options['bind']) ? $options['bind'] : array());
         $sql = 'UPDATE '
-        . $this->parseTable($options['table'])
-        . $this->parseSet($data)
-        . $this->parseWhere(!empty($options['where']) ? $options['where'] : '')
-        . $this->parseLock(isset($options['lock']) ? $options['lock'] : false)
-        . $this->parseComment(!empty($options['comment']) ? $options['comment'] : '');
+            . $this->parseTable($options['table'])
+            . $this->parseSet($data)
+            . $this->parseWhere(!empty($options['where']) ? $options['where'] : '')
+            . $this->parseLock(isset($options['lock']) ? $options['lock'] : false)
+            . $this->parseComment(!empty($options['comment']) ? $options['comment'] : '');
         return $this->execute($sql, !empty($options['fetch_sql']) ? true : false);
     }
 
@@ -166,15 +166,15 @@ class Sqlsrv extends Driver
      * @param array $options 表达式
      * @return false | integer
      */
-    public function delete($options = array())
+    public function delete ($options = array())
     {
         $this->model = $options['model'];
         $this->parseBind(!empty($options['bind']) ? $options['bind'] : array());
         $sql = 'DELETE FROM '
-        . $this->parseTable($options['table'])
-        . $this->parseWhere(!empty($options['where']) ? $options['where'] : '')
-        . $this->parseLock(isset($options['lock']) ? $options['lock'] : false)
-        . $this->parseComment(!empty($options['comment']) ? $options['comment'] : '');
+            . $this->parseTable($options['table'])
+            . $this->parseWhere(!empty($options['where']) ? $options['where'] : '')
+            . $this->parseLock(isset($options['lock']) ? $options['lock'] : false)
+            . $this->parseComment(!empty($options['comment']) ? $options['comment'] : '');
         return $this->execute($sql, !empty($options['fetch_sql']) ? true : false);
     }
 

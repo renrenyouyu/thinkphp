@@ -17,7 +17,7 @@ class ContentReplaceBehavior
 {
 
     // 行为扩展的执行入口必须是run
-    public function run(&$content)
+    public function run (&$content)
     {
         $content = $this->templateContentReplace($content);
     }
@@ -28,7 +28,7 @@ class ContentReplaceBehavior
      * @param string $content 模板内容
      * @return string
      */
-    protected function templateContentReplace($content)
+    protected function templateContentReplace ($content)
     {
         // 系统默认的特殊变量替换
         $replace = array(

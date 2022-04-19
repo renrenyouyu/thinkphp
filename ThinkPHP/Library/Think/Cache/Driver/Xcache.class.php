@@ -23,7 +23,7 @@ class Xcache extends Cache
      * @param array $options 缓存参数
      * @access public
      */
-    public function __construct($options = array())
+    public function __construct ($options = array())
     {
         if (!function_exists('xcache_info')) {
             E(L('_NOT_SUPPORT_') . ':Xcache');
@@ -39,7 +39,7 @@ class Xcache extends Cache
      * @param string $name 缓存变量名
      * @return mixed
      */
-    public function get($name)
+    public function get ($name)
     {
         N('cache_read', 1);
         $name = $this->options['prefix'] . $name;
@@ -53,11 +53,11 @@ class Xcache extends Cache
      * 写入缓存
      * @access public
      * @param string $name 缓存变量名
-     * @param mixed $value  存储数据
-     * @param integer $expire  有效时间（秒）
+     * @param mixed $value 存储数据
+     * @param integer $expire 有效时间（秒）
      * @return boolean
      */
-    public function set($name, $value, $expire = null)
+    public function set ($name, $value, $expire = null)
     {
         N('cache_write', 1);
         if (is_null($expire)) {
@@ -80,7 +80,7 @@ class Xcache extends Cache
      * @param string $name 缓存变量名
      * @return boolean
      */
-    public function rm($name)
+    public function rm ($name)
     {
         return xcache_unset($this->options['prefix'] . $name);
     }
@@ -90,7 +90,7 @@ class Xcache extends Cache
      * @access public
      * @return boolean
      */
-    public function clear()
+    public function clear ()
     {
         return xcache_clear_cache(1, -1);
     }

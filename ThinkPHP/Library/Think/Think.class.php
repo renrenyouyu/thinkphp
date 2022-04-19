@@ -28,7 +28,7 @@ class Think
      * @access public
      * @return void
      */
-    public static function start()
+    public static function start ()
     {
         // 注册AUTOLOAD方法
         spl_autoload_register('Think\Think::autoload');
@@ -88,8 +88,7 @@ class Think
             }
 
             // 加载应用行为定义
-            if (is_file(CONF_PATH . 'tags.php'))
-            // 允许应用增加开发模式配置定义
+            if (is_file(CONF_PATH . 'tags.php')) // 允许应用增加开发模式配置定义
             {
                 Hook::import(include CONF_PATH . 'tags.php');
             }
@@ -136,7 +135,7 @@ class Think
     }
 
     // 注册classmap
-    public static function addMap($class, $map = '')
+    public static function addMap ($class, $map = '')
     {
         if (is_array($class)) {
             self::$_map = array_merge(self::$_map, $class);
@@ -146,7 +145,7 @@ class Think
     }
 
     // 获取classmap
-    public static function getMap($class = '')
+    public static function getMap ($class = '')
     {
         if ('' === $class) {
             return self::$_map;
@@ -162,7 +161,7 @@ class Think
      * @param string $class 对象类名
      * @return void
      */
-    public static function autoload($class)
+    public static function autoload ($class)
     {
         // 检查是否存在映射
         if (isset(self::$_map[$class])) {
@@ -196,8 +195,7 @@ class Think
             }
             // 根据自动加载路径设置进行尝试搜索
             foreach (explode(',', C('APP_AUTOLOAD_PATH')) as $path) {
-                if (import($path . '.' . $class))
-                // 如果加载类成功则返回
+                if (import($path . '.' . $class)) // 如果加载类成功则返回
                 {
                     return;
                 }
@@ -212,7 +210,7 @@ class Think
      * @param string $method 类的静态方法名
      * @return object
      */
-    public static function instance($class, $method = '')
+    public static function instance ($class, $method = '')
     {
         $identify = $class . $method;
         if (!isset(self::$_instance[$identify])) {
@@ -237,7 +235,7 @@ class Think
      * @access public
      * @param mixed $e 异常对象
      */
-    public static function appException($e)
+    public static function appException ($e)
     {
         $error            = array();
         $error['message'] = $e->getMessage();
@@ -266,7 +264,7 @@ class Think
      * @param int $errline 错误行数
      * @return void
      */
-    public static function appError($errno, $errstr, $errfile, $errline)
+    public static function appError ($errno, $errstr, $errfile, $errline)
     {
         switch ($errno) {
             case E_ERROR:
@@ -290,7 +288,7 @@ class Think
     }
 
     // 致命错误捕获
-    public static function fatalError()
+    public static function fatalError ()
     {
         Log::save();
         if ($e = error_get_last()) {
@@ -312,7 +310,7 @@ class Think
      * @param mixed $error 错误
      * @return void
      */
-    public static function halt($error)
+    public static function halt ($error)
     {
         $e = array();
         if (APP_DEBUG || IS_CLI) {
@@ -355,7 +353,7 @@ class Think
      * @param boolean $record 是否记录日志
      * @return void|array
      */
-    public static function trace($value = '[think]', $label = '', $level = 'DEBUG', $record = false)
+    public static function trace ($value = '[think]', $label = '', $level = 'DEBUG', $record = false)
     {
         static $_trace = array();
         if ('[think]' === $value) {

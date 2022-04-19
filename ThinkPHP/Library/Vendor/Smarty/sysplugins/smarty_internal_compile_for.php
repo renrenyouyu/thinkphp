@@ -15,7 +15,8 @@
  * @package Smarty
  * @subpackage Compiler
  */
-class Smarty_Internal_Compile_For extends Smarty_Internal_CompileBase {
+class Smarty_Internal_Compile_For extends Smarty_Internal_CompileBase
+{
 
     /**
      * Compiles code for the {for} tag
@@ -31,12 +32,12 @@ class Smarty_Internal_Compile_For extends Smarty_Internal_CompileBase {
      * The parser is gereration different sets of attribute by which this compiler can
      * determin which syntax is used.
      *
-     * @param array  $args      array with attributes from parser
-     * @param object $compiler  compiler object
-     * @param array  $parameter array with compilation parameter
+     * @param array $args array with attributes from parser
+     * @param object $compiler compiler object
+     * @param array $parameter array with compilation parameter
      * @return string compiled code
      */
-    public function compile($args, $compiler, $parameter)
+    public function compile ($args, $compiler, $parameter)
     {
         if ($parameter == 0) {
             $this->required_attributes = array('start', 'to');
@@ -57,7 +58,7 @@ class Smarty_Internal_Compile_For extends Smarty_Internal_CompileBase {
             $output .= "  if ($_attr[ifexp]){ for (\$_foo=true;$_attr[ifexp]; \$_smarty_tpl->tpl_vars[$_attr[var]]->value$_attr[step]){\n";
         } else {
             $_statement = $_attr['start'];
-            $output .= "\$_smarty_tpl->tpl_vars[$_statement[var]] = new Smarty_Variable;";
+            $output     .= "\$_smarty_tpl->tpl_vars[$_statement[var]] = new Smarty_Variable;";
             if (isset($_attr['step'])) {
                 $output .= "\$_smarty_tpl->tpl_vars[$_statement[var]]->step = $_attr[step];";
             } else {
@@ -90,20 +91,21 @@ class Smarty_Internal_Compile_For extends Smarty_Internal_CompileBase {
  * @package Smarty
  * @subpackage Compiler
  */
-class Smarty_Internal_Compile_Forelse extends Smarty_Internal_CompileBase {
+class Smarty_Internal_Compile_Forelse extends Smarty_Internal_CompileBase
+{
 
     /**
      * Compiles code for the {forelse} tag
      *
-     * @param array  $args      array with attributes from parser
-     * @param object $compiler  compiler object
-     * @param array  $parameter array with compilation parameter
+     * @param array $args array with attributes from parser
+     * @param object $compiler compiler object
+     * @param array $parameter array with compilation parameter
      * @return string compiled code
      */
-    public function compile($args, $compiler, $parameter)
+    public function compile ($args, $compiler, $parameter)
     {
         // check and get attributes
-        $_attr  = $this->getAttributes($compiler, $args);
+        $_attr = $this->getAttributes($compiler, $args);
 
         list($openTag, $nocache) = $this->closeTag($compiler, array('for'));
         $this->openTag($compiler, 'forelse', array('forelse', $nocache));
@@ -118,17 +120,18 @@ class Smarty_Internal_Compile_Forelse extends Smarty_Internal_CompileBase {
  * @package Smarty
  * @subpackage Compiler
  */
-class Smarty_Internal_Compile_Forclose extends Smarty_Internal_CompileBase {
+class Smarty_Internal_Compile_Forclose extends Smarty_Internal_CompileBase
+{
 
     /**
      * Compiles code for the {/for} tag
      *
-     * @param array  $args      array with attributes from parser
-     * @param object $compiler  compiler object
-     * @param array  $parameter array with compilation parameter
+     * @param array $args array with attributes from parser
+     * @param object $compiler compiler object
+     * @param array $parameter array with compilation parameter
      * @return string compiled code
      */
-    public function compile($args, $compiler, $parameter)
+    public function compile ($args, $compiler, $parameter)
     {
         // check and get attributes
         $_attr = $this->getAttributes($compiler, $args);

@@ -22,7 +22,7 @@ class Mobile
      * @param array $var 模板变量
      * @return void
      */
-    public function fetch($templateFile, $var)
+    public function fetch ($templateFile, $var)
     {
         $templateFile                = substr($templateFile, strlen(THEME_PATH));
         $var['_think_template_path'] = $templateFile;

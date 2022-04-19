@@ -22,7 +22,7 @@ class Dispatcher
      * @access public
      * @return void
      */
-    public static function dispatch()
+    public static function dispatch ()
     {
         $varPath = C('VAR_PATHINFO');
         $urlCase = C('URL_CASE_INSENSITIVE');
@@ -58,11 +58,11 @@ class Dispatcher
                         $rule = $rules[$subDomain];
                     } elseif (isset($rules['*.' . $domain2]) && !empty($domain3)) {
                         // 泛三级域名
-                        $rule = $rules['*.' . $domain2];
+                        $rule      = $rules['*.' . $domain2];
                         $panDomain = $domain3;
                     } elseif (isset($rules['*']) && !empty($domain2) && 'www' != $domain2) {
                         // 泛二级域名
-                        $rule = $rules['*'];
+                        $rule      = $rules['*'];
                         $panDomain = $domain2;
                     }
                 }
@@ -76,7 +76,7 @@ class Dispatcher
                 $array = explode('/', $rule);
                 // 模块绑定
                 define('BIND_MODULE', array_shift($array));
-                // 控制器绑定         
+                // 控制器绑定
                 if (!empty($array)) {
                     $controller = array_shift($array);
                     if ($controller) {
@@ -134,7 +134,7 @@ class Dispatcher
             define('__INFO__', trim($_SERVER['PATH_INFO'], '/'));
             // 去除URL后缀
             $_SERVER['PATH_INFO'] = preg_replace('/\.' . __EXT__ . '$/i', '', __INFO__);
-            $paths = explode($depr, trim($_SERVER['PATH_INFO'], $depr));
+            $paths                = explode($depr, trim($_SERVER['PATH_INFO'], $depr));
         }
 
         // URL常量
@@ -246,12 +246,12 @@ class Dispatcher
 
     /**
      * 获得控制器的命名空间路径 便于插件机制访问
-     * @param  boolean $urlCase 是否转换成小写
+     * @param boolean $urlCase 是否转换成小写
      * @return string
      */
-    private static function getSpace($urlCase)
+    private static function getSpace ($urlCase)
     {
-        $var = C('VAR_ADDON');
+        $var   = C('VAR_ADDON');
         $space = !empty($_GET[$var]) ? strip_tags($_GET[$var]) : '';
         unset($_GET[$var]);
         return $space;
@@ -259,17 +259,17 @@ class Dispatcher
 
     /**
      * 获得实际的控制器名称
-     * @param  array $paths path_info数组
-     * @param  boolean $urlCase 是否转换成小写
+     * @param array $paths path_info数组
+     * @param boolean $urlCase 是否转换成小写
      * @return string
      */
-    private static function getController(&$paths, $urlCase)
+    private static function getController (&$paths, $urlCase)
     {
         if (defined('BIND_CONTROLLER')) {
             return BIND_CONTROLLER;
         } else {
             if ($paths && C('URL_ROUTER_ON') && Route::check($paths)) {
-                $depr = C('URL_PATHINFO_DEPR');
+                $depr  = C('URL_PATHINFO_DEPR');
                 $paths = explode($depr, trim($_SERVER['PATH_INFO'], $depr));
             }
             if ($paths) {
@@ -277,7 +277,7 @@ class Dispatcher
                 Hook::listen('path_info');
                 if (C('CONTROLLER_LEVEL') > 1) {// 控制器层次
                     $controller = implode('/', array_slice($paths, 0, C('CONTROLLER_LEVEL')));
-                    $paths = array_slice($paths, C('CONTROLLER_LEVEL'));
+                    $paths      = array_slice($paths, C('CONTROLLER_LEVEL'));
                 } else {
                     $controller = array_shift($paths);
                 }
@@ -312,11 +312,11 @@ class Dispatcher
 
     /**
      * 获得实际的操作名称
-     * @param  array $paths path_info数组
-     * @param  boolean $urlCase 是否转换成小写
+     * @param array $paths path_info数组
+     * @param boolean $urlCase 是否转换成小写
      * @return string
      */
-    private static function getAction(&$paths, $urlCase)
+    private static function getAction (&$paths, $urlCase)
     {
         if (defined('BIND_ACTION')) {
             return BIND_ACTION;
@@ -362,10 +362,10 @@ class Dispatcher
 
     /**
      * 获得实际的模块名称
-     * @param  array $paths path_info数组
+     * @param array $paths path_info数组
      * @return string
      */
-    private static function getModule(&$paths)
+    private static function getModule (&$paths)
     {
         if (defined('BIND_MODULE')) {
             return BIND_MODULE;
@@ -377,7 +377,7 @@ class Dispatcher
             if ($paths && C('MULTI_MODULE')) { // 获取模块名
                 $allowList = C('MODULE_ALLOW_LIST'); // 允许的模块列表
                 if (empty($allowList) || (is_array($allowList) && in_array_case($paths[0], $allowList))) {
-                    $module = array_shift($paths);
+                    $module               = array_shift($paths);
                     $_SERVER['PATH_INFO'] = implode(MODULE_PATHINFO_DEPR, $paths);
                 }
             } else {

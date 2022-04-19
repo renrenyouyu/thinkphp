@@ -28,17 +28,17 @@ class Local
     /**
      * 构造函数，用于设置上传根路径
      */
-    public function __construct($config = null)
+    public function __construct ($config = null)
     {
 
     }
 
     /**
      * 检测上传根目录
-     * @param string $rootpath   根目录
+     * @param string $rootpath 根目录
      * @return boolean true-检测通过，false-检测失败
      */
-    public function checkRootPath($rootpath)
+    public function checkRootPath ($rootpath)
     {
         if (!(is_dir($rootpath) && is_writable($rootpath))) {
             $this->error = '上传根目录不存在！请尝试手动创建:' . $rootpath;
@@ -50,10 +50,10 @@ class Local
 
     /**
      * 检测上传目录
-     * @param  string $savepath 上传目录
+     * @param string $savepath 上传目录
      * @return boolean          检测结果，true-通过，false-失败
      */
-    public function checkSavePath($savepath)
+    public function checkSavePath ($savepath)
     {
         /* 检测并创建目录 */
         if (!$this->mkdir($savepath)) {
@@ -71,11 +71,11 @@ class Local
 
     /**
      * 保存指定文件
-     * @param  array   $file    保存的文件信息
-     * @param  boolean $replace 同名文件是否覆盖
+     * @param array $file 保存的文件信息
+     * @param boolean $replace 同名文件是否覆盖
      * @return boolean          保存状态，true-成功，false-失败
      */
-    public function save($file, $replace = true)
+    public function save ($file, $replace = true)
     {
         $filename = $this->rootPath . $file['savepath'] . $file['savename'];
 
@@ -96,10 +96,10 @@ class Local
 
     /**
      * 创建目录
-     * @param  string $savepath 要创建的目录
+     * @param string $savepath 要创建的目录
      * @return boolean          创建状态，true-成功，false-失败
      */
-    public function mkdir($savepath)
+    public function mkdir ($savepath)
     {
         $dir = $this->rootPath . $savepath;
         if (is_dir($dir)) {
@@ -118,7 +118,7 @@ class Local
      * 获取最后一次上传错误信息
      * @return string 错误信息
      */
-    public function getError()
+    public function getError ()
     {
         return $this->error;
     }

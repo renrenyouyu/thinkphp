@@ -80,7 +80,7 @@ class Auth
         'AUTH_USER'         => 'member', // 用户信息表
     );
 
-    public function __construct()
+    public function __construct ()
     {
         $prefix                             = C('DB_PREFIX');
         $this->_config['AUTH_GROUP']        = $prefix . $this->_config['AUTH_GROUP'];
@@ -101,7 +101,7 @@ class Auth
      * @param relation string    如果为 'or' 表示满足任一条规则即通过验证;如果为 'and'则表示需满足所有规则才能通过验证
      * @return boolean           通过验证返回true;失败返回false
      */
-    public function check($name, $uid, $type = 1, $mode = 'url', $relation = 'or')
+    public function check ($name, $uid, $type = 1, $mode = 'url', $relation = 'or')
     {
         if (!$this->_config['AUTH_ON']) {
             return true;
@@ -146,19 +146,19 @@ class Auth
 
     /**
      * 根据用户id获取用户组,返回值为数组
-     * @param  uid int     用户id
+     * @param uid int     用户id
      * @return array       用户所属的用户组 array(
      *     array('uid'=>'用户id','group_id'=>'用户组id','title'=>'用户组名称','rules'=>'用户组拥有的规则id,多个,号隔开'),
      *     ...)
      */
-    public function getGroups($uid)
+    public function getGroups ($uid)
     {
         static $groups = array();
         if (isset($groups[$uid])) {
             return $groups[$uid];
         }
 
-        $user_groups = M()
+        $user_groups  = M()
             ->table($this->_config['AUTH_GROUP_ACCESS'] . ' a')
             ->where("a.uid='$uid' and g.status='1'")
             ->join($this->_config['AUTH_GROUP'] . " g on a.group_id=g.id")
@@ -169,13 +169,13 @@ class Auth
 
     /**
      * 获得权限列表
-     * @param integer $uid  用户id
+     * @param integer $uid 用户id
      * @param integer $type
      */
-    protected function getAuthList($uid, $type)
+    protected function getAuthList ($uid, $type)
     {
         static $_authList = array(); //保存用户验证通过的权限列表
-        $t                = implode(',', (array) $type);
+        $t = implode(',', (array)$type);
         if (isset($_authList[$uid . $t])) {
             return $_authList[$uid . $t];
         }
@@ -232,7 +232,7 @@ class Auth
     /**
      * 获得用户资料,根据自己的情况读取数据库
      */
-    protected function getUserInfo($uid)
+    protected function getUserInfo ($uid)
     {
         static $userinfo = array();
         if (!isset($userinfo[$uid])) {

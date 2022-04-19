@@ -27,7 +27,7 @@ class Db
      * @param mixed $config 连接配置
      * @return Object 返回数据库驱动类
      */
-    public static function getInstance($config = array())
+    public static function getInstance ($config = array())
     {
         $md5 = md5(serialize($config));
         if (!isset(self::$instance[$md5])) {
@@ -58,7 +58,7 @@ class Db
      * @param mixed $config
      * @return array
      */
-    private static function parseConfig($config)
+    private static function parseConfig ($config)
     {
         if (!empty($config)) {
             if (is_string($config)) {
@@ -112,9 +112,11 @@ class Db
      * @param string $dsnStr
      * @return array
      */
-    private static function parseDsn($dsnStr)
+    private static function parseDsn ($dsnStr)
     {
-        if (empty($dsnStr)) {return false;}
+        if (empty($dsnStr)) {
+            return false;
+        }
         $info = parse_url($dsnStr);
         if (!$info) {
             return false;
@@ -138,7 +140,7 @@ class Db
     }
 
     // 调用驱动类的方法
-    public static function __callStatic($method, $params)
+    public static function __callStatic ($method, $params)
     {
         return call_user_func_array(array(self::$_instance, $method), $params);
     }

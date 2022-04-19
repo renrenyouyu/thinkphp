@@ -25,7 +25,7 @@ class Http
      * @param string $local 本地保存文件名
      * @return mixed
      */
-    public static function curlDownload($remote, $local)
+    public static function curlDownload ($remote, $local)
     {
         $cp = curl_init($remote);
         $fp = fopen($local, "w");
@@ -52,21 +52,21 @@ class Http
      *        bool   block 是否阻塞访问,默认为true
      * @return mixed
      */
-    public static function fsockopenDownload($url, $conf = array())
+    public static function fsockopenDownload ($url, $conf = array())
     {
         $return = '';
         if (!is_array($conf)) {
             return $return;
         }
 
-        $matches                                       = parse_url($url);
-        !isset($matches['host']) && $matches['host']   = '';
-        !isset($matches['path']) && $matches['path']   = '';
+        $matches = parse_url($url);
+        !isset($matches['host']) && $matches['host'] = '';
+        !isset($matches['path']) && $matches['path'] = '';
         !isset($matches['query']) && $matches['query'] = '';
-        !isset($matches['port']) && $matches['port']   = '';
-        $host                                          = $matches['host'];
-        $path                                          = $matches['path'] ? $matches['path'] . ($matches['query'] ? '?' . $matches['query'] : '') : '/';
-        $port                                          = !empty($matches['port']) ? $matches['port'] : 80;
+        !isset($matches['port']) && $matches['port'] = '';
+        $host = $matches['host'];
+        $path = $matches['path'] ? $matches['path'] . ($matches['query'] ? '?' . $matches['query'] : '') : '/';
+        $port = !empty($matches['port']) ? $matches['port'] : 80;
 
         $conf_arr = array(
             'limit'   => 0,
@@ -124,11 +124,11 @@ class Http
 
                 $stop = false;
                 while (!feof($fp) && !$stop) {
-                    $data = fread($fp, (0 == $limit || $limit > 8192 ? 8192 : $limit));
+                    $data   = fread($fp, (0 == $limit || $limit > 8192 ? 8192 : $limit));
                     $return .= $data;
                     if ($limit) {
                         $limit -= strlen($data);
-                        $stop = $limit <= 0;
+                        $stop  = $limit <= 0;
                     }
                 }
             }
@@ -145,11 +145,11 @@ class Http
      * @access public
      * @param string $filename 下载文件名
      * @param string $showname 下载显示的文件名
-     * @param string $content  下载的内容
-     * @param integer $expire  下载内容浏览器缓存时间
+     * @param string $content 下载的内容
+     * @param integer $expire 下载内容浏览器缓存时间
      * @return void
      */
-    public static function download($filename, $showname = '', $content = '', $expire = 180)
+    public static function download ($filename, $showname = '', $content = '', $expire = 180)
     {
         if (is_file($filename)) {
             $length = filesize($filename);
@@ -185,7 +185,7 @@ class Http
         if ('' == $content) {
             readfile($filename);
         } else {
-            echo ($content);
+            echo($content);
         }
         exit();
     }
@@ -194,7 +194,8 @@ class Http
      * 获取文件的名称，兼容中文名
      * @return string
      */
-    static public function get_basename($filename){
+    static public function get_basename ($filename)
+    {
         return preg_replace('/^.+[\\\\\\/]/', '', $filename);
     }
 
@@ -202,21 +203,21 @@ class Http
      * 显示HTTP Header 信息
      * @return string
      */
-    public static function getHeaderInfo($header = '', $echo = true)
+    public static function getHeaderInfo ($header = '', $echo = true)
     {
         ob_start();
         $headers = getallheaders();
         if (!empty($header)) {
             $info = $headers[$header];
-            echo ($header . ':' . $info . "\n");
+            echo($header . ':' . $info . "\n");
         } else {
             foreach ($headers as $key => $val) {
-                echo ("$key:$val\n");
+                echo("$key:$val\n");
             }
         }
         $output = ob_get_clean();
         if ($echo) {
-            echo (nl2br($output));
+            echo(nl2br($output));
         } else {
             return $output;
         }
@@ -227,7 +228,7 @@ class Http
      * HTTP Protocol defined status codes
      * @param int $num
      */
-    public static function sendHttpStatus($code)
+    public static function sendHttpStatus ($code)
     {
         static $_status = array(
             // Informational 1xx

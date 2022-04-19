@@ -23,7 +23,7 @@ class Xxtea
      * @param integer $expire 有效期（秒）
      * @return string
      */
-    public static function encrypt($str, $key, $expire = 0)
+    public static function encrypt ($str, $key, $expire = 0)
     {
         $expire = sprintf('%010d', $expire ? $expire + time() : 0);
         $str    = $expire . $str;
@@ -42,11 +42,11 @@ class Xxtea
             for ($p = 0; $p < $n; $p++) {
                 $y  = $v[$p + 1];
                 $mx = self::int32((($z >> 5 & 0x07ffffff) ^ $y << 2) + (($y >> 3 & 0x1fffffff) ^ $z << 4)) ^ self::int32(($sum ^ $y) + ($k[$p & 3 ^ $e] ^ $z));
-                $z  = $v[$p]  = self::int32($v[$p] + $mx);
+                $z  = $v[$p] = self::int32($v[$p] + $mx);
             }
             $y  = $v[0];
             $mx = self::int32((($z >> 5 & 0x07ffffff) ^ $y << 2) + (($y >> 3 & 0x1fffffff) ^ $z << 4)) ^ self::int32(($sum ^ $y) + ($k[$p & 3 ^ $e] ^ $z));
-            $z  = $v[$n]  = self::int32($v[$n] + $mx);
+            $z  = $v[$n] = self::int32($v[$n] + $mx);
         }
         return self::long2str($v, false);
     }
@@ -57,7 +57,7 @@ class Xxtea
      * @param string $key 加密key
      * @return string
      */
-    public static function decrypt($str, $key)
+    public static function decrypt ($str, $key)
     {
         $v = self::str2long($str, false);
         $k = self::str2long($key, false);
@@ -73,11 +73,11 @@ class Xxtea
             for ($p = $n; $p > 0; $p--) {
                 $z  = $v[$p - 1];
                 $mx = self::int32((($z >> 5 & 0x07ffffff) ^ $y << 2) + (($y >> 3 & 0x1fffffff) ^ $z << 4)) ^ self::int32(($sum ^ $y) + ($k[$p & 3 ^ $e] ^ $z));
-                $y  = $v[$p]  = self::int32($v[$p] - $mx);
+                $y  = $v[$p] = self::int32($v[$p] - $mx);
             }
             $z   = $v[$n];
             $mx  = self::int32((($z >> 5 & 0x07ffffff) ^ $y << 2) + (($y >> 3 & 0x1fffffff) ^ $z << 4)) ^ self::int32(($sum ^ $y) + ($k[$p & 3 ^ $e] ^ $z));
-            $y   = $v[0]   = self::int32($v[0] - $mx);
+            $y   = $v[0] = self::int32($v[0] - $mx);
             $sum = self::int32($sum - $delta);
         }
         $data   = self::long2str($v, true);
@@ -89,7 +89,7 @@ class Xxtea
         return $data;
     }
 
-    private static function long2str($v, $w)
+    private static function long2str ($v, $w)
     {
         $len = count($v);
         $s   = array();
@@ -103,7 +103,7 @@ class Xxtea
         }
     }
 
-    private static function str2long($s, $w)
+    private static function str2long ($s, $w)
     {
         $v = unpack("V*", $s . str_repeat("\0", (4 - strlen($s) % 4) & 3));
         $v = array_values($v);
@@ -113,7 +113,7 @@ class Xxtea
         return $v;
     }
 
-    private static function int32($n)
+    private static function int32 ($n)
     {
         while ($n >= 2147483648) {
             $n -= 4294967296;
@@ -123,7 +123,7 @@ class Xxtea
             $n += 4294967296;
         }
 
-        return (int) $n;
+        return (int)$n;
     }
 
 }

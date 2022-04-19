@@ -24,7 +24,7 @@ class Memcached extends Cache
      *
      * @param array $options
      */
-    public function __construct($options = array())
+    public function __construct ($options = array())
     {
         if (!extension_loaded('memcached')) {
             E(L('_NOT_SUPPORT_') . ':memcached');
@@ -51,7 +51,7 @@ class Memcached extends Cache
      * @param string $name 缓存变量名
      * @return mixed
      */
-    public function get($name)
+    public function get ($name)
     {
         N('cache_read', 1);
         return $this->handler->get($this->options['prefix'] . $name);
@@ -61,17 +61,17 @@ class Memcached extends Cache
      * 写入缓存
      * @access public
      * @param string $name 缓存变量名
-     * @param mixed $value  存储数据
-     * @param integer $expire  有效时间（秒）
+     * @param mixed $value 存储数据
+     * @param integer $expire 有效时间（秒）
      * @return boolean
      */
-    public function set($name, $value, $expire = null)
+    public function set ($name, $value, $expire = null)
     {
         N('cache_write', 1);
         if (is_null($expire)) {
             $expire = $this->options['expire'];
         }
-        $name = $this->options['prefix'] . $name;
+        $name   = $this->options['prefix'] . $name;
         $expire = $expire == 0 ? 0 : time() + $expire;
         if ($this->handler->set($name, $value, $expire)) {
             if ($this->options['length'] > 0) {
@@ -89,12 +89,12 @@ class Memcached extends Cache
      * @param string $name 缓存变量名
      * @return boolean
      */
-    public function rm($name, $ttl = false)
+    public function rm ($name, $ttl = false)
     {
         $name = $this->options['prefix'] . $name;
         return false === $ttl ?
-        $this->handler->delete($name) :
-        $this->handler->delete($name, $ttl);
+            $this->handler->delete($name) :
+            $this->handler->delete($name, $ttl);
     }
 
     /**
@@ -102,7 +102,7 @@ class Memcached extends Cache
      * @access public
      * @return boolean
      */
-    public function clear()
+    public function clear ()
     {
         return $this->handler->flush();
     }

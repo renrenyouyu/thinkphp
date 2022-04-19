@@ -13,11 +13,11 @@
  * Name:     noprint<br>
  * Purpose:  return an empty string
  *
- * @author   Uwe Tews
  * @param array $params parameters
  * @return string with compiled code
+ * @author   Uwe Tews
  */
-function smarty_modifiercompiler_noprint($params, $compiler)
+function smarty_modifiercompiler_noprint ($params, $compiler)
 {
     return "''";
 }

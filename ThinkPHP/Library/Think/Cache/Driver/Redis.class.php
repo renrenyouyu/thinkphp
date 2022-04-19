@@ -23,7 +23,7 @@ class Redis extends Cache
      * @param array $options 缓存参数
      * @access public
      */
-    public function __construct($options = array())
+    public function __construct ($options = array())
     {
         if (!extension_loaded('redis')) {
             E(L('_NOT_SUPPORT_') . ':redis');
@@ -43,8 +43,8 @@ class Redis extends Cache
         $func                    = $options['persistent'] ? 'pconnect' : 'connect';
         $this->handler           = new \Redis;
         false === $options['timeout'] ?
-        $this->handler->$func($options['host'], $options['port']) :
-        $this->handler->$func($options['host'], $options['port'], $options['timeout']);
+            $this->handler->$func($options['host'], $options['port']) :
+            $this->handler->$func($options['host'], $options['port'], $options['timeout']);
         if ('' != $options['password']) {
             $this->handler->auth($options['password']);
         }
@@ -56,7 +56,7 @@ class Redis extends Cache
      * @param string $name 缓存变量名
      * @return mixed
      */
-    public function get($name)
+    public function get ($name)
     {
         N('cache_read', 1);
         $value    = $this->handler->get($this->options['prefix'] . $name);
@@ -68,11 +68,11 @@ class Redis extends Cache
      * 写入缓存
      * @access public
      * @param string $name 缓存变量名
-     * @param mixed $value  存储数据
-     * @param integer $expire  有效时间（秒）
+     * @param mixed $value 存储数据
+     * @param integer $expire 有效时间（秒）
      * @return boolean
      */
-    public function set($name, $value, $expire = null)
+    public function set ($name, $value, $expire = null)
     {
         N('cache_write', 1);
         if (is_null($expire)) {
@@ -99,7 +99,7 @@ class Redis extends Cache
      * @param string $name 缓存变量名
      * @return boolean
      */
-    public function rm($name)
+    public function rm ($name)
     {
         return $this->handler->delete($this->options['prefix'] . $name);
     }
@@ -109,19 +109,19 @@ class Redis extends Cache
      * @access public
      * @return boolean
      */
-    public function clear()
+    public function clear ()
     {
         return $this->handler->flushDB();
     }
-    
+
     /**
      * 魔术方法，phpRedis中所包含的所有操作均可以通过魔术方法直接调用
      * @access public
      * @return mixed
      */
-    function __call($method, $args)
+    function __call ($method, $args)
     {
-        return call_user_func_array(array($this->handler, $method) , $args);
+        return call_user_func_array(array($this->handler, $method), $args);
     }
 
 }
