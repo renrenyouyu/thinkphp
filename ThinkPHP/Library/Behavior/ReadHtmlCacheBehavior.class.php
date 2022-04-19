@@ -18,7 +18,7 @@ use Think\Storage;
 class ReadHtmlCacheBehavior
 {
     // 行为扩展的执行入口必须是run
-    public function run(&$params)
+    public function run (&$params)
     {
         // 开启静态缓存
         if (IS_GET && C('HTML_CACHE_ON')) {
@@ -33,7 +33,7 @@ class ReadHtmlCacheBehavior
     }
 
     // 判断是否需要静态缓存
-    private static function requireHtmlCache()
+    private static function requireHtmlCache ()
     {
         // 分析当前的静态规则
         $htmls = C('HTML_CACHE_RULES'); // 读取静态规则
@@ -60,32 +60,44 @@ class ReadHtmlCacheBehavior
                 // 以$_开头的系统变量
                 $callback = function ($match) {
                     switch ($match[1]) {
-                        case '_GET':$var = $_GET[$match[2]];
+                        case '_GET':
+                            $var = $_GET[$match[2]];
                             break;
-                        case '_POST':$var = $_POST[$match[2]];
+                        case '_POST':
+                            $var = $_POST[$match[2]];
                             break;
-                        case '_REQUEST':$var = $_REQUEST[$match[2]];
+                        case '_REQUEST':
+                            $var = $_REQUEST[$match[2]];
                             break;
-                        case '_SERVER':$var = $_SERVER[$match[2]];
+                        case '_SERVER':
+                            $var = $_SERVER[$match[2]];
                             break;
-                        case '_SESSION':$var = $_SESSION[$match[2]];
+                        case '_SESSION':
+                            $var = $_SESSION[$match[2]];
                             break;
-                        case '_COOKIE':$var = $_COOKIE[$match[2]];
+                        case '_COOKIE':
+                            $var = $_COOKIE[$match[2]];
                             break;
                     }
                     return (count($match) == 4) ? $match[3]($var) : $var;
                 };
-                $rule = preg_replace_callback('/{\$(_\w+)\.(\w+)(?:\|(\w+))?}/', $callback, $rule);
+                $rule     = preg_replace_callback('/{\$(_\w+)\.(\w+)(?:\|(\w+))?}/', $callback, $rule);
                 // {ID|FUN} GET变量的简写
-                $rule = preg_replace_callback('/{(\w+)\|(\w+)}/', function ($match) {return $match[2]($_GET[$match[1]]);}, $rule);
-                $rule = preg_replace_callback('/{(\w+)}/', function ($match) {return $_GET[$match[1]];}, $rule);
+                $rule = preg_replace_callback('/{(\w+)\|(\w+)}/', function ($match) {
+                    return $match[2]($_GET[$match[1]]);
+                }, $rule);
+                $rule = preg_replace_callback('/{(\w+)}/', function ($match) {
+                    return $_GET[$match[1]];
+                }, $rule);
                 // 特殊系统变量
                 $rule = str_ireplace(
                     array('{:controller}', '{:action}', '{:module}'),
                     array(CONTROLLER_NAME, ACTION_NAME, MODULE_NAME),
                     $rule);
                 // {|FUN} 单独使用函数
-                $rule = preg_replace_callback('/{|(\w+)}/', function ($match) {return $match[1]();}, $rule);
+                $rule      = preg_replace_callback('/{|(\w+)}/', function ($match) {
+                    return $match[1]();
+                }, $rule);
                 $cacheTime = C('HTML_CACHE_TIME', null, 60);
                 if (is_array($html)) {
                     if (!empty($html[2])) {
@@ -110,11 +122,11 @@ class ReadHtmlCacheBehavior
      * 检查静态HTML文件是否有效
      * 如果无效需要重新更新
      * @access public
-     * @param string $cacheFile  静态文件名
-     * @param integer $cacheTime  缓存有效期
+     * @param string $cacheFile 静态文件名
+     * @param integer $cacheTime 缓存有效期
      * @return boolean
      */
-    public static function checkHTMLCache($cacheFile = '', $cacheTime = '')
+    public static function checkHTMLCache ($cacheFile = '', $cacheTime = '')
     {
         if (!is_file($cacheFile) && 'sae' != APP_MODE) {
             return false;

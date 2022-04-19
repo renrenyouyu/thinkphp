@@ -16,9 +16,9 @@ class base extends PHPUnit_Framework_TestCase
      * 清空配置项，加载指定的配置文件中的配置
      * @param $config
      */
-    function loadConfig($config, $rebuild = true)
+    function loadConfig ($config, $rebuild = true)
     {
-        $file = CONF_PATH . $config . CONF_EXT;
+        $file   = CONF_PATH . $config . CONF_EXT;
         $config = include $file;
         if (!empty($config)) {
             $config = [];

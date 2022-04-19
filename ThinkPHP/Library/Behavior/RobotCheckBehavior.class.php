@@ -17,7 +17,7 @@ namespace Behavior;
 class RobotCheckBehavior
 {
 
-    public function run(&$params)
+    public function run (&$params)
     {
         // 机器人访问检测
         if (C('LIMIT_ROBOT_VISIT', null, true) && self::isRobot()) {
@@ -26,7 +26,7 @@ class RobotCheckBehavior
         }
     }
 
-    private static function isRobot()
+    private static function isRobot ()
     {
         static $_robot = null;
         if (is_null($_robot)) {

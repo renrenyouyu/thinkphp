@@ -17,7 +17,7 @@ class CheckLangBehavior
 {
 
     // 行为扩展的执行入口必须是run
-    public function run(&$params)
+    public function run (&$params)
     {
         // 检测语言
         $this->checkLanguage();
@@ -29,7 +29,7 @@ class CheckLangBehavior
      * @access private
      * @return void
      */
-    private function checkLanguage()
+    private function checkLanguage ()
     {
         // 不开启语言包功能，仅仅加载框架语言文件直接返回
         if (!C('LANG_SWITCH_ON', null, false)) {

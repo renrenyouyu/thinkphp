@@ -21,7 +21,7 @@ class File
     );
 
     // 实例化并传入参数
-    public function __construct($config = array())
+    public function __construct ($config = array())
     {
         $this->config = array_merge($this->config, $config);
     }
@@ -30,10 +30,10 @@ class File
      * 日志写入接口
      * @access public
      * @param string $log 日志信息
-     * @param string $destination  写入目标
+     * @param string $destination 写入目标
      * @return void
      */
-    public function write($log, $destination = '')
+    public function write ($log, $destination = '')
     {
         $now = date($this->config['log_time_format']);
         if (empty($destination)) {

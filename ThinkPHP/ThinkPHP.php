@@ -22,7 +22,7 @@ if (MEMORY_LIMIT_ON) {
 }
 
 // 版本信息
-const THINK_VERSION = '3.2.3';
+const THINK_VERSION      = '3.2.3';
 const THINK_FORK_VERSION = '3.2.4';
 
 // URL 模式定义

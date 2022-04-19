@@ -24,7 +24,8 @@ class Sae extends Storage
     private $kvs      = array();
     private $htmls    = array();
     private $contents = array();
-    public function __construct()
+
+    public function __construct ()
     {
         if (!function_exists('memcache_init')) {
             header('Content-Type:text/html;charset=utf-8');
@@ -40,7 +41,7 @@ class Sae extends Storage
     /**
      * 获得SaeKv对象
      */
-    private function getKv()
+    private function getKv ()
     {
         static $kv;
         if (!$kv) {
@@ -56,10 +57,10 @@ class Sae extends Storage
     /**
      * 文件内容读取
      * @access public
-     * @param string $filename  文件名
+     * @param string $filename 文件名
      * @return string
      */
-    public function read($filename, $type = '')
+    public function read ($filename, $type = '')
     {
         switch (strtolower($type)) {
             case 'f':
@@ -76,11 +77,11 @@ class Sae extends Storage
     /**
      * 文件写入
      * @access public
-     * @param string $filename  文件名
-     * @param string $content  文件内容
+     * @param string $filename 文件名
+     * @param string $content 文件内容
      * @return boolean
      */
-    public function put($filename, $content, $type = '')
+    public function put ($filename, $content, $type = '')
     {
         switch (strtolower($type)) {
             case 'f':
@@ -106,11 +107,11 @@ class Sae extends Storage
     /**
      * 文件追加写入
      * @access public
-     * @param string $filename  文件名
-     * @param string $content  追加的文件内容
+     * @param string $filename 文件名
+     * @param string $content 追加的文件内容
      * @return boolean
      */
-    public function append($filename, $content, $type = '')
+    public function append ($filename, $content, $type = '')
     {
         if ($old_content = $this->read($filename, $type)) {
             $content = $old_content . $content;
@@ -121,11 +122,11 @@ class Sae extends Storage
     /**
      * 加载文件
      * @access public
-     * @param string $_filename  文件名
-     * @param array $vars  传入变量
+     * @param string $_filename 文件名
+     * @param array $vars 传入变量
      * @return void
      */
-    public function load($_filename, $vars = null)
+    public function load ($_filename, $vars = null)
     {
         if (!is_null($vars)) {
             extract($vars, EXTR_OVERWRITE);
@@ -137,10 +138,10 @@ class Sae extends Storage
     /**
      * 文件是否存在
      * @access public
-     * @param string $filename  文件名
+     * @param string $filename 文件名
      * @return boolean
      */
-    public function has($filename, $type = '')
+    public function has ($filename, $type = '')
     {
         if ($this->read($filename, $type)) {
             return true;
@@ -152,10 +153,10 @@ class Sae extends Storage
     /**
      * 文件删除
      * @access public
-     * @param string $filename  文件名
+     * @param string $filename 文件名
      * @return boolean
      */
-    public function unlink($filename, $type = '')
+    public function unlink ($filename, $type = '')
     {
         switch (strtolower($type)) {
             case 'f':
@@ -175,11 +176,11 @@ class Sae extends Storage
     /**
      * 读取文件信息
      * @access public
-     * @param string $filename  文件名
-     * @param string $name  信息名 mtime或者content
+     * @param string $filename 文件名
+     * @param string $name 信息名 mtime或者content
      * @return boolean
      */
-    public function get($filename, $name, $type = '')
+    public function get ($filename, $name, $type = '')
     {
         switch (strtolower($type)) {
             case 'html':

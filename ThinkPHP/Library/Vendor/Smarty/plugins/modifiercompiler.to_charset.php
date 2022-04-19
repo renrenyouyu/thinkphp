@@ -13,13 +13,13 @@
  * Name:     to_charset<br>
  * Purpose:  convert character encoding from internal encoding to $charset
  *
- * @author Rodney Rehm
  * @param array $params parameters
  * @return string with compiled code
+ * @author Rodney Rehm
  */
-function smarty_modifiercompiler_to_charset($params, $compiler)
+function smarty_modifiercompiler_to_charset ($params, $compiler)
 {
-    if (!SMARTY_MBSTRING /* ^phpunit */&&empty($_SERVER['SMARTY_PHPUNIT_DISABLE_MBSTRING'])/* phpunit$ */) {
+    if (!SMARTY_MBSTRING /* ^phpunit */ && empty($_SERVER['SMARTY_PHPUNIT_DISABLE_MBSTRING'])/* phpunit$ */) {
         // FIXME: (rodneyrehm) shouldn't this throw an error?
         return $params[0];
     }

@@ -13,11 +13,13 @@ namespace Behavior;
 /**
  * 自动执行任务
  */
+
 use Think\Log as Log;
+
 class CronRunBehavior
 {
 
-    public function run(&$params)
+    public function run (&$params)
     {
         // 锁定自动执行
         $lockfile = RUNTIME_PATH . 'cron.lock';

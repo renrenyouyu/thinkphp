@@ -26,6 +26,7 @@
  * headers输出，你可以在入口文件第一行加入代码 ob_start(); 或者配置output_buffering
  *
  */
+
 namespace Behavior;
 
 use Behavior\ChromePhp as ChromePhp;
@@ -40,7 +41,7 @@ class ChromeShowPageTraceBehavior
     protected $tracePageTabs = array('BASE' => '基本', 'FILE' => '文件', 'INFO' => '流程', 'ERR|NOTIC' => '错误', 'SQL' => 'SQL', 'DEBUG' => '调试');
 
     // 行为扩展的执行入口必须是run
-    public function run(&$params)
+    public function run (&$params)
     {
         if (C('SHOW_PAGE_TRACE')) {
             $this->showTrace();
@@ -52,7 +53,7 @@ class ChromeShowPageTraceBehavior
      * 显示页面Trace信息
      * @access private
      */
-    private function showTrace()
+    private function showTrace ()
     {
         // 系统默认显示信息
         $files = get_included_files();
@@ -64,7 +65,7 @@ class ChromeShowPageTraceBehavior
         $base  = array(
             '请求信息' => date('Y-m-d H:i:s', $_SERVER['REQUEST_TIME']) . ' ' . $_SERVER['SERVER_PROTOCOL'] . ' ' . $_SERVER['REQUEST_METHOD'] . ' : ' . __SELF__,
             '运行时间' => $this->showTime(),
-            '吞吐率'    => number_format(1 / G('beginTime', 'viewEndTime'), 2) . 'req/s',
+            '吞吐率'  => number_format(1 / G('beginTime', 'viewEndTime'), 2) . 'req/s',
             '内存开销' => MEMORY_LIMIT_ON ? number_format((memory_get_usage() - $GLOBALS['_startUseMems']) / 1024, 2) . ' kb' : '不支持',
             '查询信息' => N('db_query') . ' queries ' . N('db_write') . ' writes ',
             '文件加载' => count(get_included_files()),
@@ -144,7 +145,7 @@ class ChromeShowPageTraceBehavior
     /**
      * 获取运行时间
      */
-    private function showTime()
+    private function showTime ()
     {
         // 显示运行时间
         G('beginTime', $GLOBALS['_beginTime']);
@@ -153,9 +154,10 @@ class ChromeShowPageTraceBehavior
         return G('beginTime', 'viewEndTime') . 's ( Load:' . G('beginTime', 'loadTime') . 's Init:' . G('loadTime', 'initTime') . 's Exec:' . G('initTime', 'viewStartTime') . 's Template:' . G('viewStartTime', 'viewEndTime') . 's )';
     }
 }
+
 if (!function_exists('chrome_debug')) {
 //ChromePhp 输出trace的函数
-    function chromeDebug($msg, $type = 'trace', $trace_level = 1)
+    function chromeDebug ($msg, $type = 'trace', $trace_level = 1)
     {
         if ('trace' == $type) {
             ChromePhp::groupCollapsed($msg);
@@ -188,12 +190,12 @@ if (!function_exists('chrome_debug')) {
         }
     }
 
-/**
- * Server Side Chrome PHP debugger class
- *
- * @package ChromePhp
- * @author Craig Campbell <iamcraigcampbell@gmail.com>
- */
+    /**
+     * Server Side Chrome PHP debugger class
+     *
+     * @package ChromePhp
+     * @author Craig Campbell <iamcraigcampbell@gmail.com>
+     */
     class ChromePhp
     {
         /**
@@ -302,7 +304,7 @@ if (!function_exists('chrome_debug')) {
         /**
          * constructor
          */
-        private function __construct()
+        private function __construct ()
         {
             $this->_php_version         = phpversion();
             $this->_timestamp           = $this->_php_version >= 5.1 ? $_SERVER['REQUEST_TIME'] : time();
@@ -314,7 +316,7 @@ if (!function_exists('chrome_debug')) {
          *
          * @return ChromePhp
          */
-        public static function getInstance()
+        public static function getInstance ()
         {
             if (null === self::$_instance) {
                 self::$_instance = new self();
@@ -328,7 +330,7 @@ if (!function_exists('chrome_debug')) {
          * @param mixed $data,... unlimited OPTIONAL number of additional logs [...]
          * @return void
          */
-        public static function log()
+        public static function log ()
         {
             $args = func_get_args();
             return self::_log('', $args);
@@ -340,7 +342,7 @@ if (!function_exists('chrome_debug')) {
          * @param mixed $data,... unlimited OPTIONAL number of additional logs [...]
          * @return void
          */
-        public static function warn()
+        public static function warn ()
         {
             $args = func_get_args();
             return self::_log(self::WARN, $args);
@@ -352,7 +354,7 @@ if (!function_exists('chrome_debug')) {
          * @param mixed $data,... unlimited OPTIONAL number of additional logs [...]
          * @return void
          */
-        public static function error()
+        public static function error ()
         {
             $args = func_get_args();
             return self::_log(self::ERROR, $args);
@@ -363,7 +365,7 @@ if (!function_exists('chrome_debug')) {
          *
          * @param string value
          */
-        public static function group()
+        public static function group ()
         {
             $args = func_get_args();
             return self::_log(self::GROUP, $args);
@@ -375,7 +377,7 @@ if (!function_exists('chrome_debug')) {
          * @param mixed $data,... unlimited OPTIONAL number of additional logs [...]
          * @return void
          */
-        public static function info()
+        public static function info ()
         {
             $args = func_get_args();
             return self::_log(self::INFO, $args);
@@ -386,7 +388,7 @@ if (!function_exists('chrome_debug')) {
          *
          * @param string value
          */
-        public static function groupCollapsed()
+        public static function groupCollapsed ()
         {
             $args = func_get_args();
             return self::_log(self::GROUP_COLLAPSED, $args);
@@ -397,7 +399,7 @@ if (!function_exists('chrome_debug')) {
          *
          * @param string value
          */
-        public static function groupEnd()
+        public static function groupEnd ()
         {
             $args = func_get_args();
             return self::_log(self::GROUP_END, $args);
@@ -408,7 +410,7 @@ if (!function_exists('chrome_debug')) {
          *
          * @param string value
          */
-        public static function table()
+        public static function table ()
         {
             $args = func_get_args();
             return self::_log(self::TABLE, $args);
@@ -420,7 +422,7 @@ if (!function_exists('chrome_debug')) {
          * @param string $type
          * @return void
          */
-        protected static function _log($type, array $args)
+        protected static function _log ($type, array $args)
         {
             // nothing passed in, don't do anything
             if (count($args) == 0 && self::GROUP_END != $type) {
@@ -453,7 +455,7 @@ if (!function_exists('chrome_debug')) {
          * @param Object
          * @return array
          */
-        protected function _convert($object)
+        protected function _convert ($object)
         {
             // if this isn't an object then just return it
             if (!is_object($object)) {
@@ -517,7 +519,7 @@ if (!function_exists('chrome_debug')) {
          * @param ReflectionProperty
          * @return string
          */
-        protected function _getPropertyKey(ReflectionProperty $property)
+        protected function _getPropertyKey (ReflectionProperty $property)
         {
             $static = $property->isStatic() ? ' static' : '';
             if ($property->isPublic()) {
@@ -536,10 +538,10 @@ if (!function_exists('chrome_debug')) {
         /**
          * adds a value to the data array
          *
-         * @var mixed
          * @return void
+         * @var mixed
          */
-        protected function _addRow(array $logs, $backtrace, $type)
+        protected function _addRow (array $logs, $backtrace, $type)
         {
             // if this is logged on the same line for example in a loop, set it to null to save space
             if (in_array($backtrace, $this->_backtraces)) {
@@ -562,7 +564,7 @@ if (!function_exists('chrome_debug')) {
             $this->_writeHeader($this->_json);
         }
 
-        protected function _writeHeader($data)
+        protected function _writeHeader ($data)
         {
             header(self::HEADER_NAME . ': ' . $this->_encode($data));
         }
@@ -573,7 +575,7 @@ if (!function_exists('chrome_debug')) {
          * @param array $data
          * @return string
          */
-        protected function _encode($data)
+        protected function _encode ($data)
         {
             return base64_encode(utf8_encode(json_encode($data)));
         }
@@ -585,7 +587,7 @@ if (!function_exists('chrome_debug')) {
          * @param mixed value
          * @return void
          */
-        public function addSetting($key, $value)
+        public function addSetting ($key, $value)
         {
             $this->_settings[$key] = $value;
         }
@@ -596,7 +598,7 @@ if (!function_exists('chrome_debug')) {
          * @param array $settings
          * @return void
          */
-        public function addSettings(array $settings)
+        public function addSettings (array $settings)
         {
             foreach ($settings as $key => $value) {
                 $this->addSetting($key, $value);
@@ -609,7 +611,7 @@ if (!function_exists('chrome_debug')) {
          * @param string key
          * @return mixed
          */
-        public function getSetting($key)
+        public function getSetting ($key)
         {
             if (!isset($this->_settings[$key])) {
                 return null;

@@ -16,7 +16,6 @@ namespace Think\Crypt\Driver;
  * Optimised for performance with large blocks by Michael Hayworth, November 2001
  * http://www.netdealing.com
  */
-
 class Des
 {
 
@@ -27,7 +26,7 @@ class Des
      * @param integer $expire 有效期（秒）
      * @return string
      */
-    public static function encrypt($str, $key, $expire = 0)
+    public static function encrypt ($str, $key, $expire = 0)
     {
         if ("" == $str) {
             return "";
@@ -43,7 +42,7 @@ class Des
      * @param string $key 加密key
      * @return string
      */
-    public static function decrypt($str, $key)
+    public static function decrypt ($str, $key)
     {
         if ("" == $str) {
             return "";
@@ -63,7 +62,7 @@ class Des
      * @param string $key 加密key
      * @return string
      */
-    private static function _des($key, $message, $encrypt, $mode = 0, $iv = null)
+    private static function _des ($key, $message, $encrypt, $mode = 0, $iv = null)
     {
         //declaring this locally speeds things up a bit
         $spfunction1 = array(0x1010400, 0, 0x10000, 0x1010404, 0x1010004, 0x10404, 0x4, 0x10000, 0x400, 0x1010400, 0x1010404, 0x400, 0x1000404, 0x1010004, 0x1000000, 0x4, 0x404, 0x1000400, 0x1000400, 0x10400, 0x10400, 0x1010000, 0x1010000, 0x1000404, 0x10004, 0x1000004, 0x1000004, 0x10004, 0, 0x404, 0x10404, 0x1000000, 0x10000, 0x1010404, 0x4, 0x1010000, 0x1010400, 0x1000000, 0x1000000, 0x400, 0x1010004, 0x10000, 0x10400, 0x1000004, 0x400, 0x4, 0x1000404, 0x10404, 0x1010404, 0x10004, 0x1010000, 0x1000404, 0x1000004, 0x404, 0x10404, 0x1010400, 0x404, 0x1000400, 0x1000400, 0, 0x10004, 0x10400, 0, 0x1010004);
@@ -83,7 +82,11 @@ class Des
         $chunk = 0;
         //set up the loops for single and triple des
         $iterations = ((count($keys) == 32) ? 3 : 9); //single or triple des
-        if (3 == $iterations) {$looping = (($encrypt) ? array(0, 32, 2) : array(30, -2, -2));} else { $looping = (($encrypt) ? array(0, 32, 2, 62, 30, -2, 64, 96, 2) : array(94, 62, -2, 32, 64, 2, 30, -2, -2));}
+        if (3 == $iterations) {
+            $looping = (($encrypt) ? array(0, 32, 2) : array(30, -2, -2));
+        } else {
+            $looping = (($encrypt) ? array(0, 32, 2, 62, 30, -2, 64, 96, 2) : array(94, 62, -2, 32, 64, 2, 30, -2, -2));
+        }
 
         $message .= (chr(0) . chr(0) . chr(0) . chr(0) . chr(0) . chr(0) . chr(0) . chr(0)); //pad the message out with null bytes
         //store the result here
@@ -104,29 +107,33 @@ class Des
 
             //for Cipher Block Chaining mode, xor the message with the previous result
             if (1 == $mode) {
-                if ($encrypt) {$left ^= $cbcleft;
-                    $right ^= $cbcright;} else {
+                if ($encrypt) {
+                    $left  ^= $cbcleft;
+                    $right ^= $cbcright;
+                } else {
                     $cbcleft2  = $cbcleft;
                     $cbcright2 = $cbcright;
                     $cbcleft   = $left;
-                    $cbcright  = $right;}}
+                    $cbcright  = $right;
+                }
+            }
 
             //first each 64 but chunk of the message must be permuted according to IP
-            $temp = (($left >> 4 & $masks[4]) ^ $right) & 0x0f0f0f0f;
+            $temp  = (($left >> 4 & $masks[4]) ^ $right) & 0x0f0f0f0f;
             $right ^= $temp;
-            $left ^= ($temp << 4);
-            $temp = (($left >> 16 & $masks[16]) ^ $right) & 0x0000ffff;
+            $left  ^= ($temp << 4);
+            $temp  = (($left >> 16 & $masks[16]) ^ $right) & 0x0000ffff;
             $right ^= $temp;
-            $left ^= ($temp << 16);
-            $temp = (($right >> 2 & $masks[2]) ^ $left) & 0x33333333;
-            $left ^= $temp;
+            $left  ^= ($temp << 16);
+            $temp  = (($right >> 2 & $masks[2]) ^ $left) & 0x33333333;
+            $left  ^= $temp;
             $right ^= ($temp << 2);
-            $temp = (($right >> 8 & $masks[8]) ^ $left) & 0x00ff00ff;
-            $left ^= $temp;
+            $temp  = (($right >> 8 & $masks[8]) ^ $left) & 0x00ff00ff;
+            $left  ^= $temp;
             $right ^= ($temp << 8);
-            $temp = (($left >> 1 & $masks[1]) ^ $right) & 0x55555555;
+            $temp  = (($left >> 1 & $masks[1]) ^ $right) & 0x55555555;
             $right ^= $temp;
-            $left ^= ($temp << 1);
+            $left  ^= ($temp << 1);
 
             $left  = (($left << 1) | ($left >> 31 & $masks[31]));
             $right = (($right << 1) | ($right >> 31 & $masks[31]));
@@ -144,9 +151,9 @@ class Des
                     $temp  = $left;
                     $left  = $right;
                     $right = $temp ^ ($spfunction2[($right1 >> 24 & $masks[24]) & 0x3f] | $spfunction4[($right1 >> 16 & $masks[16]) & 0x3f]
-                         | $spfunction6[($right1 >> 8 & $masks[8]) & 0x3f] | $spfunction8[$right1 & 0x3f]
-                         | $spfunction1[($right2 >> 24 & $masks[24]) & 0x3f] | $spfunction3[($right2 >> 16 & $masks[16]) & 0x3f]
-                         | $spfunction5[($right2 >> 8 & $masks[8]) & 0x3f] | $spfunction7[$right2 & 0x3f]);
+                            | $spfunction6[($right1 >> 8 & $masks[8]) & 0x3f] | $spfunction8[$right1 & 0x3f]
+                            | $spfunction1[($right2 >> 24 & $masks[24]) & 0x3f] | $spfunction3[($right2 >> 16 & $masks[16]) & 0x3f]
+                            | $spfunction5[($right2 >> 8 & $masks[8]) & 0x3f] | $spfunction7[$right2 & 0x3f]);
                 }
                 $temp  = $left;
                 $left  = $right;
@@ -158,35 +165,40 @@ class Des
             $right = (($right >> 1 & $masks[1]) | ($right << 31));
 
             //now perform IP-1, which is IP in the opposite direction
-            $temp = (($left >> 1 & $masks[1]) ^ $right) & 0x55555555;
+            $temp  = (($left >> 1 & $masks[1]) ^ $right) & 0x55555555;
             $right ^= $temp;
-            $left ^= ($temp << 1);
-            $temp = (($right >> 8 & $masks[8]) ^ $left) & 0x00ff00ff;
-            $left ^= $temp;
+            $left  ^= ($temp << 1);
+            $temp  = (($right >> 8 & $masks[8]) ^ $left) & 0x00ff00ff;
+            $left  ^= $temp;
             $right ^= ($temp << 8);
-            $temp = (($right >> 2 & $masks[2]) ^ $left) & 0x33333333;
-            $left ^= $temp;
+            $temp  = (($right >> 2 & $masks[2]) ^ $left) & 0x33333333;
+            $left  ^= $temp;
             $right ^= ($temp << 2);
-            $temp = (($left >> 16 & $masks[16]) ^ $right) & 0x0000ffff;
+            $temp  = (($left >> 16 & $masks[16]) ^ $right) & 0x0000ffff;
             $right ^= $temp;
-            $left ^= ($temp << 16);
-            $temp = (($left >> 4 & $masks[4]) ^ $right) & 0x0f0f0f0f;
+            $left  ^= ($temp << 16);
+            $temp  = (($left >> 4 & $masks[4]) ^ $right) & 0x0f0f0f0f;
             $right ^= $temp;
-            $left ^= ($temp << 4);
+            $left  ^= ($temp << 4);
 
             //for Cipher Block Chaining mode, xor the message with the previous result
             if (1 == $mode) {
-                if ($encrypt) {$cbcleft = $left;
-                    $cbcright                           = $right;} else {
-                    $left ^= $cbcleft2;
-                    $right ^= $cbcright2;}}
+                if ($encrypt) {
+                    $cbcleft  = $left;
+                    $cbcright = $right;
+                } else {
+                    $left  ^= $cbcleft2;
+                    $right ^= $cbcright2;
+                }
+            }
             $tempresult .= (chr($left >> 24 & $masks[24]) . chr(($left >> 16 & $masks[16]) & 0xff) . chr(($left >> 8 & $masks[8]) & 0xff) . chr($left & 0xff) . chr($right >> 24 & $masks[24]) . chr(($right >> 16 & $masks[16]) & 0xff) . chr(($right >> 8 & $masks[8]) & 0xff) . chr($right & 0xff));
 
             $chunk += 8;
             if (512 == $chunk) {
-                $result .= $tempresult;
+                $result     .= $tempresult;
                 $tempresult = "";
-                $chunk      = 0;}
+                $chunk      = 0;
+            }
         } //for every 8 characters, or 64 bits in the message
 
         //return the result as an array
@@ -200,7 +212,7 @@ class Des
      * @param string $key 加密key
      * @return string
      */
-    private static function _createKeys($key)
+    private static function _createKeys ($key)
     {
         //declaring this locally speeds things up a bit
         $pc2bytes0  = array(0, 0x4, 0x20000000, 0x20000004, 0x10000, 0x10004, 0x20010000, 0x20010004, 0x200, 0x204, 0x20000200, 0x20000204, 0x10200, 0x10204, 0x20010200, 0x20010204);
@@ -234,27 +246,27 @@ class Des
             $left  = (ord($key{$m++}) << 24) | (ord($key{$m++}) << 16) | (ord($key{$m++}) << 8) | ord($key{$m++});
             $right = (ord($key{$m++}) << 24) | (ord($key{$m++}) << 16) | (ord($key{$m++}) << 8) | ord($key{$m++});
 
-            $temp = (($left >> 4 & $masks[4]) ^ $right) & 0x0f0f0f0f;
+            $temp  = (($left >> 4 & $masks[4]) ^ $right) & 0x0f0f0f0f;
             $right ^= $temp;
-            $left ^= ($temp << 4);
-            $temp = (($right >> 16 & $masks[16]) ^ $left) & 0x0000ffff;
-            $left ^= $temp;
+            $left  ^= ($temp << 4);
+            $temp  = (($right >> 16 & $masks[16]) ^ $left) & 0x0000ffff;
+            $left  ^= $temp;
             $right ^= ($temp << -16);
-            $temp = (($left >> 2 & $masks[2]) ^ $right) & 0x33333333;
+            $temp  = (($left >> 2 & $masks[2]) ^ $right) & 0x33333333;
             $right ^= $temp;
-            $left ^= ($temp << 2);
-            $temp = (($right >> 16 & $masks[16]) ^ $left) & 0x0000ffff;
-            $left ^= $temp;
+            $left  ^= ($temp << 2);
+            $temp  = (($right >> 16 & $masks[16]) ^ $left) & 0x0000ffff;
+            $left  ^= $temp;
             $right ^= ($temp << -16);
-            $temp = (($left >> 1 & $masks[1]) ^ $right) & 0x55555555;
+            $temp  = (($left >> 1 & $masks[1]) ^ $right) & 0x55555555;
             $right ^= $temp;
-            $left ^= ($temp << 1);
-            $temp = (($right >> 8 & $masks[8]) ^ $left) & 0x00ff00ff;
-            $left ^= $temp;
+            $left  ^= ($temp << 1);
+            $temp  = (($right >> 8 & $masks[8]) ^ $left) & 0x00ff00ff;
+            $left  ^= $temp;
             $right ^= ($temp << 8);
-            $temp = (($left >> 1 & $masks[1]) ^ $right) & 0x55555555;
+            $temp  = (($left >> 1 & $masks[1]) ^ $right) & 0x55555555;
             $right ^= $temp;
-            $left ^= ($temp << 1);
+            $left  ^= ($temp << 1);
 
             //the right side needs to be shifted and to get the last four bits of the left side
             $temp = ($left << 8) | (($right >> 20 & $masks[20]) & 0x000000f0);
@@ -279,14 +291,14 @@ class Des
                 //this conversion will look like PC-2 except only the last 6 bits of each byte are used
                 //rather than 48 consecutive bits and the order of lines will be according to
                 //how the S selection functions will be applied: S2, S4, S6, S8, S1, S3, S5, S7
-                $lefttemp = $pc2bytes0[$left >> 28 & $masks[28]] | $pc2bytes1[($left >> 24 & $masks[24]) & 0xf]
-                 | $pc2bytes2[($left >> 20 & $masks[20]) & 0xf] | $pc2bytes3[($left >> 16 & $masks[16]) & 0xf]
-                 | $pc2bytes4[($left >> 12 & $masks[12]) & 0xf] | $pc2bytes5[($left >> 8 & $masks[8]) & 0xf]
-                 | $pc2bytes6[($left >> 4 & $masks[4]) & 0xf];
-                $righttemp = $pc2bytes7[$right >> 28 & $masks[28]] | $pc2bytes8[($right >> 24 & $masks[24]) & 0xf]
-                 | $pc2bytes9[($right >> 20 & $masks[20]) & 0xf] | $pc2bytes10[($right >> 16 & $masks[16]) & 0xf]
-                 | $pc2bytes11[($right >> 12 & $masks[12]) & 0xf] | $pc2bytes12[($right >> 8 & $masks[8]) & 0xf]
-                 | $pc2bytes13[($right >> 4 & $masks[4]) & 0xf];
+                $lefttemp   = $pc2bytes0[$left >> 28 & $masks[28]] | $pc2bytes1[($left >> 24 & $masks[24]) & 0xf]
+                    | $pc2bytes2[($left >> 20 & $masks[20]) & 0xf] | $pc2bytes3[($left >> 16 & $masks[16]) & 0xf]
+                    | $pc2bytes4[($left >> 12 & $masks[12]) & 0xf] | $pc2bytes5[($left >> 8 & $masks[8]) & 0xf]
+                    | $pc2bytes6[($left >> 4 & $masks[4]) & 0xf];
+                $righttemp  = $pc2bytes7[$right >> 28 & $masks[28]] | $pc2bytes8[($right >> 24 & $masks[24]) & 0xf]
+                    | $pc2bytes9[($right >> 20 & $masks[20]) & 0xf] | $pc2bytes10[($right >> 16 & $masks[16]) & 0xf]
+                    | $pc2bytes11[($right >> 12 & $masks[12]) & 0xf] | $pc2bytes12[($right >> 8 & $masks[8]) & 0xf]
+                    | $pc2bytes13[($right >> 4 & $masks[4]) & 0xf];
                 $temp       = (($righttemp >> 16 & $masks[16]) ^ $lefttemp) & 0x0000ffff;
                 $keys[$n++] = $lefttemp ^ $temp;
                 $keys[$n++] = $righttemp ^ ($temp << 16);

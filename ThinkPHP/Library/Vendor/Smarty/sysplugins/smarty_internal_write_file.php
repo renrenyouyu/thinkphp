@@ -13,17 +13,18 @@
  * @package Smarty
  * @subpackage PluginsInternal
  */
-class Smarty_Internal_Write_File {
+class Smarty_Internal_Write_File
+{
 
     /**
      * Writes file in a safe way to disk
      *
      * @param string $_filepath complete filepath
      * @param string $_contents file content
-     * @param Smarty $smarty    smarty instance
+     * @param Smarty $smarty smarty instance
      * @return boolean true
      */
-    public static function writeFile($_filepath, $_contents, Smarty $smarty)
+    public static function writeFile ($_filepath, $_contents, Smarty $smarty)
     {
         $_error_reporting = error_reporting();
         error_reporting($_error_reporting & ~E_NOTICE & ~E_WARNING);

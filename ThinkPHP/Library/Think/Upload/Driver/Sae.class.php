@@ -31,7 +31,7 @@ class Sae
      * 构造函数，设置storage的domain， 如果有传配置，则domain为配置项，如果没有传domain为第一个路径的目录名称。
      * @param mixed $config 上传配置
      */
-    public function __construct($config = null)
+    public function __construct ($config = null)
     {
         if (is_array($config) && !empty($config['domain'])) {
             $this->domain = strtolower($config['domain']);
@@ -40,10 +40,10 @@ class Sae
 
     /**
      * 检测上传根目录
-     * @param string $rootpath   根目录
+     * @param string $rootpath 根目录
      * @return boolean true-检测通过，false-检测失败
      */
-    public function checkRootPath($rootpath)
+    public function checkRootPath ($rootpath)
     {
         $rootpath = trim($rootpath, './');
         if (!$this->domain) {
@@ -63,21 +63,21 @@ class Sae
 
     /**
      * 检测上传目录
-     * @param  string $savepath 上传目录
+     * @param string $savepath 上传目录
      * @return boolean          检测结果，true-通过，false-失败
      */
-    public function checkSavePath($savepath)
+    public function checkSavePath ($savepath)
     {
         return true;
     }
 
     /**
      * 保存指定文件
-     * @param  array   $file    保存的文件信息
-     * @param  boolean $replace 同名文件是否覆盖
+     * @param array $file 保存的文件信息
+     * @param boolean $replace 同名文件是否覆盖
      * @return boolean          保存状态，true-成功，false-失败
      */
-    public function save(&$file, $replace = true)
+    public function save (&$file, $replace = true)
     {
         $filename = ltrim($this->rootPath . '/' . $file['savepath'] . $file['savename'], '/');
         $st       = new \SaeStorage();
@@ -97,7 +97,7 @@ class Sae
         return true;
     }
 
-    public function mkdir()
+    public function mkdir ()
     {
         return true;
     }
@@ -106,7 +106,7 @@ class Sae
      * 获取最后一次上传错误信息
      * @return string 错误信息
      */
-    public function getError()
+    public function getError ()
     {
         return $this->error;
     }

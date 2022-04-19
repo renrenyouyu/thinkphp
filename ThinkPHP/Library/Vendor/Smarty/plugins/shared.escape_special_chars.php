@@ -14,18 +14,18 @@ if (version_compare(PHP_VERSION, '5.2.3', '>=')) {
      * Purpose:  used by other smarty functions to escape
      *           special chars except for already escaped ones
      *
-     * @author   Monte Ohrt <monte at ohrt dot com>
      * @param string $string text that should by escaped
      * @return string
+     * @author   Monte Ohrt <monte at ohrt dot com>
      */
-    function smarty_function_escape_special_chars($string)
+    function smarty_function_escape_special_chars ($string)
     {
         if (!is_array($string)) {
             $string = htmlspecialchars($string, ENT_COMPAT, SMARTY_RESOURCE_CHAR_SET, false);
         }
         return $string;
-    }  
-} else {         
+    }
+} else {
     /**
      * escape_special_chars common function
      *
@@ -33,19 +33,19 @@ if (version_compare(PHP_VERSION, '5.2.3', '>=')) {
      * Purpose:  used by other smarty functions to escape
      *           special chars except for already escaped ones
      *
-     * @author   Monte Ohrt <monte at ohrt dot com>
      * @param string $string text that should by escaped
      * @return string
+     * @author   Monte Ohrt <monte at ohrt dot com>
      */
-    function smarty_function_escape_special_chars($string)
+    function smarty_function_escape_special_chars ($string)
     {
         if (!is_array($string)) {
             $string = preg_replace('!&(#?\w+);!', '%%%SMARTY_START%%%\\1%%%SMARTY_END%%%', $string);
             $string = htmlspecialchars($string);
-            $string = str_replace(array('%%%SMARTY_START%%%', '%%%SMARTY_END%%%'), array('&', ';'), $string); 
+            $string = str_replace(array('%%%SMARTY_START%%%', '%%%SMARTY_END%%%'), array('&', ';'), $string);
         }
         return $string;
-    }                                                                                                             
-} 
+    }
+}
 
 ?>

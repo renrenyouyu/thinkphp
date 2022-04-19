@@ -18,17 +18,17 @@ class String
      * @access public
      * @return string
      */
-    public static function uuid()
+    public static function uuid ()
     {
         $charid = md5(uniqid(mt_rand(), true));
         $hyphen = chr(45); // "-"
         $uuid   = chr(123) // "{"
-         . substr($charid, 0, 8) . $hyphen
-        . substr($charid, 8, 4) . $hyphen
-        . substr($charid, 12, 4) . $hyphen
-        . substr($charid, 16, 4) . $hyphen
-        . substr($charid, 20, 12)
-        . chr(125); // "}"
+            . substr($charid, 0, 8) . $hyphen
+            . substr($charid, 8, 4) . $hyphen
+            . substr($charid, 12, 4) . $hyphen
+            . substr($charid, 16, 4) . $hyphen
+            . substr($charid, 20, 12)
+            . chr(125); // "}"
         return $uuid;
     }
 
@@ -36,7 +36,7 @@ class String
      * 生成Guid主键
      * @return Boolean
      */
-    public static function keyGen()
+    public static function keyGen ()
     {
         return str_replace('-', '', substr(String::uuid(), 1, -1));
     }
@@ -46,7 +46,7 @@ class String
      * @param string $string 字符串
      * @return Boolean
      */
-    public static function isUtf8($str)
+    public static function isUtf8 ($str)
     {
         $c    = 0;
         $b    = 0;
@@ -100,7 +100,7 @@ class String
      * @param string $suffix 截断显示字符
      * @return string
      */
-    public static function msubstr($str, $start = 0, $length, $charset = "utf-8", $suffix = true)
+    public static function msubstr ($str, $start = 0, $length, $charset = "utf-8", $suffix = true)
     {
         if (function_exists("mb_substr")) {
             $slice = mb_substr($str, $start, $length, $charset);
@@ -126,7 +126,7 @@ class String
      * @param string $addChars 额外字符
      * @return string
      */
-    public static function randString($len = 6, $type = '', $addChars = '')
+    public static function randString ($len = 6, $type = '', $addChars = '')
     {
         $str = '';
         switch ($type) {
@@ -174,7 +174,7 @@ class String
      * 0 字母 1 数字 其它 混合
      * @return string
      */
-    public static function buildCountRand($number, $length = 4, $mode = 1)
+    public static function buildCountRand ($number, $length = 4, $mode = 1)
     {
         if (1 == $mode && $length < strlen($number)) {
             //不足以生成一定数量的不重复数字
@@ -204,7 +204,7 @@ class String
      * @param integer $number 生成数量
      * @return string | array
      */
-    public static function buildFormatRand($format, $number = 1)
+    public static function buildFormatRand ($format, $number = 1)
     {
         $str    = array();
         $length = strlen($format);
@@ -238,13 +238,13 @@ class String
      * @param integer $max 最大值
      * @return string
      */
-    public static function randNumber($min, $max)
+    public static function randNumber ($min, $max)
     {
         return sprintf("%0" . strlen($max) . "d", mt_rand($min, $max));
     }
 
     // 自动转换字符集 支持数组转换
-    public static function autoCharset($string, $from = 'gbk', $to = 'utf-8')
+    public static function autoCharset ($string, $from = 'gbk', $to = 'utf-8')
     {
         $from = strtoupper($from) == 'UTF8' ? 'utf-8' : $from;
         $to   = strtoupper($to) == 'UTF8' ? 'utf-8' : $to;

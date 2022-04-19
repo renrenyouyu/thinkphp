@@ -19,7 +19,9 @@ namespace Org\Util;
  * @author    liu21st <liu21st@gmail.com>
  * @version   $Id: Date.class.php 2662 2012-01-26 06:32:50Z liu21st $
  */
+
 use Org\Util\Date as Date;
+
 class Date
 {
 
@@ -134,11 +136,11 @@ class Date
     /**
      * 架构函数
      * 创建一个Date对象
-     * @param mixed $date  日期
+     * @param mixed $date 日期
      * @static
      * @access public
      */
-    public function __construct($date = '')
+    public function __construct ($date = '')
     {
         //分析日期
         $this->date = $this->parse($date);
@@ -153,7 +155,7 @@ class Date
      * @param mixed $date 日期
      * @return string
      */
-    public function parse($date)
+    public function parse ($date)
     {
         if (is_string($date)) {
             if (("" == $date) || strtotime($date) == -1) {
@@ -189,7 +191,7 @@ class Date
      * @param mixed $date 日期数据
      * @return string
      */
-    public function valid($date)
+    public function valid ($date)
     {
 
     }
@@ -198,10 +200,10 @@ class Date
      * 日期参数设置
      * @static
      * @access public
-     * @param integer $date  日期时间戳
+     * @param integer $date 日期时间戳
      * @return void
      */
-    public function setDate($date)
+    public function setDate ($date)
     {
         $dateArray    = getdate($date);
         $this->date   = $dateArray[0]; //时间戳
@@ -228,10 +230,10 @@ class Date
      * 日期格式化
      * 默认返回 1970-01-01 11:30:45 格式
      * @access public
-     * @param string $format  格式化参数
+     * @param string $format 格式化参数
      * @return string
      */
-    public function format($format = "%Y-%m-%d %H:%M:%S")
+    public function format ($format = "%Y-%m-%d %H:%M:%S")
     {
         return strftime($format, $this->date);
     }
@@ -242,7 +244,7 @@ class Date
      * @access public
      * @return string
      */
-    public function isLeapYear($year = '')
+    public function isLeapYear ($year = '')
     {
         if (empty($year)) {
             $year = $this->year;
@@ -261,10 +263,10 @@ class Date
      * @static
      * @access public
      * @param mixed $date 要比较的日期
-     * @param string $elaps  比较跨度
+     * @param string $elaps 比较跨度
      * @return integer
      */
-    public function dateDiff($date, $elaps = "d")
+    public function dateDiff ($date, $elaps = "d")
     {
         $__DAYS_PER_WEEK__    = (7);
         $__DAYS_PER_MONTH__   = (30);
@@ -305,21 +307,21 @@ class Date
      * @param mixed $precision 返回的精度
      * @return string
      */
-    public function timeDiff($time, $precision = false)
+    public function timeDiff ($time, $precision = false)
     {
         if (!is_numeric($precision) && !is_bool($precision)) {
             static $_diff = array('y' => '年', 'M' => '个月', 'd' => '天', 'w' => '周', 's' => '秒', 'h' => '小时', 'm' => '分钟');
             return ceil($this->dateDiff($time, $precision)) . $_diff[$precision] . '前';
         }
-        $diff          = abs($this->parse($time) - $this->date);
+        $diff = abs($this->parse($time) - $this->date);
         static $chunks = array(array(31536000, '年'), array(2592000, '个月'), array(604800, '周'), array(86400, '天'), array(3600, '小时'), array(60, '分钟'), array(1, '秒'));
-        $count         = 0;
-        $since         = '';
+        $count = 0;
+        $since = '';
         for ($i = 0; $i < count($chunks); $i++) {
             if ($diff >= $chunks[$i][0]) {
-                $num = floor($diff / $chunks[$i][0]);
+                $num   = floor($diff / $chunks[$i][0]);
                 $since .= sprintf('%d' . $chunks[$i][1], $num);
-                $diff = (int) ($diff - $chunks[$i][0] * $num);
+                $diff  = (int)($diff - $chunks[$i][0] * $num);
                 $count++;
                 if (!$precision || $count >= $precision) {
                     break;
@@ -334,7 +336,7 @@ class Date
      * @access public
      * @return Date
      */
-    public function getDayOfWeek($n)
+    public function getDayOfWeek ($n)
     {
         $week = array(0 => 'sunday', 1 => 'monday', 2 => 'tuesday', 3 => 'wednesday', 4 => 'thursday', 5 => 'friday', 6 => 'saturday');
         return (new Date($week[$n]));
@@ -345,7 +347,7 @@ class Date
      * @access public
      * @return Date
      */
-    public function firstDayOfWeek()
+    public function firstDayOfWeek ()
     {
         return $this->getDayOfWeek(1);
     }
@@ -355,7 +357,7 @@ class Date
      * @access public
      * @return Date
      */
-    public function firstDayOfMonth()
+    public function firstDayOfMonth ()
     {
         return (new Date(mktime(0, 0, 0, $this->month, 1, $this->year)));
     }
@@ -365,7 +367,7 @@ class Date
      * @access public
      * @return Date
      */
-    public function firstDayOfYear()
+    public function firstDayOfYear ()
     {
         return (new Date(mktime(0, 0, 0, 1, 1, $this->year)));
     }
@@ -375,7 +377,7 @@ class Date
      * @access public
      * @return Date
      */
-    public function lastDayOfWeek()
+    public function lastDayOfWeek ()
     {
         return $this->getDayOfWeek(0);
     }
@@ -385,7 +387,7 @@ class Date
      * @access public
      * @return Date
      */
-    public function lastDayOfMonth()
+    public function lastDayOfMonth ()
     {
         return (new Date(mktime(0, 0, 0, $this->month + 1, 0, $this->year)));
     }
@@ -395,7 +397,7 @@ class Date
      * @access public
      * @return Date
      */
-    public function lastDayOfYear()
+    public function lastDayOfYear ()
     {
         return (new Date(mktime(0, 0, 0, 1, 0, $this->year + 1)));
     }
@@ -405,7 +407,7 @@ class Date
      * @access public
      * @return integer
      */
-    public function maxDayOfMonth()
+    public function maxDayOfMonth ()
     {
         $result = $this->dateDiff(strtotime($this->dateAdd(1, 'm')), 'd');
         return $result;
@@ -426,10 +428,10 @@ class Date
      *    s    - 秒
      * @access public
      * @param integer $number 间隔数目
-     * @param string $interval  比较类型
+     * @param string $interval 比较类型
      * @return Date
      */
-    public function dateAdd($number = 0, $interval = "d")
+    public function dateAdd ($number = 0, $interval = "d")
     {
         $hours   = $this->hour;
         $minutes = $this->minute;
@@ -499,12 +501,14 @@ class Date
      * @param integer $number 日期数字
      * @return string
      */
-    public function numberToCh($number)
+    public function numberToCh ($number)
     {
         $number = intval($number);
         $array  = array('一', '二', '三', '四', '五', '六', '七', '八', '九', '十');
         $str    = '';
-        if (0 == $number) {$str .= "十";}
+        if (0 == $number) {
+            $str .= "十";
+        }
         if ($number < 10) {
             $str .= $array[$number - 1];
         } elseif ($number < 20) {
@@ -525,7 +529,7 @@ class Date
      * @param boolean $flag 是否显示公元
      * @return string
      */
-    public function yearToCh($yearStr, $flag = false)
+    public function yearToCh ($yearStr, $flag = false)
     {
         $array = array('零', '一', '二', '三', '四', '五', '六', '七', '八', '九');
         $str   = $flag ? '公元' : '';
@@ -541,10 +545,10 @@ class Date
      *
      * @static
      * @access public
-     * @param string $type  获取信息类型
+     * @param string $type 获取信息类型
      * @return string
      */
-    public function magicInfo($type)
+    public function magicInfo ($type)
     {
         $result = '';
         $m      = $this->month;
@@ -587,7 +591,7 @@ class Date
         return $result;
     }
 
-    public function __toString()
+    public function __toString ()
     {
         return $this->format();
     }

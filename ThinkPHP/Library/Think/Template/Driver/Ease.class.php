@@ -22,7 +22,7 @@ class Ease
      * @param array $var 模板变量
      * @return void
      */
-    public function fetch($templateFile, $var)
+    public function fetch ($templateFile, $var)
     {
         $templateFile = substr($templateFile, strlen(THEME_PATH), -5);
         $CacheDir     = substr(CACHE_PATH, 0, -1);

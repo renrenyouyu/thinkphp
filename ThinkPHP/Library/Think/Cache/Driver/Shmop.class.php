@@ -23,7 +23,7 @@ class Shmop extends Cache
      * @param array $options 缓存参数
      * @access public
      */
-    public function __construct($options = array())
+    public function __construct ($options = array())
     {
         if (!extension_loaded('shmop')) {
             E(L('_NOT_SUPPORT_') . ':shmop');
@@ -48,7 +48,7 @@ class Shmop extends Cache
      * @param string $name 缓存变量名
      * @return mixed
      */
-    public function get($name = false)
+    public function get ($name = false)
     {
         N('cache_read', 1);
         $id = shmop_open($this->handler, 'c', 0600, 0);
@@ -79,10 +79,10 @@ class Shmop extends Cache
      * 写入缓存
      * @access public
      * @param string $name 缓存变量名
-     * @param mixed $value  存储数据
+     * @param mixed $value 存储数据
      * @return boolean
      */
-    public function set($name, $value)
+    public function set ($name, $value)
     {
         N('cache_write', 1);
         $lh  = $this->_lock();
@@ -114,7 +114,7 @@ class Shmop extends Cache
      * @param string $name 缓存变量名
      * @return boolean
      */
-    public function rm($name)
+    public function rm ($name)
     {
         $lh  = $this->_lock();
         $val = $this->get();
@@ -134,7 +134,7 @@ class Shmop extends Cache
      * @param string $project 项目标识名
      * @return integer
      */
-    private function _ftok($project)
+    private function _ftok ($project)
     {
         if (function_exists('ftok')) {
             return ftok(__FILE__, $project);
@@ -145,8 +145,8 @@ class Shmop extends Cache
             return sprintf("%u", (($s['ino'] & 0xffff) | (($s['dev'] & 0xff) << 16) |
                 (($project & 0xff) << 24)));
         } else {
-            $filename = __FILE__ . (string) $project;
-            for ($key = array(); sizeof($key) < strlen($filename); $key[] = ord(substr($filename, sizeof($key), 1)));
+            $filename = __FILE__ . (string)$project;
+            for ($key = array(); sizeof($key) < strlen($filename); $key[] = ord(substr($filename, sizeof($key), 1))) ;
             return dechex(array_sum($key));
         }
     }
@@ -157,7 +157,7 @@ class Shmop extends Cache
      * @param string $name 缓存变量名
      * @return integer|boolean
      */
-    private function _write(&$val, &$lh)
+    private function _write (&$val, &$lh)
     {
         $id = shmop_open($this->handler, 'c', 0600, $this->options['size']);
         if ($id) {
@@ -176,7 +176,7 @@ class Shmop extends Cache
      * @param string $name 缓存变量名
      * @return boolean
      */
-    private function _lock()
+    private function _lock ()
     {
         if (function_exists('sem_get')) {
             $fp = sem_get($this->handler, 1, 0600, 1);
@@ -194,7 +194,7 @@ class Shmop extends Cache
      * @param string $name 缓存变量名
      * @return boolean
      */
-    private function _unlock(&$fp)
+    private function _unlock (&$fp)
     {
         if (function_exists('sem_release')) {
             sem_release($fp);

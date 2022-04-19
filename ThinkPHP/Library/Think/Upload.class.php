@@ -47,10 +47,10 @@ class Upload
 
     /**
      * 构造方法，用于构造上传实例
-     * @param array  $config 配置
+     * @param array $config 配置
      * @param string $driver 要使用的上传驱动 LOCAL-本地上传驱动，FTP-FTP上传驱动
      */
-    public function __construct($config = array(), $driver = '', $driverConfig = null)
+    public function __construct ($config = array(), $driver = '', $driverConfig = null)
     {
         /* 获取配置 */
         $this->config = array_merge($this->config, $config);
@@ -75,15 +75,15 @@ class Upload
 
     /**
      * 使用 $this->name 获取配置
-     * @param  string $name 配置名称
+     * @param string $name 配置名称
      * @return multitype    配置值
      */
-    public function __get($name)
+    public function __get ($name)
     {
         return $this->config[$name];
     }
 
-    public function __set($name, $value)
+    public function __set ($name, $value)
     {
         if (isset($this->config[$name])) {
             $this->config[$name] = $value;
@@ -95,7 +95,7 @@ class Upload
         }
     }
 
-    public function __isset($name)
+    public function __isset ($name)
     {
         return isset($this->config[$name]);
     }
@@ -104,17 +104,17 @@ class Upload
      * 获取最后一次上传错误信息
      * @return string 错误信息
      */
-    public function getError()
+    public function getError ()
     {
         return $this->error;
     }
 
     /**
      * 上传单个文件
-     * @param  array  $file 文件数组
+     * @param array $file 文件数组
      * @return array        上传成功后的文件信息
      */
-    public function uploadOne($file)
+    public function uploadOne ($file)
     {
         $info = $this->upload(array($file));
         return $info ? $info[0] : $info;
@@ -124,7 +124,7 @@ class Upload
      * 上传文件
      * @param 文件信息数组 $files ，通常是 $_FILES数组
      */
-    public function upload($files = '')
+    public function upload ($files = '')
     {
         if ('' === $files) {
             $files = $_FILES;
@@ -232,10 +232,10 @@ class Upload
     /**
      * 转换上传文件数组变量为正确的方式
      * @access private
-     * @param array $files  上传的文件变量
+     * @param array $files 上传的文件变量
      * @return array
      */
-    private function dealFiles($files)
+    private function dealFiles ($files)
     {
         $fileArray = array();
         $n         = 0;
@@ -263,7 +263,7 @@ class Upload
      * @param string $driver 驱动名称
      * @param array $config 驱动配置
      */
-    private function setDriver($driver = null, $config = null)
+    private function setDriver ($driver = null, $config = null)
     {
         $driver         = $driver ?: ($this->driver ?: C('FILE_UPLOAD_TYPE'));
         $config         = $config ?: ($this->driverConfig ?: C('UPLOAD_TYPE_CONFIG'));
@@ -278,7 +278,7 @@ class Upload
      * 检查上传的文件
      * @param array $file 文件信息
      */
-    private function check($file)
+    private function check ($file)
     {
         /* 文件上传失败，捕获错误代码 */
         if ($file['error']) {
@@ -322,9 +322,9 @@ class Upload
 
     /**
      * 获取错误代码信息
-     * @param string $errorNo  错误号
+     * @param string $errorNo 错误号
      */
-    private function error($errorNo)
+    private function error ($errorNo)
     {
         switch ($errorNo) {
             case 1:
@@ -354,7 +354,7 @@ class Upload
      * 检查文件大小是否合法
      * @param integer $size 数据
      */
-    private function checkSize($size)
+    private function checkSize ($size)
     {
         return !($size > $this->maxSize) || (0 == $this->maxSize);
     }
@@ -363,7 +363,7 @@ class Upload
      * 检查上传的文件MIME类型是否合法
      * @param string $mime 数据
      */
-    private function checkMime($mime)
+    private function checkMime ($mime)
     {
         return empty($this->config['mimes']) ? true : in_array(strtolower($mime), $this->mimes);
     }
@@ -372,7 +372,7 @@ class Upload
      * 检查上传的文件后缀是否合法
      * @param string $ext 后缀
      */
-    private function checkExt($ext)
+    private function checkExt ($ext)
     {
         return empty($this->config['exts']) ? true : in_array(strtolower($ext), $this->exts);
     }
@@ -381,7 +381,7 @@ class Upload
      * 根据上传文件命名规则取得保存文件名
      * @param string $file 文件信息
      */
-    private function getSaveName($file)
+    private function getSaveName ($file)
     {
         $rule = $this->saveName;
         if (empty($rule)) {
@@ -405,9 +405,9 @@ class Upload
 
     /**
      * 获取子目录的名称
-     * @param array $file  上传的文件信息
+     * @param array $file 上传的文件信息
      */
-    private function getSubPath($filename)
+    private function getSubPath ($filename)
     {
         $subpath = '';
         $rule    = $this->subName;
@@ -424,17 +424,17 @@ class Upload
 
     /**
      * 根据指定的规则获取文件或目录名称
-     * @param  array  $rule     规则
-     * @param  string $filename 原文件名
+     * @param array $rule 规则
+     * @param string $filename 原文件名
      * @return string           文件或目录名称
      */
-    private function getName($rule, $filename)
+    private function getName ($rule, $filename)
     {
         $name = '';
         if (is_array($rule)) {
             //数组规则
             $func  = $rule[0];
-            $param = (array) $rule[1];
+            $param = (array)$rule[1];
             foreach ($param as &$value) {
                 $value = str_replace('__FILE__', $filename, $value);
             }

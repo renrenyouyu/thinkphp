@@ -11,7 +11,7 @@ class demoTest extends base
      *
      * 可以进行前置检查，或者数据填充
      */
-    protected function setUp()
+    protected function setUp ()
     {
         if (!extension_loaded('mysqli')) {
             $this->markTestSkipped(
@@ -25,31 +25,31 @@ class demoTest extends base
      *
      * 可以进行数据清理，或者资源释放
      */
-    protected function tearDown()
+    protected function tearDown ()
     {
 
     }
 
-    public function testTrue()
+    public function testTrue ()
     {
         $this->assertTrue(true, '提示:这应该已经是能正常工作的');
-        $this->assertArrayHasKey(1, [1=>1]);
+        $this->assertArrayHasKey(1, [1 => 1]);
     }
 
-    public function testArrayPushAndPop()
+    public function testArrayPushAndPop ()
     {
         $stack = array();
         $this->assertEquals(0, count($stack));
 
         array_push($stack, 'foo');
-        $this->assertEquals('foo', $stack[count($stack)-1]);
+        $this->assertEquals('foo', $stack[count($stack) - 1]);
         $this->assertEquals(1, count($stack));
 
         $this->assertEquals('foo', array_pop($stack));
         $this->assertEquals(0, count($stack));
     }
 
-    public function testEmpty()
+    public function testEmpty ()
     {
         $stack = array();
         $this->assertEmpty($stack);
@@ -62,10 +62,10 @@ class demoTest extends base
      *
      * @depends testEmpty
      */
-    public function testPush(array $stack)
+    public function testPush (array $stack)
     {
         array_push($stack, 'foo');
-        $this->assertEquals('foo', $stack[count($stack)-1]);
+        $this->assertEquals('foo', $stack[count($stack) - 1]);
         $this->assertNotEmpty($stack);
 
         return $stack;
@@ -75,7 +75,7 @@ class demoTest extends base
      * 先执行 testPush 的测试，并将测试结果传递给 testPop
      * @depends testPush
      */
-    public function testPop(array $stack)
+    public function testPop (array $stack)
     {
         $this->assertEquals('foo', array_pop($stack));
         $this->assertEmpty($stack);

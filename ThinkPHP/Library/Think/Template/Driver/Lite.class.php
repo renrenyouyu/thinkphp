@@ -22,7 +22,7 @@ class Lite
      * @param array $var 模板变量
      * @return void
      */
-    public function fetch($templateFile, $var)
+    public function fetch ($templateFile, $var)
     {
         vendor("TemplateLite.class#template");
         $templateFile      = substr($templateFile, strlen(THEME_PATH));

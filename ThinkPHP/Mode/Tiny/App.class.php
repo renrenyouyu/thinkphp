@@ -1,4 +1,5 @@
 <?php
+
 namespace Think;
 
 /**
@@ -13,7 +14,7 @@ class App
      * @access public
      * @return void
      */
-    public static function init()
+    public static function init ()
     {
         // 定义当前请求的系统常量
         define('NOW_TIME', $_SERVER['REQUEST_TIME']);
@@ -43,13 +44,13 @@ class App
      * @access public
      * @return void
      */
-    public static function exec()
+    public static function exec ()
     {
         // 获取控制器和操作名
-        define('MODULE_NAME',     defined('BIND_MODULE') ? BIND_MODULE : C('DEFAULT_MODULE'));
+        define('MODULE_NAME', defined('BIND_MODULE') ? BIND_MODULE : C('DEFAULT_MODULE'));
         define('CONTROLLER_NAME', defined('BIND_CONTROLLER') ? BIND_CONTROLLER : C('DEFAULT_CONTROLLER'));
-        define('ACTION_NAME',     defined('BIND_ACTION') ? BIND_ACTION : C('DEFAULT_ACTION'));
-        
+        define('ACTION_NAME', defined('BIND_ACTION') ? BIND_ACTION : C('DEFAULT_ACTION'));
+
         $module = sprintf("%s/%s", MODULE_NAME, CONTROLLER_NAME);
         $module = A($module);
         $action = ACTION_NAME;
@@ -90,12 +91,12 @@ class App
      * @access public
      * @return void
      */
-    public static function run()
+    public static function run ()
     {
         load_ext_file(COMMON_PATH);
 
         App::init();
-        ! defined('APP_NO_EXEC') && App::exec();
+        !defined('APP_NO_EXEC') && App::exec();
     }
 
 }

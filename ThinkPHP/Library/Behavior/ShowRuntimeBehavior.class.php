@@ -17,7 +17,7 @@ class ShowRuntimeBehavior
 {
 
     // 行为扩展的执行入口必须是run
-    public function run(&$content)
+    public function run (&$content)
     {
         if (C('SHOW_RUN_TIME')) {
             if (false !== strpos($content, '{__NORUNTIME__}')) {
@@ -41,7 +41,7 @@ class ShowRuntimeBehavior
      * @access private
      * @return string
      */
-    private function showTime()
+    private function showTime ()
     {
         // 显示运行时间
         G('beginTime', $GLOBALS['_beginTime']);
@@ -67,7 +67,7 @@ class ShowRuntimeBehavior
             $showTime .= ' | LoadFile:' . count(get_included_files());
         }
         if (C('SHOW_FUN_TIMES')) {
-            $fun = get_defined_functions();
+            $fun      = get_defined_functions();
             $showTime .= ' | CallFun:' . count($fun['user']) . ',' . count($fun['internal']);
         }
         return $showTime;

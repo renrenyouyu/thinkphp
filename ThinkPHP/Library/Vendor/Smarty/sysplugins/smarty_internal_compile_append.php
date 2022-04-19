@@ -15,7 +15,8 @@
  * @package Smarty
  * @subpackage Compiler
  */
-class Smarty_Internal_Compile_Append extends Smarty_Internal_Compile_Assign {
+class Smarty_Internal_Compile_Append extends Smarty_Internal_Compile_Assign
+{
 
     /**
      * Compiles code for the {append} tag
@@ -25,11 +26,11 @@ class Smarty_Internal_Compile_Append extends Smarty_Internal_Compile_Assign {
      * @param array $parameter array with compilation parameter
      * @return string compiled code
      */
-    public function compile($args, $compiler, $parameter)
+    public function compile ($args, $compiler, $parameter)
     {
         // the following must be assigned at runtime because it will be overwritten in parent class
         $this->required_attributes = array('var', 'value');
-        $this->shorttag_order = array('var', 'value');
+        $this->shorttag_order      = array('var', 'value');
         $this->optional_attributes = array('scope', 'index');
         // check and get attributes
         $_attr = $this->getAttributes($compiler, $args);

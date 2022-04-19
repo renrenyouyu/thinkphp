@@ -11,7 +11,7 @@ include dirname('./') . '/index.php';
 //要求thinkphp核心扩展升级到最新才能支持phpunit
 if (!defined('THINK_FORK_VERSION') || version_compare(THINK_FORK_VERSION, '3.2.4', '<')) {
     echo "ThinkPHP version is not support phpunit, please upgrade to 3.2.4+.\n";
-    echo "use `cd ".THINK_PATH." && git pull origin master` if you using composer.\n";
+    echo "use `cd " . THINK_PATH . " && git pull origin master` if you using composer.\n";
     echo "see https://github.com/vus520/thinkphp/\n";
     exit;
 }
@@ -29,5 +29,7 @@ spl_autoload_register(function ($class) {
 
 //兼容 PHPUnit 6.1.3
 if (!class_exists("\PHPUnit_Framework_TestCase") && class_exists("\PHPUnit\Framework\TestCase")) {
-    class PHPUnit_Framework_TestCase extends \PHPUnit\Framework\TestCase{}
+    class PHPUnit_Framework_TestCase extends \PHPUnit\Framework\TestCase
+    {
+    }
 }

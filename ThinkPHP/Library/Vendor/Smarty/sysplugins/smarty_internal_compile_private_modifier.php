@@ -16,26 +16,27 @@
  * @package Smarty
  * @subpackage Compiler
  */
-class Smarty_Internal_Compile_Private_Modifier extends Smarty_Internal_CompileBase {
+class Smarty_Internal_Compile_Private_Modifier extends Smarty_Internal_CompileBase
+{
 
     /**
      * Compiles code for modifier execution
      *
-     * @param array  $args      array with attributes from parser
-     * @param object $compiler  compiler object
-     * @param array  $parameter array with compilation parameter
+     * @param array $args array with attributes from parser
+     * @param object $compiler compiler object
+     * @param array $parameter array with compilation parameter
      * @return string compiled code
      */
-    public function compile($args, $compiler, $parameter)
+    public function compile ($args, $compiler, $parameter)
     {
         // check and get attributes
-        $_attr = $this->getAttributes($compiler, $args);
+        $_attr  = $this->getAttributes($compiler, $args);
         $output = $parameter['value'];
         // loop over list of modifiers
         foreach ($parameter['modifierlist'] as $single_modifier) {
-            $modifier = $single_modifier[0];
+            $modifier           = $single_modifier[0];
             $single_modifier[0] = $output;
-            $params = implode(',', $single_modifier);
+            $params             = implode(',', $single_modifier);
             // check for registered modifier
             if (isset($compiler->smarty->registered_plugins[Smarty::PLUGIN_MODIFIER][$modifier])) {
                 $function = $compiler->smarty->registered_plugins[Smarty::PLUGIN_MODIFIER][$modifier][0];

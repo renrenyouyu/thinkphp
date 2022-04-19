@@ -16,22 +16,23 @@
  * @author Rodney Rehm
  *
  * @property string $content
- * @property int    $timestamp
- * @property bool   $exists
+ * @property int $timestamp
+ * @property bool $exists
  */
-class Smarty_Config_Source extends Smarty_Template_Source {
+class Smarty_Config_Source extends Smarty_Template_Source
+{
 
     /**
      * create Config Object container
      *
-     * @param Smarty_Resource $handler          Resource Handler this source object communicates with
-     * @param Smarty          $smarty           Smarty instance this source object belongs to
-     * @param string          $resource         full config_resource
-     * @param string          $type             type of resource
-     * @param string          $name             resource name
-     * @param string          $unique_resource  unqiue resource name
+     * @param Smarty_Resource $handler Resource Handler this source object communicates with
+     * @param Smarty $smarty Smarty instance this source object belongs to
+     * @param string $resource full config_resource
+     * @param string $type type of resource
+     * @param string $name resource name
+     * @param string $unique_resource unqiue resource name
      */
-    public function __construct(Smarty_Resource $handler, Smarty $smarty, $resource, $type, $name, $unique_resource)
+    public function __construct (Smarty_Resource $handler, Smarty $smarty, $resource, $type, $name, $unique_resource)
     {
         $this->handler = $handler; // Note: prone to circular references
 
@@ -40,10 +41,10 @@ class Smarty_Config_Source extends Smarty_Template_Source {
         //$this->config_lexer_class = $handler->config_lexer_class;
         //$this->config_parser_class = $handler->config_parser_class;
 
-        $this->smarty = $smarty;
-        $this->resource = $resource;
-        $this->type = $type;
-        $this->name = $name;
+        $this->smarty          = $smarty;
+        $this->resource        = $resource;
+        $this->type            = $type;
+        $this->name            = $name;
         $this->unique_resource = $unique_resource;
     }
 
@@ -51,10 +52,10 @@ class Smarty_Config_Source extends Smarty_Template_Source {
      * <<magic>> Generic setter.
      *
      * @param string $property_name valid: content, timestamp, exists
-     * @param mixed  $value         newly assigned value (not check for correct type)
+     * @param mixed $value newly assigned value (not check for correct type)
      * @throws SmartyException when the given property name is not valid
      */
-    public function __set($property_name, $value)
+    public function __set ($property_name, $value)
     {
         switch ($property_name) {
             case 'content':
@@ -74,7 +75,7 @@ class Smarty_Config_Source extends Smarty_Template_Source {
      * @param string $property_name valid: content, timestamp, exists
      * @throws SmartyException when the given property name is not valid
      */
-    public function __get($property_name)
+    public function __get ($property_name)
     {
         switch ($property_name) {
             case 'timestamp':

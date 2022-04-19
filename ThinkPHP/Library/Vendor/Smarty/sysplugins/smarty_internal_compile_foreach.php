@@ -15,7 +15,8 @@
  * @package Smarty
  * @subpackage Compiler
  */
-class Smarty_Internal_Compile_Foreach extends Smarty_Internal_CompileBase {
+class Smarty_Internal_Compile_Foreach extends Smarty_Internal_CompileBase
+{
     /**
      * Attribute definition: Overwrites base class.
      *
@@ -36,17 +37,17 @@ class Smarty_Internal_Compile_Foreach extends Smarty_Internal_CompileBase {
      * @var array
      * @see Smarty_Internal_CompileBase
      */
-    public $shorttag_order = array('from','item','key','name');
+    public $shorttag_order = array('from', 'item', 'key', 'name');
 
     /**
      * Compiles code for the {foreach} tag
      *
-     * @param array  $args      array with attributes from parser
-     * @param object $compiler  compiler object
-     * @param array  $parameter array with compilation parameter
+     * @param array $args array with attributes from parser
+     * @param object $compiler compiler object
+     * @param array $parameter array with compilation parameter
      * @return string compiled code
      */
-    public function compile($args, $compiler, $parameter)
+    public function compile ($args, $compiler, $parameter)
     {
         $tpl = $compiler->template;
         // check and get attributes
@@ -69,35 +70,35 @@ class Smarty_Internal_Compile_Foreach extends Smarty_Internal_CompileBase {
         $compiler->nocache = $compiler->nocache | $compiler->tag_nocache;
 
         if (isset($_attr['name'])) {
-            $name = $_attr['name'];
-            $has_name = true;
+            $name          = $_attr['name'];
+            $has_name      = true;
             $SmartyVarName = '$smarty.foreach.' . trim($name, '\'"') . '.';
         } else {
-            $name = null;
+            $name     = null;
             $has_name = false;
         }
         $ItemVarName = '$' . trim($item, '\'"') . '@';
         // evaluates which Smarty variables and properties have to be computed
         if ($has_name) {
-            $usesSmartyFirst = strpos($tpl->source->content, $SmartyVarName . 'first') !== false;
-            $usesSmartyLast = strpos($tpl->source->content, $SmartyVarName . 'last') !== false;
-            $usesSmartyIndex = strpos($tpl->source->content, $SmartyVarName . 'index') !== false;
+            $usesSmartyFirst     = strpos($tpl->source->content, $SmartyVarName . 'first') !== false;
+            $usesSmartyLast      = strpos($tpl->source->content, $SmartyVarName . 'last') !== false;
+            $usesSmartyIndex     = strpos($tpl->source->content, $SmartyVarName . 'index') !== false;
             $usesSmartyIteration = strpos($tpl->source->content, $SmartyVarName . 'iteration') !== false;
-            $usesSmartyShow = strpos($tpl->source->content, $SmartyVarName . 'show') !== false;
-            $usesSmartyTotal = strpos($tpl->source->content, $SmartyVarName . 'total') !== false;
+            $usesSmartyShow      = strpos($tpl->source->content, $SmartyVarName . 'show') !== false;
+            $usesSmartyTotal     = strpos($tpl->source->content, $SmartyVarName . 'total') !== false;
         } else {
             $usesSmartyFirst = false;
-            $usesSmartyLast = false;
+            $usesSmartyLast  = false;
             $usesSmartyTotal = false;
-            $usesSmartyShow = false;
+            $usesSmartyShow  = false;
         }
 
-        $usesPropFirst = $usesSmartyFirst || strpos($tpl->source->content, $ItemVarName . 'first') !== false;
-        $usesPropLast = $usesSmartyLast || strpos($tpl->source->content, $ItemVarName . 'last') !== false;
-        $usesPropIndex = $usesPropFirst || strpos($tpl->source->content, $ItemVarName . 'index') !== false;
+        $usesPropFirst     = $usesSmartyFirst || strpos($tpl->source->content, $ItemVarName . 'first') !== false;
+        $usesPropLast      = $usesSmartyLast || strpos($tpl->source->content, $ItemVarName . 'last') !== false;
+        $usesPropIndex     = $usesPropFirst || strpos($tpl->source->content, $ItemVarName . 'index') !== false;
         $usesPropIteration = $usesPropLast || strpos($tpl->source->content, $ItemVarName . 'iteration') !== false;
-        $usesPropShow = strpos($tpl->source->content, $ItemVarName . 'show') !== false;
-        $usesPropTotal = $usesSmartyTotal || $usesSmartyShow || $usesPropShow || $usesPropLast || strpos($tpl->source->content, $ItemVarName . 'total') !== false;
+        $usesPropShow      = strpos($tpl->source->content, $ItemVarName . 'show') !== false;
+        $usesPropTotal     = $usesSmartyTotal || $usesSmartyShow || $usesPropShow || $usesPropLast || strpos($tpl->source->content, $ItemVarName . 'total') !== false;
         // generate output code
         $output = "<?php ";
         $output .= " \$_smarty_tpl->tpl_vars[$item] = new Smarty_Variable; \$_smarty_tpl->tpl_vars[$item]->_loop = false;\n";
@@ -173,17 +174,18 @@ class Smarty_Internal_Compile_Foreach extends Smarty_Internal_CompileBase {
  * @package Smarty
  * @subpackage Compiler
  */
-class Smarty_Internal_Compile_Foreachelse extends Smarty_Internal_CompileBase {
+class Smarty_Internal_Compile_Foreachelse extends Smarty_Internal_CompileBase
+{
 
     /**
      * Compiles code for the {foreachelse} tag
      *
-     * @param array  $args array with attributes from parser
+     * @param array $args array with attributes from parser
      * @param object $compiler compiler object
-     * @param array  $parameter array with compilation parameter
+     * @param array $parameter array with compilation parameter
      * @return string compiled code
      */
-    public function compile($args, $compiler, $parameter)
+    public function compile ($args, $compiler, $parameter)
     {
         // check and get attributes
         $_attr = $this->getAttributes($compiler, $args);
@@ -202,17 +204,18 @@ class Smarty_Internal_Compile_Foreachelse extends Smarty_Internal_CompileBase {
  * @package Smarty
  * @subpackage Compiler
  */
-class Smarty_Internal_Compile_Foreachclose extends Smarty_Internal_CompileBase {
+class Smarty_Internal_Compile_Foreachclose extends Smarty_Internal_CompileBase
+{
 
     /**
      * Compiles code for the {/foreach} tag
      *
-     * @param array  $args      array with attributes from parser
-     * @param object $compiler  compiler object
-     * @param array  $parameter array with compilation parameter
+     * @param array $args array with attributes from parser
+     * @param object $compiler compiler object
+     * @param array $parameter array with compilation parameter
      * @return string compiled code
      */
-    public function compile($args, $compiler, $parameter)
+    public function compile ($args, $compiler, $parameter)
     {
         // check and get attributes
         $_attr = $this->getAttributes($compiler, $args);

@@ -2,7 +2,7 @@
 
 /**
  * ThinkPHP Tiny模式定义
- * 
+ *
  * 主要精简
  * 1，去掉路由
  * 2，去掉URL调度
@@ -31,8 +31,8 @@ return array(
 
     // 函数和类文件
     'core'   => array(
-        THINK_PATH  . 'Common/functions.php',
+        THINK_PATH . 'Common/functions.php',
         COMMON_PATH . 'Common/function.php',
-        MODE_PATH   . 'Tiny/App' . EXT,
+        MODE_PATH . 'Tiny/App' . EXT,
     ),
 );

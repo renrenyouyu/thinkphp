@@ -23,7 +23,7 @@ class Sqlite extends Cache
      * @param array $options 缓存参数
      * @access public
      */
-    public function __construct($options = array())
+    public function __construct ($options = array())
     {
         if (!extension_loaded('sqlite')) {
             E(L('_NOT_SUPPORT_') . ':sqlite');
@@ -49,7 +49,7 @@ class Sqlite extends Cache
      * @param string $name 缓存变量名
      * @return mixed
      */
-    public function get($name)
+    public function get ($name)
     {
         N('cache_read', 1);
         $name   = $this->options['prefix'] . sqlite_escape_string($name);
@@ -70,11 +70,11 @@ class Sqlite extends Cache
      * 写入缓存
      * @access public
      * @param string $name 缓存变量名
-     * @param mixed $value  存储数据
-     * @param integer $expire  有效时间（秒）
+     * @param mixed $value 存储数据
+     * @param integer $expire 有效时间（秒）
      * @return boolean
      */
-    public function set($name, $value, $expire = null)
+    public function set ($name, $value, $expire = null)
     {
         N('cache_write', 1);
         $name  = $this->options['prefix'] . sqlite_escape_string($name);
@@ -104,7 +104,7 @@ class Sqlite extends Cache
      * @param string $name 缓存变量名
      * @return boolean
      */
-    public function rm($name)
+    public function rm ($name)
     {
         $name = $this->options['prefix'] . sqlite_escape_string($name);
         $sql  = 'DELETE FROM ' . $this->options['table'] . ' WHERE var=\'' . $name . '\'';
@@ -117,7 +117,7 @@ class Sqlite extends Cache
      * @access public
      * @return boolean
      */
-    public function clear()
+    public function clear ()
     {
         $sql = 'DELETE FROM ' . $this->options['table'];
         sqlite_query($this->handler, $sql);

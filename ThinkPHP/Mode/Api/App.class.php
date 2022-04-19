@@ -13,7 +13,6 @@ namespace Think;
 /**
  * ThinkPHP API模式 应用程序类
  */
-
 class App
 {
 
@@ -22,7 +21,7 @@ class App
      * @access public
      * @return void
      */
-    public static function init()
+    public static function init ()
     {
         // 定义当前请求的系统常量
         define('NOW_TIME', $_SERVER['REQUEST_TIME']);
@@ -55,7 +54,7 @@ class App
      * @access public
      * @return void
      */
-    public static function exec()
+    public static function exec ()
     {
 
         if (!preg_match('/^[A-Za-z](\/|\w)*$/', CONTROLLER_NAME)) {
@@ -134,7 +133,7 @@ class App
      * @access public
      * @return void
      */
-    public static function run()
+    public static function run ()
     {
         App::init();
         // Session初始化
@@ -143,7 +142,7 @@ class App
         }
         // 记录应用初始化时间
         G('initTime');
-        ! defined('APP_NO_EXEC') && App::exec();
+        !defined('APP_NO_EXEC') && App::exec();
         return;
     }
 

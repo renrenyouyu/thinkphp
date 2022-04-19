@@ -18,12 +18,12 @@
  * @param array $params parameters
  * @return string with compiled code
  */
-function smarty_modifiercompiler_count_characters($params, $compiler)
+function smarty_modifiercompiler_count_characters ($params, $compiler)
 {
     if (!isset($params[1]) || $params[1] != 'true') {
         return 'preg_match_all(\'/[^\s]/u\',' . $params[0] . ', $tmp)';
     }
-    if (SMARTY_MBSTRING /* ^phpunit */&&empty($_SERVER['SMARTY_PHPUNIT_DISABLE_MBSTRING'])/* phpunit$ */) {
+    if (SMARTY_MBSTRING /* ^phpunit */ && empty($_SERVER['SMARTY_PHPUNIT_DISABLE_MBSTRING'])/* phpunit$ */) {
         return 'mb_strlen(' . $params[0] . ', SMARTY_RESOURCE_CHAR_SET)';
     }
     // no MBString fallback

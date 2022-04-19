@@ -23,7 +23,7 @@ class Think
      * @param integer $expire 有效期（秒）
      * @return string
      */
-    public static function encrypt($data, $key, $expire = 0)
+    public static function encrypt ($data, $key, $expire = 0)
     {
         $expire = sprintf('%010d', $expire ? $expire + time() : 0);
         $key    = md5($key);
@@ -31,7 +31,7 @@ class Think
         $x      = 0;
         $len    = strlen($data);
         $l      = strlen($key);
-        $char   = $str   = '';
+        $char   = $str = '';
 
         for ($i = 0; $i < $len; $i++) {
             if ($x == $l) {
@@ -54,7 +54,7 @@ class Think
      * @param string $key 加密key
      * @return string
      */
-    public static function decrypt($data, $key)
+    public static function decrypt ($data, $key)
     {
         $key  = md5($key);
         $data = str_replace(array('-', '_'), array('+', '/'), $data);

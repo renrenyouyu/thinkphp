@@ -23,7 +23,7 @@ class RpcController
      * 架构函数
      * @access public
      */
-    public function __construct()
+    public function __construct ()
     {
         //控制器初始化
         if (method_exists($this, '_initialize')) {
@@ -57,6 +57,7 @@ class RpcController
      * @param array $args 参数
      * @return mixed
      */
-    public function __call($method, $args)
-    {}
+    public function __call ($method, $args)
+    {
+    }
 }

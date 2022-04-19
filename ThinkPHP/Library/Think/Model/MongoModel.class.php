@@ -41,7 +41,7 @@ class MongoModel extends Model
      * @param array $args 调用参数
      * @return mixed
      */
-    public function __call($method, $args)
+    public function __call ($method, $args)
     {
         if (in_array(strtolower($method), $this->methods, true)) {
             // 连贯操作的实现
@@ -68,7 +68,7 @@ class MongoModel extends Model
      * @access public
      * @return void
      */
-    public function flush()
+    public function flush ()
     {
         // 缓存不存在则查询数据表信息
         $fields = $this->db->getFields();
@@ -95,7 +95,7 @@ class MongoModel extends Model
     }
 
     // 写入数据前的回调方法 包括新增和更新
-    protected function _before_write(&$data)
+    protected function _before_write (&$data)
     {
         $pk = $this->getPk();
         // 根据主键类型处理主键数据
@@ -109,7 +109,7 @@ class MongoModel extends Model
      * @access public
      * @return integer
      */
-    public function count()
+    public function count ()
     {
         // 分析表达式
         $options = $this->_parseOptions();
@@ -121,11 +121,11 @@ class MongoModel extends Model
      * @access public
      * @return array | false
      */
-    public function distinct($field, $where = array())
+    public function distinct ($field, $where = array())
     {
         // 分析表达式
         $this->options          = $this->_parseOptions();
-        $this->options['where'] = array_merge((array) $this->options['where'], $where);
+        $this->options['where'] = array_merge((array)$this->options['where'], $where);
 
         $command = array(
             "distinct" => $this->options['table'],
@@ -143,7 +143,7 @@ class MongoModel extends Model
      * @param string $pk 字段名 默认为主键
      * @return mixed
      */
-    public function getMongoNextId($pk = '')
+    public function getMongoNextId ($pk = '')
     {
         if (empty($pk)) {
             $pk = $this->getPk();
@@ -159,7 +159,7 @@ class MongoModel extends Model
      * @param boolean $replace 是否replace
      * @return mixed
      */
-    public function add($data = '', $options = array(), $replace = false)
+    public function add ($data = '', $options = array(), $replace = false)
     {
         if (empty($data)) {
             // 没有传递数据，获取当前数据对象的值
@@ -191,7 +191,7 @@ class MongoModel extends Model
     }
 
     // 插入数据前的回调方法
-    protected function _before_insert(&$data, $options)
+    protected function _before_insert (&$data, $options)
     {
         // 写入数据到数据库
         if ($this->_autoinc && self::TYPE_INT == $this->_idType) {
@@ -203,13 +203,13 @@ class MongoModel extends Model
         }
     }
 
-    public function clear()
+    public function clear ()
     {
         return $this->db->clear();
     }
 
     // 查询成功后的回调方法
-    protected function _after_select(&$resultSet, $options)
+    protected function _after_select (&$resultSet, $options)
     {
         array_walk($resultSet, array($this, 'checkMongoId'));
     }
@@ -220,7 +220,7 @@ class MongoModel extends Model
      * @param array $result 返回数据
      * @return array
      */
-    protected function checkMongoId(&$result)
+    protected function checkMongoId (&$result)
     {
         if (is_object($result['_id'])) {
             $result['_id'] = $result['_id']->__toString();
@@ -229,7 +229,7 @@ class MongoModel extends Model
     }
 
     // 表达式过滤回调方法
-    protected function _options_filter(&$options)
+    protected function _options_filter (&$options)
     {
         $id = $this->getPk();
         if (isset($options['where'][$id]) && is_scalar($options['where'][$id]) && self::TYPE_OBJECT == $this->_idType) {
@@ -243,37 +243,36 @@ class MongoModel extends Model
      * @param mixed $options 表达式参数
      * @return mixed
      */
-    public function select($options = array())
+    public function select ($options = array())
     {
-        if( is_numeric($options) || is_string($options)) {
-            $id = $this->getPk();
-            $where[$id] = $options;
-            $options = array();
+        if (is_numeric($options) || is_string($options)) {
+            $id               = $this->getPk();
+            $where[$id]       = $options;
+            $options          = array();
             $options['where'] = $where;
         }
         // 分析表达式
         $options = $this->_parseOptions($options);
-        $result = $this->db->select($options);
-        if(false === $result) {
+        $result  = $this->db->select($options);
+        if (false === $result) {
             return false;
         }
-        
-        if(empty($result)) {// 查询结果为空
+
+        if (empty($result)) {// 查询结果为空
             return null;
-        }
-        else{
+        } else {
             $this->checkMongoId($result);
         }
-        
+
         //$result是以主键为key的，所以需要处理一下
         $data = array();
-        foreach($result as $v){
+        foreach ($result as $v) {
             $data[] = $v;
         }
-        
+
         $this->data = $data;
         $this->_after_select($this->data, $options);
-        
+
         return $this->data;
     }
 
@@ -283,7 +282,7 @@ class MongoModel extends Model
      * @param mixed $options 表达式参数
      * @return mixed
      */
-    public function find($options = array())
+    public function find ($options = array())
     {
         if (is_numeric($options) || is_string($options)) {
             $id               = $this->getPk();
@@ -311,11 +310,11 @@ class MongoModel extends Model
     /**
      * 字段值增长
      * @access public
-     * @param string $field  字段名
-     * @param integer $step  增长值
+     * @param string $field 字段名
+     * @param integer $step 增长值
      * @return boolean
      */
-    public function setInc($field, $step = 1)
+    public function setInc ($field, $step = 1)
     {
         return $this->setField($field, array('inc', $step));
     }
@@ -323,11 +322,11 @@ class MongoModel extends Model
     /**
      * 字段值减少
      * @access public
-     * @param string $field  字段名
-     * @param integer $step  减少值
+     * @param string $field 字段名
+     * @param integer $step 减少值
      * @return boolean
      */
-    public function setDec($field, $step = 1)
+    public function setDec ($field, $step = 1)
     {
         return $this->setField($field, array('inc', '-' . $step));
     }
@@ -335,11 +334,11 @@ class MongoModel extends Model
     /**
      * 获取一条记录的某个字段值
      * @access public
-     * @param string $field  字段名
-     * @param string $spea  字段数据间隔符号
+     * @param string $field 字段名
+     * @param string $spea 字段数据间隔符号
      * @return mixed
      */
-    public function getField($field, $sepa = null)
+    public function getField ($field, $sepa = null)
     {
         $options['field'] = $field;
         $options          = $this->_parseOptions($options);
@@ -391,10 +390,10 @@ class MongoModel extends Model
     /**
      * 执行Mongo指令
      * @access public
-     * @param array $command  指令
+     * @param array $command 指令
      * @return mixed
      */
-    public function command($command, $options = array())
+    public function command ($command, $options = array())
     {
         $options = $this->_parseOptions($options);
         return $this->db->command($command, $options);
@@ -403,17 +402,17 @@ class MongoModel extends Model
     /**
      * 执行MongoCode
      * @access public
-     * @param string $code  MongoCode
-     * @param array $args   参数
+     * @param string $code MongoCode
+     * @param array $args 参数
      * @return mixed
      */
-    public function mongoCode($code, $args = array())
+    public function mongoCode ($code, $args = array())
     {
         return $this->db->execute($code, $args);
     }
 
     // 数据库切换后回调方法
-    protected function _after_db()
+    protected function _after_db ()
     {
         // 切换Collection
         $this->db->switchCollection($this->getTableName(), $this->dbName ? $this->dbName : C('db_name'));
@@ -424,7 +423,7 @@ class MongoModel extends Model
      * @access public
      * @return string
      */
-    public function getTableName()
+    public function getTableName ()
     {
         if (empty($this->trueTableName)) {
             $tableName = !empty($this->tablePrefix) ? $this->tablePrefix : '';
@@ -443,13 +442,13 @@ class MongoModel extends Model
      * @access public
      * @return string
      */
-    public function group($key, $init, $reduce, $option = array())
+    public function group ($key, $init, $reduce, $option = array())
     {
         $option = $this->_parseOptions($option);
 
         //合并查询条件
         if (isset($option['where'])) {
-            $option['condition'] = array_merge((array) $option['condition'], $option['where']);
+            $option['condition'] = array_merge((array)$option['condition'], $option['where']);
         }
 
         return $this->db->group($key, $init, $reduce, $option);
@@ -460,7 +459,7 @@ class MongoModel extends Model
      * @access public
      * @return json
      */
-    public function getLastError()
+    public function getLastError ()
     {
         return $this->db->command(array('getLastError' => 1));
     }
@@ -470,7 +469,7 @@ class MongoModel extends Model
      * @access public
      * @return json
      */
-    public function status()
+    public function status ()
     {
         $option = $this->_parseOptions();
         return $this->db->command(array('collStats' => $option['table']));
@@ -481,7 +480,7 @@ class MongoModel extends Model
      * @access public
      * @return object
      */
-    public function getDB()
+    public function getDB ()
     {
         return $this->db->getDB();
     }
@@ -491,21 +490,22 @@ class MongoModel extends Model
      * @access public
      * @return object
      */
-    public function getCollection()
+    public function getCollection ()
     {
         return $this->db->getCollection();
     }
-    
+
     /**
      * 设置查询超时时间，-1为不限时间
      * @param int $timeout 毫秒
      * @access public
      * @return object
      */
-    public function timeout($timeout=-1) {
-        if(class_exists('MongoCursor')) {
+    public function timeout ($timeout = -1)
+    {
+        if (class_exists('MongoCursor')) {
             MongoCursor::$timeout = $timeout;
-    	}
-    	return $this;
+        }
+        return $this;
     }
 }

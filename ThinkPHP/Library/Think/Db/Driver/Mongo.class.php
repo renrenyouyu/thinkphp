@@ -31,7 +31,7 @@ class Mongo extends Driver
      * @access public
      * @param array $config 数据库配置数组
      */
-    public function __construct($config = '')
+    public function __construct ($config = '')
     {
         if (!class_exists('mongoClient')) {
             E(L('_NOT_SUPPORT_') . ':Mongo');
@@ -48,7 +48,7 @@ class Mongo extends Driver
      * 连接数据库方法
      * @access public
      */
-    public function connect($config = '', $linkNum = 0)
+    public function connect ($config = '', $linkNum = 0)
     {
         if (!isset($this->linkID[$linkNum])) {
             if (empty($config)) {
@@ -68,12 +68,12 @@ class Mongo extends Driver
     /**
      * 切换当前操作的Db和Collection
      * @access public
-     * @param string $collection  collection
-     * @param string $db  db
+     * @param string $collection collection
+     * @param string $db db
      * @param boolean $master 是否主服务器
      * @return void
      */
-    public function switchCollection($collection, $db = '', $master = true)
+    public function switchCollection ($collection, $db = '', $master = true)
     {
         // 当前没有连接 则首先进行数据库连接
         if (!$this->_linkID) {
@@ -108,7 +108,7 @@ class Mongo extends Driver
      * 释放查询结果
      * @access public
      */
-    public function free()
+    public function free ()
     {
         $this->_cursor = null;
     }
@@ -116,10 +116,10 @@ class Mongo extends Driver
     /**
      * 执行命令
      * @access public
-     * @param array $command  指令
+     * @param array $command 指令
      * @return array
      */
-    public function command($command = array(), $options = array())
+    public function command ($command = array(), $options = array())
     {
         $cache = isset($options['cache']) ? $options['cache'] : false;
         if ($cache) {
@@ -131,7 +131,7 @@ class Mongo extends Driver
             }
         }
         N('db_write', 1); // 兼容代码
-        $this->model  =   $options['model'];
+        $this->model = $options['model'];
         $this->executeTimes++;
         try {
             if ($this->config['debug']) {
@@ -156,11 +156,11 @@ class Mongo extends Driver
     /**
      * 执行语句
      * @access public
-     * @param string $code  sql指令
-     * @param array $args  参数
+     * @param string $code sql指令
+     * @param array $args 参数
      * @return mixed
      */
-    public function execute($code, $args = array())
+    public function execute ($code, $args = array())
     {
         $this->executeTimes++;
         N('db_write', 1); // 兼容代码
@@ -179,7 +179,7 @@ class Mongo extends Driver
      * 关闭数据库
      * @access public
      */
-    public function close()
+    public function close ()
     {
         if ($this->_linkID) {
             $this->_linkID->close();
@@ -195,7 +195,7 @@ class Mongo extends Driver
      * @access public
      * @return string
      */
-    public function error()
+    public function error ()
     {
         $this->error = $this->_mongo->lastError();
         trace($this->error, '', 'ERR');
@@ -210,7 +210,7 @@ class Mongo extends Driver
      * @param boolean $replace 是否replace
      * @return false | integer
      */
-    public function insert($data, $options = array(), $replace = false)
+    public function insert ($data, $options = array(), $replace = false)
     {
         if (isset($options['table'])) {
             $this->switchCollection($options['table']);
@@ -247,7 +247,7 @@ class Mongo extends Driver
      * @param array $options 参数表达式
      * @return bool
      */
-    public function insertAll($dataList, $options = array())
+    public function insertAll ($dataList, $options = array())
     {
         if (isset($options['table'])) {
             $this->switchCollection($options['table']);
@@ -271,7 +271,7 @@ class Mongo extends Driver
      * @param string $pk 主键名
      * @return integer
      */
-    public function getMongoNextId($pk)
+    public function getMongoNextId ($pk)
     {
         if ($this->config['debug']) {
             $this->queryStr = $this->_dbName . '.' . $this->_collectionName . '.find({},{' . $pk . ':1}).sort({' . $pk . ':-1}).limit(1)';
@@ -294,7 +294,7 @@ class Mongo extends Driver
      * @param array $options 表达式
      * @return bool
      */
-    public function update($data, $options)
+    public function update ($data, $options)
     {
         if (isset($options['table'])) {
             $this->switchCollection($options['table']);
@@ -331,7 +331,7 @@ class Mongo extends Driver
      * @param array $options 表达式
      * @return false | integer
      */
-    public function delete($options = array())
+    public function delete ($options = array())
     {
         if (isset($options['table'])) {
             $this->switchCollection($options['table']);
@@ -359,7 +359,7 @@ class Mongo extends Driver
      * @param array $options 表达式
      * @return false | integer
      */
-    public function clear($options = array())
+    public function clear ($options = array())
     {
         if (isset($options['table'])) {
             $this->switchCollection($options['table']);
@@ -386,17 +386,17 @@ class Mongo extends Driver
      * @param array $options 表达式
      * @return iterator
      */
-    public function select($options = array())
+    public function select ($options = array())
     {
         if (isset($options['table'])) {
             $this->switchCollection($options['table'], '', false);
         }
-        
-        $cache  =  isset($options['cache'])?$options['cache']:false;
-        if($cache) {
-            $key    =  is_string($cache['key'])?$cache['key']:md5(serialize($options));
-            $value  =  S($key,'','',$cache['type']);
-            if(false !== $value) {
+
+        $cache = isset($options['cache']) ? $options['cache'] : false;
+        if ($cache) {
+            $key   = is_string($cache['key']) ? $cache['key'] : md5(serialize($options));
+            $value = S($key, '', '', $cache['type']);
+            if (false !== $value) {
                 return $value;
             }
         }
@@ -431,10 +431,10 @@ class Mongo extends Driver
             if (isset($options['page'])) {
                 // 根据页数计算limit
                 list($page, $length) = $options['page'];
-                $page                = $page > 0 ? $page : 1;
-                $length              = $length > 0 ? $length : (is_numeric($options['limit']) ? $options['limit'] : 20);
-                $offset              = $length * ((int) $page - 1);
-                $options['limit']    = $offset . ',' . $length;
+                $page             = $page > 0 ? $page : 1;
+                $length           = $length > 0 ? $length : (is_numeric($options['limit']) ? $options['limit'] : 20);
+                $offset           = $length * ((int)$page - 1);
+                $options['limit'] = $offset . ',' . $length;
             }
             if (isset($options['limit'])) {
                 list($offset, $length) = $this->parseLimit($options['limit']);
@@ -452,9 +452,9 @@ class Mongo extends Driver
             $this->debug(false);
             $this->_cursor = $_cursor;
             $resultSet     = iterator_to_array($_cursor);
-            
-            if($cache) {
-                S($key,$resultSet,$cache['expire'],$cache['type']);
+
+            if ($cache) {
+                S($key, $resultSet, $cache['expire'], $cache['type']);
             }
 
             return $resultSet;
@@ -469,7 +469,7 @@ class Mongo extends Driver
      * @param array $options 表达式
      * @return array
      */
-    public function find($options = array())
+    public function find ($options = array())
     {
         $options['limit'] = 1;
         $find             = $this->select($options);
@@ -482,19 +482,19 @@ class Mongo extends Driver
      * @param array $options 表达式
      * @return iterator
      */
-    public function count($options = array())
+    public function count ($options = array())
     {
         if (isset($options['table'])) {
             $this->switchCollection($options['table'], '', false);
         }
 
-        $cache  =  isset($options['cache'])?$options['cache']:false;
-        if($cache) {
-            $key    =  is_string($cache['key'])?$cache['key']:md5(serialize($options));
-            $value  =  S($key,'','',$cache['type']);
-            if(false !== $value) {
+        $cache = isset($options['cache']) ? $options['cache'] : false;
+        if ($cache) {
+            $key   = is_string($cache['key']) ? $cache['key'] : md5(serialize($options));
+            $value = S($key, '', '', $cache['type']);
+            if (false !== $value) {
                 return $value;
-             }
+            }
         }
         $this->model = $options['model'];
         $this->queryTimes++;
@@ -509,18 +509,18 @@ class Mongo extends Driver
             $this->debug(true);
             $count = $this->_collection->count($query);
             $this->debug(false);
-            
-            if($cache) {
-            	S($key,$count,$cache['expire'],$cache['type']);
+
+            if ($cache) {
+                S($key, $count, $cache['expire'], $cache['type']);
             }
-            
+
             return $count;
         } catch (\MongoCursorException $e) {
             E($e->getMessage());
         }
     }
 
-    public function group($keys, $initial, $reduce, $options = array())
+    public function group ($keys, $initial, $reduce, $options = array())
     {
         if (isset($options['table']) && $this->_collectionName != $options['table']) {
             $this->switchCollection($options['table'], '', false);
@@ -542,9 +542,9 @@ class Mongo extends Driver
 
         if ($this->config['debug']) {
             $this->queryStr = $this->_dbName . '.' . $this->_collectionName . '.group({key:' . json_encode($keys) . ',cond:' .
-            json_encode($options['condition']) . ',reduce:' .
-            json_encode($reduce) . ',initial:' .
-            json_encode($initial) . '})';
+                json_encode($options['condition']) . ',reduce:' .
+                json_encode($reduce) . ',initial:' .
+                json_encode($initial) . '})';
         }
         try {
             $this->debug(true);
@@ -567,7 +567,7 @@ class Mongo extends Driver
      * @access public
      * @return array
      */
-    public function getFields($collection = '')
+    public function getFields ($collection = '')
     {
         if (!empty($collection) && $collection != $this->_collectionName) {
             $this->switchCollection($collection, '', false);
@@ -603,7 +603,7 @@ class Mongo extends Driver
      * 取得当前数据库的collection信息
      * @access public
      */
-    public function getTables()
+    public function getTables ()
     {
         if ($this->config['debug']) {
             $this->queryStr = $this->_dbName . '.getCollenctionNames()';
@@ -625,7 +625,7 @@ class Mongo extends Driver
      * @access public
      * @return object mongoClient
      */
-    public function getDB()
+    public function getDB ()
     {
         return $this->_mongo;
     }
@@ -635,7 +635,7 @@ class Mongo extends Driver
      * @access public
      * @return object MongoCollection
      */
-    public function getCollection()
+    public function getCollection ()
     {
         return $this->_collection;
     }
@@ -646,14 +646,14 @@ class Mongo extends Driver
      * @param array $data
      * @return string
      */
-    protected function parseSet($data)
+    protected function parseSet ($data)
     {
         $result = array();
         foreach ($data as $key => $val) {
             if (is_array($val)) {
                 switch ($val[0]) {
                     case 'inc':
-                        $result['$inc'][$key] = (int) $val[1];
+                        $result['$inc'][$key] = (int)$val[1];
                         break;
                     case 'set':
                     case 'unset':
@@ -681,7 +681,7 @@ class Mongo extends Driver
      * @param mixed $order
      * @return array
      */
-    protected function parseOrder($order)
+    protected function parseOrder ($order)
     {
         if (is_string($order)) {
             $array = explode(',', $order);
@@ -705,7 +705,7 @@ class Mongo extends Driver
      * @param mixed $limit
      * @return array
      */
-    protected function parseLimit($limit)
+    protected function parseLimit ($limit)
     {
         if (strpos($limit, ',')) {
             $array = explode(',', $limit);
@@ -721,7 +721,7 @@ class Mongo extends Driver
      * @param mixed $fields
      * @return array
      */
-    public function parseField($fields)
+    public function parseField ($fields)
     {
         if (empty($fields)) {
             $fields = array();
@@ -754,7 +754,7 @@ class Mongo extends Driver
      * @param mixed $where
      * @return array
      */
-    public function parseWhere($where)
+    public function parseWhere ($where)
     {
         $query  = array();
         $return = array();
@@ -813,7 +813,7 @@ class Mongo extends Driver
      * @param mixed $val
      * @return string
      */
-    protected function parseThinkWhere($key, $val)
+    protected function parseThinkWhere ($key, $val)
     {
         $query  = array();
         $_logic = array('or', 'xor', 'nor', 'and');
@@ -856,7 +856,7 @@ class Mongo extends Driver
      * @param mixed $val
      * @return array
      */
-    protected function parseWhereItem($key, $val)
+    protected function parseWhereItem ($key, $val)
     {
         $query = array();
         if (is_array($val)) {
@@ -896,7 +896,7 @@ class Mongo extends Driver
                     $query['$where'] = new \MongoCode($val[1]);
                 } elseif ('exists' == $con) {
                     // 字段是否存在
-                    $query[$key] = array('$exists' => (bool) $val[1]);
+                    $query[$key] = array('$exists' => (bool)$val[1]);
                 } elseif ('size' == $con) {
                     // 限制属性大小
                     $query[$key] = array('$size' => intval($val[1]));

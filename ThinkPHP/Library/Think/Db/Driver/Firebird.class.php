@@ -25,7 +25,7 @@ class Firebird extends Driver
      * @param array $config 连接信息
      * @return string
      */
-    protected function parseDsn($config)
+    protected function parseDsn ($config)
     {
         $dsn = 'firebird:dbname=' . $config['hostname'] . '/' . ($config['hostport'] ?: 3050) . ':' . $config['database'];
         return $dsn;
@@ -34,11 +34,11 @@ class Firebird extends Driver
     /**
      * 执行语句
      * @access public
-     * @param string $str  sql指令
-     * @param boolean $fetchSql  不执行只是获取SQL
+     * @param string $str sql指令
+     * @param boolean $fetchSql 不执行只是获取SQL
      * @return mixed
      */
-    public function execute($str, $fetchSql = false)
+    public function execute ($str, $fetchSql = false)
     {
         $this->initConnect(true);
         if (!$this->_linkID) {
@@ -48,7 +48,9 @@ class Firebird extends Driver
         $this->queryStr = $str;
         if (!empty($this->bind)) {
             $that           = $this;
-            $this->queryStr = strtr($this->queryStr, array_map(function ($val) use ($that) {return '\'' . $that->escapeString($val) . '\'';}, $this->bind));
+            $this->queryStr = strtr($this->queryStr, array_map(function ($val) use ($that) {
+                return '\'' . $that->escapeString($val) . '\'';
+            }, $this->bind));
         }
         if ($fetchSql) {
             return $this->queryStr;
@@ -89,19 +91,19 @@ class Firebird extends Driver
      * 取得数据表的字段信息
      * @access public
      */
-    public function getFields($tableName)
+    public function getFields ($tableName)
     {
         $this->initConnect(true);
         list($tableName) = explode(' ', $tableName);
-        $sql             = 'SELECT RF.RDB$FIELD_NAME AS FIELD,RF.RDB$DEFAULT_VALUE AS DEFAULT1,RF.RDB$NULL_FLAG AS NULL1,TRIM(T.RDB$TYPE_NAME) || \'(\' || F.RDB$FIELD_LENGTH || \')\' as TYPE FROM RDB$RELATION_FIELDS RF LEFT JOIN RDB$FIELDS F ON (F.RDB$FIELD_NAME = RF.RDB$FIELD_SOURCE) LEFT JOIN RDB$TYPES T ON (T.RDB$TYPE = F.RDB$FIELD_TYPE) WHERE RDB$RELATION_NAME=UPPER(\'' . $tableName . '\') AND T.RDB$FIELD_NAME = \'RDB$FIELD_TYPE\' ORDER By RDB$FIELD_POSITION';
-        $result          = $this->query($sql);
-        $info            = array();
+        $sql    = 'SELECT RF.RDB$FIELD_NAME AS FIELD,RF.RDB$DEFAULT_VALUE AS DEFAULT1,RF.RDB$NULL_FLAG AS NULL1,TRIM(T.RDB$TYPE_NAME) || \'(\' || F.RDB$FIELD_LENGTH || \')\' as TYPE FROM RDB$RELATION_FIELDS RF LEFT JOIN RDB$FIELDS F ON (F.RDB$FIELD_NAME = RF.RDB$FIELD_SOURCE) LEFT JOIN RDB$TYPES T ON (T.RDB$TYPE = F.RDB$FIELD_TYPE) WHERE RDB$RELATION_NAME=UPPER(\'' . $tableName . '\') AND T.RDB$FIELD_NAME = \'RDB$FIELD_TYPE\' ORDER By RDB$FIELD_POSITION';
+        $result = $this->query($sql);
+        $info   = array();
         if ($result) {
             foreach ($result as $key => $val) {
                 $info[trim($val['field'])] = array(
                     'name'    => trim($val['field']),
                     'type'    => $val['type'],
-                    'notnull' => (bool) (1 == $val['null1']), // 1表示不为Null
+                    'notnull' => (bool)(1 == $val['null1']), // 1表示不为Null
                     'default' => $val['default1'],
                     'primary' => false,
                     'autoinc' => false,
@@ -121,7 +123,7 @@ class Firebird extends Driver
      * 取得数据库的表信息
      * @access public
      */
-    public function getTables($dbName = '')
+    public function getTables ($dbName = '')
     {
         $sql    = 'SELECT DISTINCT RDB$RELATION_NAME FROM RDB$RELATION_FIELDS WHERE RDB$SYSTEM_FLAG=0';
         $result = $this->query($sql);
@@ -135,10 +137,10 @@ class Firebird extends Driver
     /**
      * SQL指令安全过滤
      * @access public
-     * @param string $str  SQL指令
+     * @param string $str SQL指令
      * @return string
      */
-    public function escapeString($str)
+    public function escapeString ($str)
     {
         return str_replace("'", "''", $str);
     }
@@ -149,7 +151,7 @@ class Firebird extends Driver
      * @param $limit limit表达式
      * @return string
      */
-    public function parseLimit($limit)
+    public function parseLimit ($limit)
     {
         $limitStr = '';
         if (!empty($limit)) {
@@ -168,7 +170,7 @@ class Firebird extends Driver
      * @access protected
      * @return string
      */
-    protected function parseRand()
+    protected function parseRand ()
     {
         return 'rand()';
     }

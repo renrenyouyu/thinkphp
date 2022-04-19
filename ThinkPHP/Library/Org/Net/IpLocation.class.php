@@ -51,7 +51,7 @@ class IpLocation
      * @param string $filename
      * @return IpLocation
      */
-    public function __construct($filename = "UTFWry.dat")
+    public function __construct ($filename = "UTFWry.dat")
     {
         $this->fp = 0;
         if (($this->fp = fopen(dirname(__FILE__) . '/' . $filename, 'rb')) !== false) {
@@ -67,7 +67,7 @@ class IpLocation
      * @access private
      * @return int
      */
-    private function getlong()
+    private function getlong ()
     {
         //将读取的little-endian编码的4个字节转化为长整型数
         $result = unpack('Vlong', fread($this->fp, 4));
@@ -80,7 +80,7 @@ class IpLocation
      * @access private
      * @return int
      */
-    private function getlong3()
+    private function getlong3 ()
     {
         //将读取的little-endian编码的3个字节转化为长整型数
         $result = unpack('Vlong', fread($this->fp, 3) . chr(0));
@@ -94,7 +94,7 @@ class IpLocation
      * @param string $ip
      * @return string
      */
-    private function packip($ip)
+    private function packip ($ip)
     {
         // 将IP地址转化为长整型数，如果在PHP5中，IP地址错误，则返回False，
         // 这时intval将Flase转化为整数-1，之后压缩成big-endian编码的字符串
@@ -108,7 +108,7 @@ class IpLocation
      * @param string $data
      * @return string
      */
-    private function getstring($data = "")
+    private function getstring ($data = "")
     {
         $char = fread($this->fp, 1);
         while (ord($char) > 0) {
@@ -125,7 +125,7 @@ class IpLocation
      * @access private
      * @return string
      */
-    private function getarea()
+    private function getarea ()
     {
         $byte = fread($this->fp, 1); // 标志字节
         switch (ord($byte)) {
@@ -151,7 +151,7 @@ class IpLocation
      * @param string $ip
      * @return array
      */
-    public function getlocation($ip = '')
+    public function getlocation ($ip = '')
     {
         if (!$this->fp) {
             return null;
@@ -240,7 +240,7 @@ class IpLocation
      * 析构函数，用于在页面执行结束后自动关闭打开的文件。
      *
      */
-    public function __destruct()
+    public function __destruct ()
     {
         if ($this->fp) {
             fclose($this->fp);

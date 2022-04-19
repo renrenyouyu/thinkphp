@@ -39,9 +39,9 @@ class Bcs
 
     /**
      * 构造函数，用于设置上传根路径
-     * @param array  $config FTP配置
+     * @param array $config FTP配置
      */
-    public function __construct($config)
+    public function __construct ($config)
     {
         /* 默认FTP配置 */
         $this->config = array_merge($this->config, $config);
@@ -56,10 +56,10 @@ class Bcs
 
     /**
      * 检测上传根目录(百度云上传时支持自动创建目录，直接返回)
-     * @param string $rootpath   根目录
+     * @param string $rootpath 根目录
      * @return boolean true-检测通过，false-检测失败
      */
-    public function checkRootPath($rootpath)
+    public function checkRootPath ($rootpath)
     {
         /* 设置根目录 */
         $this->rootPath = str_replace('./', '/', $rootpath);
@@ -68,31 +68,31 @@ class Bcs
 
     /**
      * 检测上传目录(百度云上传时支持自动创建目录，直接返回)
-     * @param  string $savepath 上传目录
+     * @param string $savepath 上传目录
      * @return boolean          检测结果，true-通过，false-失败
      */
-    public function checkSavePath($savepath)
+    public function checkSavePath ($savepath)
     {
         return true;
     }
 
     /**
      * 创建文件夹 (百度云上传时支持自动创建目录，直接返回)
-     * @param  string $savepath 目录名称
+     * @param string $savepath 目录名称
      * @return boolean          true-创建成功，false-创建失败
      */
-    public function mkdir($savepath)
+    public function mkdir ($savepath)
     {
         return true;
     }
 
     /**
      * 保存指定文件
-     * @param  array   $file    保存的文件信息
-     * @param  boolean $replace 同名文件是否覆盖
+     * @param array $file 保存的文件信息
+     * @param boolean $replace 同名文件是否覆盖
      * @return boolean          保存状态，true-成功，false-失败
      */
-    public function save(&$file, $replace = true)
+    public function save (&$file, $replace = true)
     {
         $opt             = array();
         $opt['acl']      = BaiduBCS::BCS_SDK_ACL_TYPE_PUBLIC_WRITE;
@@ -100,14 +100,14 @@ class Bcs
             CURLOPT_CONNECTTIMEOUT => 10,
             CURLOPT_TIMEOUT        => 1800,
         );
-        $object      = "/{$file['savepath']}{$file['savename']}";
-        $response    = $this->bcs->create_object($this->config['bucket'], $object, $file['tmp_name'], $opt);
-        $url         = $this->download($object);
-        $file['url'] = $url;
+        $object          = "/{$file['savepath']}{$file['savename']}";
+        $response        = $this->bcs->create_object($this->config['bucket'], $object, $file['tmp_name'], $opt);
+        $url             = $this->download($object);
+        $file['url']     = $url;
         return $response->isOK() ? true : false;
     }
 
-    public function download($file)
+    public function download ($file)
     {
         $file        = str_replace('./', '/', $file);
         $opt         = array();
@@ -120,20 +120,20 @@ class Bcs
      * 获取最后一次上传错误信息
      * @return string 错误信息
      */
-    public function getError()
+    public function getError ()
     {
         return $this->error;
     }
 
     /**
      * 请求百度云服务器
-     * @param  string   $path    请求的PATH
-     * @param  string   $method  请求方法
-     * @param  array    $headers 请求header
-     * @param  resource $body    上传文件资源
+     * @param string $path 请求的PATH
+     * @param string $method 请求方法
+     * @param array $headers 请求header
+     * @param resource $body 上传文件资源
      * @return boolean
      */
-    private function request($path, $method, $headers = null, $body = null)
+    private function request ($path, $method, $headers = null, $body = null)
     {
         $ch = curl_init($path);
 
@@ -205,10 +205,10 @@ class Bcs
 
     /**
      * 获取响应数据
-     * @param  string $text 响应头字符串
+     * @param string $text 响应头字符串
      * @return array        响应数据列表
      */
-    private function response($text)
+    private function response ($text)
     {
         $items = json_decode($text, true);
         return $items;
@@ -218,13 +218,13 @@ class Bcs
      * 生成请求签名
      * @return string          请求签名
      */
-    private function sign($method, $Bucket, $object = '/', $size = '')
+    private function sign ($method, $Bucket, $object = '/', $size = '')
     {
         if (!$size) {
             $size = $this->config['size'];
         }
 
-        $param = array(
+        $param    = array(
             'ak'     => $this->config['AccessKey'],
             'sk'     => $this->config['SecretKey'],
             'size'   => $size,
@@ -244,14 +244,14 @@ class Bcs
 
     /**
      * 获取请求错误信息
-     * @param  string $header 请求返回头信息
+     * @param string $header 请求返回头信息
      */
-    private function error($header)
+    private function error ($header)
     {
-        list($status, $stash)     = explode("\r\n", $header, 2);
+        list($status, $stash) = explode("\r\n", $header, 2);
         list($v, $code, $message) = explode(" ", $status, 3);
-        $message                  = is_null($message) ? 'File Not Found' : "[{$status}]:{$message}";
-        $this->error              = $message;
+        $message     = is_null($message) ? 'File Not Found' : "[{$status}]:{$message}";
+        $this->error = $message;
     }
 
 }

@@ -13,7 +13,6 @@ namespace Think;
 /**
  * ThinkPHP 应用程序类 执行应用过程管理
  */
-
 class App
 {
 
@@ -22,7 +21,7 @@ class App
      * @access public
      * @return void
      */
-    public static function init()
+    public static function init ()
     {
 
         // 日志目录转换为绝对路径 默认情况下存储到公共模块下面
@@ -58,7 +57,7 @@ class App
      * @access public
      * @return void
      */
-    public static function exec()
+    public static function exec ()
     {
 
         if (!preg_match('/^[A-Za-z](\/|\w)*$/', CONTROLLER_NAME)) {
@@ -147,7 +146,7 @@ class App
      * @access public
      * @return void
      */
-    public static function run()
+    public static function run ()
     {
         App::init();
         // Session初始化
@@ -156,7 +155,7 @@ class App
         }
         // 记录应用初始化时间
         G('initTime');
-        ! defined('APP_NO_EXEC') && App::exec();
+        !defined('APP_NO_EXEC') && App::exec();
         return;
     }
 
